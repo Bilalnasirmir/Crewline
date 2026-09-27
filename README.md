@@ -1,32 +1,41 @@
-# React + TypeScript + Vite
+# Crewline
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Crewline is an AI-agent CRM. AI agents do the sales, marketing and receptionist work: they call, text and email, book appointments, send quotes, move leads through stages and enrich contacts. The owner watches and steers in plain language through **Max**, the built-in assistant.
 
-Currently, two official plugins are available:
+This repo is currently a **clickable front-end prototype** on sample data. There is no backend yet.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
-
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+## Run it
+```bash
+npm install
+npm run dev        # open http://localhost:5173
+npm run build      # production build into dist/
+npm run preview    # serve the build at http://localhost:4173
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+## Where things are
+```
+src/
+  index.css              design tokens (colours, type scale, radii, themes)
+  main.tsx               routes (hash router)
+  components/ui/         buttons, inputs, selects, dialogs, tables, cards…
+  components/app/        app shell (top bar, sidebar), page layout, shared bits
+  data/                  types.ts + seed.ts (all sample data)
+  store/                 Zustand store (contacts, stages, live simulation)
+  features/
+    max/                 Max assistant (chat engine, page, side panel)
+    home/                Home dashboard
+    contacts/            Contacts list, folders, DNC, health, profile, dialogs
+    campaigns/           Campaigns list
+    shared/              reusable editors (follow-ups, line lists)
+    stub.tsx             placeholder for screens not built yet
+docs/
+  DESIGN_SYSTEM.md       design spec (Shopify admin look), binding
+  UPDATE_BRIEF.md        owner's feature brief (verbatim)
+  ORIGINAL_DESCRIPTION.md
+  reference-screenshots/ 12 reference screenshots
+  legacy/prototype-v2/   older plain-JS prototype (reference only)
+PROJECT_BRIEF.md         full handover: decisions, screens, status, next steps
+CLAUDE.md                short instructions for Claude Code
+```
+
+Start with `PROJECT_BRIEF.md`.

@@ -19,6 +19,7 @@
   --topbar-2: #202020;
   --btn: #303030;
   --btn-hover: #1a1a1a;
+  --btn-fg: #ffffff;
 
   --text: #303030;
   --text-2: #616161;
@@ -62,6 +63,7 @@
   --topbar-2: #26282c;
   --btn: #ededed;
   --btn-hover: #ffffff;
+  --btn-fg: #111214;
   --shadow-card: 0 0 0 1px rgba(255,255,255,0.06);
   --subtle: #1c1d21;
   --subtle-2: #17181b;
@@ -93,6 +95,7 @@
   --topbar-2: #1a2b52;
   --btn: #ededed;
   --btn-hover: #ffffff;
+  --btn-fg: #111214;
   --shadow-card: 0 0 0 1px rgba(255,255,255,0.06);
   --subtle: #172647;
   --subtle-2: #13203d;
@@ -144,6 +147,7 @@
   --color-topbar-2: var(--topbar-2);
   --color-btn: var(--btn);
   --color-btn-hover: var(--btn-hover);
+  --color-btn-fg: var(--btn-fg);
   --shadow-card: var(--shadow-card);
   --color-sidebar: var(--sidebar);
   --color-subtle: var(--subtle);

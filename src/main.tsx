@@ -8,6 +8,7 @@ import { MaxPage } from '@/features/max/page'
 import { ContactsPage } from '@/features/contacts/page'
 import { ContactProfile } from '@/features/contacts/profile'
 import { Stub } from '@/features/stub'
+import { CampaignsPage } from '@/features/campaigns/page'
 
 const router = createHashRouter([
   { path: '/', element: <AppShell />, children: [
@@ -18,7 +19,7 @@ const router = createHashRouter([
     { path: 'inbox', element: <Stub title="Inbox" /> },
     { path: 'contacts', element: <ContactsPage /> },
     { path: 'contacts/:id', element: <ContactProfile /> },
-    { path: 'campaigns', element: <Stub title="Campaigns" /> },
+    { path: 'campaigns', element: <CampaignsPage /> },
     { path: 'campaigns/new', element: <Stub title="New campaign" /> },
     { path: 'campaigns/:id', element: <Stub title="Campaign" /> },
     { path: 'stages', element: <Stub title="Stages" /> },
