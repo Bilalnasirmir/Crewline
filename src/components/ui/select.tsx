@@ -17,7 +17,7 @@ export function Select({
       <S.Trigger
         id={id}
         className={cn(
-          'group flex w-full min-w-0 items-center justify-between gap-2 rounded-control border border-border bg-bg px-2.5 text-left text-base text-text transition-colors hover:border-border-strong focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/25 data-[placeholder]:text-faint disabled:opacity-50 [&>span:first-child]:truncate [&>span:first-child]:flex [&>span:first-child]:items-center [&>span:first-child]:gap-2',
+          'group flex w-full min-w-0 items-center justify-between gap-2 rounded-control border border-border-strong bg-surface px-2.5 text-left text-base text-text transition-colors hover:border-border-strong focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/25 data-[placeholder]:text-faint disabled:opacity-50 [&>span:first-child]:truncate [&>span:first-child]:flex [&>span:first-child]:items-center [&>span:first-child]:gap-2',
           size === 'sm' ? 'h-7 text-sm' : 'h-8',
           className, triggerClassName,
         )}
@@ -31,7 +31,7 @@ export function Select({
           align={align}
           sideOffset={4}
           collisionPadding={8}
-          className="z-[1000] max-h-[320px] min-w-[var(--radix-select-trigger-width)] overflow-hidden rounded-card border border-border bg-bg p-1 shadow-menu anim-pop"
+          className="z-[1000] max-h-[320px] min-w-[var(--radix-select-trigger-width)] overflow-hidden rounded-card border border-border-strong bg-surface p-1 shadow-menu anim-pop"
         >
           <S.Viewport>
             {groups.map((g) => (

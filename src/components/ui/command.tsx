@@ -4,7 +4,7 @@ import { Search } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 export const Command = ({ className, ...p }: React.ComponentPropsWithoutRef<typeof C>) => (
-  <C className={cn('flex h-full w-full flex-col overflow-hidden bg-bg text-text', className)} {...p} />
+  <C className={cn('flex h-full w-full flex-col overflow-hidden bg-surface text-text', className)} {...p} />
 )
 export function CommandInput({ className, ...p }: React.ComponentPropsWithoutRef<typeof C.Input>) {
   return (

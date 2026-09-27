@@ -52,7 +52,7 @@ function BlockView({ b, msg, last }: { b: Block; msg: MaxMessage; last: boolean 
               const ag = o.icon === 'agent' ? agents.find((a) => a.name === o.l) : null
               return (
                 <button key={o.v} disabled={answered && !on} onClick={() => pickOption(msg.id, b.id, o.v, b.multi, o.l)}
-                  className={cn('flex items-start gap-2 rounded-control border px-3 py-1.5 text-left text-base transition-colors disabled:opacity-40', on ? 'border-primary bg-primary-soft text-text' : 'border-border bg-bg hover:bg-subtle', o.d && 'min-w-[200px]')}>
+                  className={cn('flex items-start gap-2 rounded-control border px-3 py-1.5 text-left text-base transition-colors disabled:opacity-40', on ? 'border-primary bg-primary-soft text-text' : 'border-border-strong bg-surface hover:bg-subtle', o.d && 'min-w-[200px]')}>
                   {ag ? <AgentAvatar name={ag.name} size={18} className="mt-0.5" /> : isPlat ? <PlatIcon p={o.icon as any} size={16} tip={false} className="mt-0.5" /> : I ? <I className={cn('mt-0.5 size-4', o.icon === 'ai' ? 'text-ai' : 'text-muted')} /> : null}
                   <span className="min-w-0"><span className="block font-medium leading-5">{o.l}</span>{o.d && <span className="block text-sm text-muted">{o.d}</span>}</span>
                   {on && <Check className="ml-auto mt-0.5 size-4 shrink-0 text-primary" />}
@@ -146,7 +146,7 @@ function Message({ m, last, compact }: { m: MaxMessage; last: boolean; compact?:
     <div className="flex justify-end">
       <div className="max-w-[85%] space-y-1">
         {m.attachments?.length ? <div className="flex flex-wrap justify-end gap-1">{m.attachments.map((a) => <span key={a} className="inline-flex h-6 items-center gap-1 rounded-tag border border-border bg-bg px-2 text-xs"><Paperclip className="size-3" />{a}</span>)}</div> : null}
-        <div className="rounded-[14px] rounded-br-[4px] bg-subtle px-3.5 py-2 text-base leading-6">{m.voice && <Mic className="mr-1.5 inline size-3.5 text-muted" />}{(m.blocks[0] as any).md}</div>
+        <div className="rounded-[14px] rounded-br-[4px] bg-subtle px-3.5 py-2 text-base leading-6 [.bg-surface_&]:bg-subtle">{m.voice && <Mic className="mr-1.5 inline size-3.5 text-muted" />}{(m.blocks[0] as any).md}</div>
       </div>
     </div>
   )
@@ -183,7 +183,7 @@ export function Composer({ onSend, placeholder = 'Ask Max anything — type, spe
           <Button size="sm" onClick={() => { setLive(false); onSend('Find people in Brooklyn who bought internet', { voice: true }) }}><Square />End</Button>
         </div>
       )}
-      <div className={cn('rounded-[14px] border border-border bg-bg shadow-btn transition-colors focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20', compact && 'rounded-card')}>
+      <div className={cn('rounded-[14px] border border-border-strong bg-surface shadow-btn transition-colors focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20', compact && 'rounded-card')}>
         {att.length > 0 && <div className="flex flex-wrap gap-1 px-3 pt-2">{att.map((a) => <span key={a} className="inline-flex h-6 items-center gap-1 rounded-tag bg-subtle px-2 text-xs"><Paperclip className="size-3" />{a}<button onClick={() => setAtt(att.filter((x) => x !== a))} className="text-muted hover:text-text"><X className="size-3" /></button></span>)}</div>}
         <textarea ref={ref} rows={1} autoFocus={autoFocus} value={v} onChange={(e) => setV(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); submit() } }} placeholder={rec ? 'Listening…' : placeholder}
           className={cn('block w-full resize-none bg-transparent px-3.5 pt-3 text-base leading-6 outline-none placeholder:text-faint', compact ? 'min-h-[40px]' : 'min-h-[48px]')} />

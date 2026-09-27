@@ -20,7 +20,7 @@ export function DialogContent({
       <D.Overlay className="fixed inset-0 z-[1000] bg-[var(--overlay)] anim-fade" />
       <D.Content
         className={cn(
-          'fixed left-1/2 top-1/2 z-[1001] flex max-h-[calc(100dvh-32px)] w-[calc(100vw-32px)] -translate-x-1/2 -translate-y-1/2 flex-col overflow-hidden rounded-card border border-border bg-bg shadow-dialog outline-none anim-pop',
+          'fixed left-1/2 top-1/2 z-[1001] flex max-h-[calc(100dvh-32px)] w-[calc(100vw-32px)] -translate-x-1/2 -translate-y-1/2 flex-col overflow-hidden rounded-card border border-border bg-surface shadow-dialog outline-none anim-pop',
           widths[size], className,
         )}
         {...props}
@@ -54,7 +54,7 @@ export function Sheet({
         <D.Content
           style={{ width: `min(${width}px, calc(100vw - 16px))` }}
           className={cn(
-            'fixed top-0 z-[1001] flex h-dvh flex-col border-border bg-bg shadow-dialog outline-none',
+            'fixed top-0 z-[1001] flex h-dvh flex-col border-border bg-surface shadow-dialog outline-none',
             side === 'right' ? 'right-0 border-l anim-slide-right' : 'left-0 border-r',
             className,
           )}

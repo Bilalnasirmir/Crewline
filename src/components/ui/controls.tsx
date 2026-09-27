@@ -20,7 +20,7 @@ export function Switch({ className, size = 'md', ...props }: React.ComponentProp
 export function Checkbox({ className, ...props }: React.ComponentPropsWithoutRef<typeof C.Root>) {
   return (
     <C.Root
-      className={cn('flex size-4 shrink-0 items-center justify-center rounded-[4px] border border-border-strong bg-bg transition-colors data-[state=checked]:border-primary data-[state=checked]:bg-primary data-[state=indeterminate]:border-primary data-[state=indeterminate]:bg-primary disabled:opacity-50', className)}
+      className={cn('flex size-4 shrink-0 items-center justify-center rounded-[4px] border border-border-strong bg-surface transition-colors data-[state=checked]:border-primary data-[state=checked]:bg-primary data-[state=indeterminate]:border-primary data-[state=indeterminate]:bg-primary disabled:opacity-50', className)}
       {...props}
     >
       <C.Indicator className="text-white">
@@ -33,7 +33,7 @@ export function Checkbox({ className, ...props }: React.ComponentPropsWithoutRef
 export const RadioGroup = R.Root
 export function Radio({ className, ...props }: React.ComponentPropsWithoutRef<typeof R.Item>) {
   return (
-    <R.Item className={cn('flex size-4 shrink-0 items-center justify-center rounded-full border border-border-strong bg-bg transition-colors data-[state=checked]:border-primary', className)} {...props}>
+    <R.Item className={cn('flex size-4 shrink-0 items-center justify-center rounded-full border border-border-strong bg-surface transition-colors data-[state=checked]:border-primary', className)} {...props}>
       <R.Indicator className="size-2 rounded-full bg-primary" />
     </R.Item>
   )
@@ -83,7 +83,7 @@ export function Slider({ className, ...props }: React.ComponentPropsWithoutRef<t
   return (
     <Sl.Root className={cn('relative flex h-5 w-full touch-none select-none items-center', className)} {...props}>
       <Sl.Track className="relative h-1.5 grow rounded-full bg-subtle"><Sl.Range className="absolute h-full rounded-full bg-primary" /></Sl.Track>
-      <Sl.Thumb className="block size-4 rounded-full border border-border-strong bg-bg shadow-btn focus:outline-none focus:ring-2 focus:ring-primary/25" />
+      <Sl.Thumb className="block size-4 rounded-full border border-border-strong bg-surface shadow-btn focus:outline-none focus:ring-2 focus:ring-primary/25" />
     </Sl.Root>
   )
 }

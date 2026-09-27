@@ -62,14 +62,14 @@ export function HomePage() {
             <div className="mt-4"><Composer hint={null} placeholder="e.g. “Build a campaign for my Mississauga leads” or “Why did Win-back replies drop?”" onSend={(t) => ask(t)} /></div>
             <div className="mt-3 flex flex-wrap justify-center gap-1.5">
               {[['Build a campaign', Megaphone, 'Build an outbound campaign for Mississauga Leads by text and call'], ['Find people in Brooklyn', Users, 'Find people in Brooklyn'], ['What should I fix today?', Sparkles, 'What should I fix today?'], ['Bookings on Sep 23', CalendarDays, 'How many bookings did we have on September 23?'], ['Reduce my costs', Receipt, 'How can I reduce my costs?']].map(([l, I, q]: any) => (
-                <button key={l} onClick={() => ask(q)} className="flex h-7 items-center gap-1.5 rounded-full border border-border px-3 text-sm hover:bg-subtle"><I className="size-3.5 text-muted" />{l}</button>
+                <button key={l} onClick={() => ask(q)} className="flex h-8 items-center gap-1.5 rounded-control bg-surface px-3 text-sm font-semibold shadow-card hover:bg-subtle-2"><I className="size-3.5 text-muted" />{l}</button>
               ))}
             </div>
           </div>
         </section>
 
         {show('attention') && attn.length > 0 && (
-          <Card className="mb-6 border-ai/30">
+          <Card className="mb-6">
             <CardHeader icon={<AiMark />} title={<span className="flex items-center gap-2">Needs your attention <Badge tone="ai">{attn.length}</Badge></span>} description="The backend keeps checking your campaigns and agents. These go away once fixed."
               action={<Button size="sm" variant="ai" onClick={() => ask('Fix everything that needs my attention')}><Sparkles />Let AI finish it with me</Button>} />
             <div>{attn.map((a) => (

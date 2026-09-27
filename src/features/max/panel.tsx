@@ -28,12 +28,12 @@ export function MaxPanel() {
     <>
       {!open && (
         <Tip content="Ask Max (⌘J)" side="left">
-          <button onClick={() => setOpen(true)} className="fixed bottom-5 right-5 z-[90] flex h-10 items-center gap-2 rounded-full border border-border bg-bg px-3.5 text-base font-medium shadow-menu transition-transform hover:scale-[1.02]" aria-label="Open Max">
+          <button onClick={() => setOpen(true)} className="fixed bottom-5 right-5 z-[90] flex h-10 items-center gap-2 rounded-full border border-border-strong bg-surface px-3.5 text-base font-medium shadow-menu transition-transform hover:scale-[1.02]" aria-label="Open Max">
             <Sparkles className="size-4 text-ai" />Ask Max
           </button>
         </Tip>
       )}
-      <aside className={cn('fixed inset-y-0 right-0 z-[95] flex w-[min(420px,100vw)] flex-col border-l border-border bg-bg shadow-dialog transition-transform duration-200 ease-in-out', open ? 'translate-x-0' : 'translate-x-full')} aria-hidden={!open}>
+      <aside className={cn('fixed inset-y-0 right-0 z-[95] flex w-[min(420px,100vw)] flex-col border-l border-border bg-surface shadow-dialog transition-transform duration-200 ease-in-out', open ? 'translate-x-0' : 'translate-x-full')} aria-hidden={!open}>
         <div className="flex h-12 shrink-0 items-center gap-2 border-b border-border px-3">
           <span className="flex size-6 items-center justify-center rounded-full bg-ai-soft text-ai"><Sparkles className="size-3.5" /></span>
           <span className="text-base font-semibold">Max</span>

@@ -44,7 +44,7 @@ export function Segmented<T extends string>({
           className={cn(
             'flex items-center gap-1.5 rounded-[6px] px-2.5 font-medium text-muted transition-colors [&_svg]:size-3.5',
             size === 'sm' ? 'h-6 text-xs' : 'h-7 text-sm',
-            value === o.value ? 'bg-bg text-text shadow-btn' : 'hover:text-text',
+            value === o.value ? 'bg-surface text-text shadow-btn' : 'hover:text-text',
           )}
         >
           {o.icon}{o.label}

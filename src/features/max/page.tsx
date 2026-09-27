@@ -29,8 +29,8 @@ export function MaxPage() {
   return (
     <div className="flex min-h-0 flex-1">
       {/* history rail */}
-      <aside className={cn('hidden w-[260px] shrink-0 flex-col border-r border-border bg-sidebar md:flex', !histOpen && 'md:hidden')}>
-        <div className="flex h-12 items-center gap-2 border-b border-border px-3"><span className="text-base font-semibold">Chats</span><Button variant="ghost" size="icon-sm" className="ml-auto" onClick={newThread} aria-label="New chat"><Plus /></Button></div>
+      <aside className={cn('hidden w-[260px] shrink-0 flex-col border-r border-border bg-surface md:flex', !histOpen && 'md:hidden')}>
+        <div className="flex h-12 items-center gap-2 border-b border-border px-3"><span className="text-base font-bold">Chats</span><Button variant="ghost" size="icon-sm" className="ml-auto" onClick={newThread} aria-label="New chat"><Plus /></Button></div>
         <div className="p-2"><div className="relative"><Search className="absolute left-2.5 top-2 size-3.5 text-muted" /><Input className="h-7 pl-7 text-sm" placeholder="Search chats" value={q} onChange={(e) => setQ(e.target.value)} /></div></div>
         <div className="min-h-0 flex-1 overflow-y-auto px-2 pb-2">
           {list.map((t) => (
@@ -44,7 +44,7 @@ export function MaxPage() {
         </div>
         <div className="border-t border-border p-3 text-xs text-muted">Chats, files and results are saved. Reports Max makes go to Reports.</div>
       </aside>
-      <div className="flex min-w-0 flex-1 flex-col">
+      <div className="flex min-w-0 flex-1 flex-col bg-surface">
         <PageHeader title="Max" sub="your AI assistant — it can read, build and change anything in Crewline" icon={<Sparkles className="text-ai" />}
           actions={<><Button variant="ghost" size="icon" className="hidden md:inline-flex" onClick={() => setHistOpen(!histOpen)} aria-label="Toggle chats"><PanelLeft /></Button><Button size="sm" onClick={newThread}><Plus />New chat</Button></>} />
         <ThreadView empty={

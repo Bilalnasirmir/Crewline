@@ -9,13 +9,13 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        primary: 'bg-primary text-primary-fg hover:bg-primary-hover shadow-btn',
-        secondary: 'bg-bg text-text border border-border hover:bg-subtle shadow-btn',
+        primary: 'bg-btn text-bg hover:bg-btn-hover shadow-[inset_0_-1px_0_rgba(0,0,0,.3),0_1px_0_rgba(0,0,0,.15)] font-semibold',
+        secondary: 'bg-surface text-text border border-[#d0d0d0] hover:bg-subtle-2 shadow-[inset_0_-1px_0_rgba(0,0,0,.12)] font-semibold',
         ghost: 'text-text-2 hover:bg-subtle hover:text-text',
-        outline: 'bg-transparent text-text border border-border hover:bg-subtle',
-        destructive: 'bg-bg text-danger border border-border hover:bg-danger-soft shadow-btn',
+        outline: 'bg-transparent text-text border border-border-strong hover:bg-subtle font-semibold',
+        destructive: 'bg-surface text-danger border border-[#d0d0d0] hover:bg-danger-soft shadow-[inset_0_-1px_0_rgba(0,0,0,.12)] font-semibold',
         'destructive-solid': 'bg-danger text-white hover:opacity-90',
-        ai: 'bg-ai-soft text-ai hover:opacity-90',
+        ai: 'bg-ai-soft text-ai hover:opacity-90 font-semibold',
         link: 'text-primary hover:underline px-0 h-auto',
       },
       size: {

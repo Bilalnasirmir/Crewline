@@ -11,7 +11,7 @@ const badge = cva('inline-flex h-5 shrink-0 items-center gap-1 whitespace-nowrap
       amber: 'bg-warning-soft text-warning',
       red: 'bg-danger-soft text-danger',
       ai: 'bg-ai-soft text-ai',
-      outline: 'border border-border bg-bg text-text-2',
+      outline: 'border border-border bg-surface text-text-2',
     },
   },
   defaultVariants: { tone: 'neutral' },

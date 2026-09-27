@@ -10,7 +10,7 @@ export const DropdownMenuSub = D.Sub
 export const DropdownMenuRadioGroup = D.RadioGroup
 
 export const menuContentClass =
-  'z-[1000] min-w-[200px] overflow-hidden rounded-card border border-border bg-bg p-1 shadow-menu anim-pop'
+  'z-[1000] min-w-[200px] overflow-hidden rounded-card border border-border bg-surface p-1 shadow-menu anim-pop'
 export const menuItemClass =
   'relative flex h-8 cursor-pointer select-none items-center gap-2 rounded-[6px] px-2 text-base text-text outline-none data-[highlighted]:bg-subtle data-[disabled]:opacity-50 data-[disabled]:pointer-events-none [&_svg]:size-4 [&_svg]:text-muted [&_svg]:shrink-0'
 

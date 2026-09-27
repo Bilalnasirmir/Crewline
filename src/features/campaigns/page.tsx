@@ -2,7 +2,7 @@ import * as React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
 import { Plus, Megaphone, Pause, Play, MoreHorizontal, SlidersHorizontal, Sparkles, Copy, Trash2, Search, Check, Users } from 'lucide-react'
-import { cn, nf, money } from '@/lib/utils'
+import { nf, money } from '@/lib/utils'
 import { useStore, stagesFor } from '@/store'
 import { useMax } from '@/features/max/store'
 import { PageBody, PageHeader, Toolbar } from '@/components/app/page'
@@ -62,7 +62,7 @@ function CampaignTile({ c, onOpen, onCustomize }: { c: Campaign; onOpen: () => v
   const s = useStore()
   const agents = c.agents.map((id) => s.agents.find((a) => a.id === id)).filter(Boolean)
   return (
-    <Card className="group flex flex-col transition-colors hover:border-border-strong">
+    <Card className="group flex flex-col">
       <button onClick={onOpen} className="flex-1 p-4 text-left">
         <div className="flex items-start justify-between gap-2">
           <div className="min-w-0"><div className="flex items-center gap-2"><DirTag dir={c.dir} /><Badge tone={statusTone(c.status)} dot>{statusLabel(c.status)}</Badge></div><h3 className="mt-2 truncate text-base">{c.name}</h3><p className="truncate text-sm text-muted">{c.biz} · {c.sub} · {c.status === 'scheduled' ? c.started : `started ${c.started}`}</p></div>

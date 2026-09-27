@@ -25,7 +25,7 @@ export function CommandPalette({ open, onOpenChange }: { open: boolean; onOpenCh
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 z-[1000] bg-[var(--overlay)] anim-fade" />
-        <Dialog.Content className="fixed left-1/2 top-[12vh] z-[1001] w-[calc(100vw-32px)] max-w-[640px] -translate-x-1/2 overflow-hidden rounded-card border border-border bg-bg shadow-dialog outline-none anim-pop">
+        <Dialog.Content className="fixed left-1/2 top-[12vh] z-[1001] w-[calc(100vw-32px)] max-w-[640px] -translate-x-1/2 overflow-hidden rounded-card border border-border bg-surface shadow-dialog outline-none anim-pop">
           <Dialog.Title className="sr-only">Search</Dialog.Title>
           <Command loop shouldFilter={!askMax || true}>
             <CommandInput placeholder="Search people, campaigns, agents — or tell Max what to do" value={q} onValueChange={setQ} autoFocus />

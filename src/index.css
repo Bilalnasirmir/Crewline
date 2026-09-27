@@ -8,17 +8,22 @@
   --primary-soft: #eef3fe;
   --primary-fg: #ffffff;
 
-  --bg: #ffffff;
-  --sidebar: #fbfbfb;
-  --subtle: #f4f4f5;
-  --subtle-2: #f9f9fa;
-  --border: #e6e7ea;
-  --border-strong: #d4d6db;
+  --bg: #f1f1f1;
+  --surface: #ffffff;
+  --sidebar: #ebebeb;
+  --subtle: #f1f1f1;
+  --subtle-2: #f7f7f7;
+  --border: #e3e3e3;
+  --border-strong: #c9cccf;
+  --topbar: #1a1a1a;
+  --topbar-2: #303030;
+  --btn: #303030;
+  --btn-hover: #1a1a1a;
 
-  --text: #111214;
-  --text-2: #4b4d52;
-  --muted: #6b6b6b;
-  --faint: #9a9ca3;
+  --text: #303030;
+  --text-2: #4a4a4a;
+  --muted: #616161;
+  --faint: #8a8a8a;
 
   --success: #1f8a4c;
   --success-soft: #e8f5ee;
@@ -32,9 +37,10 @@
   --ai-soft: #f3eefe;
 
   --overlay: rgba(17, 18, 20, 0.4);
-  --shadow-menu: 0 1px 2px rgba(17, 18, 20, 0.06), 0 8px 24px rgba(17, 18, 20, 0.1);
-  --shadow-dialog: 0 2px 4px rgba(17, 18, 20, 0.06), 0 16px 48px rgba(17, 18, 20, 0.16);
-  --shadow-btn: 0 1px 1px rgba(17, 18, 20, 0.04);
+  --shadow-menu: 0 1px 2px rgba(0, 0, 0, 0.06), 0 8px 24px rgba(0, 0, 0, 0.12);
+  --shadow-dialog: 0 2px 4px rgba(0, 0, 0, 0.06), 0 16px 48px rgba(0, 0, 0, 0.18);
+  --shadow-btn: 0 1px 0 rgba(0, 0, 0, 0.05);
+  --shadow-card: 0 1px 0 rgba(26, 26, 26, 0.07), 0 0 0 1px rgba(0, 0, 0, 0.03);
 
   --radius-tag: 6px;
   --radius-control: 8px;
@@ -49,7 +55,13 @@
   --primary-hover: #6aa0ff;
   --primary-soft: #16233d;
   --bg: #111214;
-  --sidebar: #0b0c0e;
+  --surface: #1c1d21;
+  --sidebar: #161719;
+  --topbar: #0b0c0e;
+  --topbar-2: #26282c;
+  --btn: #ededed;
+  --btn-hover: #ffffff;
+  --shadow-card: 0 0 0 1px rgba(255,255,255,0.06);
   --subtle: #1c1d21;
   --subtle-2: #17181b;
   --border: #26282c;
@@ -74,7 +86,13 @@
   --primary-hover: #6aa0ff;
   --primary-soft: #16294d;
   --bg: #0e1a33;
-  --sidebar: #0a1428;
+  --surface: #14224a;
+  --sidebar: #0f1d3d;
+  --topbar: #0a1428;
+  --topbar-2: #1a2b52;
+  --btn: #ededed;
+  --btn-hover: #ffffff;
+  --shadow-card: 0 0 0 1px rgba(255,255,255,0.06);
   --subtle: #172647;
   --subtle-2: #13203d;
   --border: #1e2c4a;
@@ -96,10 +114,11 @@
 
 /* Mixed = light work area, dark sidebar. The sidebar reads its own tokens. */
 .theme-mixed {
-  --sidebar: #0b0c0e;
+  --sidebar: #161719;
 }
 .theme-mixed .app-sidebar {
-  --bg: #0b0c0e;
+  --bg: #161719;
+  --surface: #26282c;
   --subtle: #1c1d21;
   --border: #26282c;
   --text: #edeef0;
@@ -118,6 +137,12 @@
   --color-primary-soft: var(--primary-soft);
   --color-primary-fg: var(--primary-fg);
   --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-topbar: var(--topbar);
+  --color-topbar-2: var(--topbar-2);
+  --color-btn: var(--btn);
+  --color-btn-hover: var(--btn-hover);
+  --shadow-card: var(--shadow-card);
   --color-sidebar: var(--sidebar);
   --color-subtle: var(--subtle);
   --color-subtle-2: var(--subtle-2);
@@ -146,9 +171,9 @@
   --shadow-btn: var(--shadow-btn);
   --text-xs: 12px;
   --text-xs--line-height: 16px;
-  --text-sm: 13px;
-  --text-sm--line-height: 18px;
-  --text-base: 14px;
+  --text-sm: 12px;
+  --text-sm--line-height: 16px;
+  --text-base: 13px;
   --text-base--line-height: 20px;
   --text-lg: 16px;
   --text-lg--line-height: 22px;
@@ -167,8 +192,9 @@
     background: var(--bg);
     color: var(--text);
     font-family: var(--font-sans);
-    font-size: 14px;
+    font-size: 13px;
     line-height: 20px;
+    font-weight: 450;
     font-feature-settings: "cv11", "ss01", "ss03";
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
@@ -179,10 +205,10 @@
   :focus-visible { outline: 2px solid var(--primary); outline-offset: 1px; border-radius: 4px; }
   ::selection { background: var(--primary-soft); }
   [hidden] { display: none !important; }
-  h1, h2, h3, h4 { margin: 0; font-weight: 600; letter-spacing: -0.01em; }
+  h1, h2, h3, h4 { margin: 0; font-weight: 650; letter-spacing: -0.01em; color: var(--text); }
   h1 { font-size: 24px; line-height: 32px; font-weight: 700; letter-spacing: -0.02em; }
-  h2 { font-size: 20px; line-height: 28px; font-weight: 700; letter-spacing: -0.015em; }
-  h3 { font-size: 14px; line-height: 20px; }
+  h2 { font-size: 20px; line-height: 24px; font-weight: 650; }
+  h3 { font-size: 13px; line-height: 20px; font-weight: 650; }
   p { margin: 0; }
   a { color: var(--primary); text-decoration: none; }
   a:hover { text-decoration: underline; }
