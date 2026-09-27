@@ -1,0 +1,204 @@
+@import "tailwindcss";
+@import "@fontsource-variable/inter";
+
+/* ---------- Design tokens: one set of names, four themes ---------- */
+:root {
+  --primary: #266df0;
+  --primary-hover: #1e57c0;
+  --primary-soft: #eef3fe;
+  --primary-fg: #ffffff;
+
+  --bg: #ffffff;
+  --sidebar: #fbfbfb;
+  --subtle: #f4f4f5;
+  --subtle-2: #f9f9fa;
+  --border: #e6e7ea;
+  --border-strong: #d4d6db;
+
+  --text: #111214;
+  --text-2: #4b4d52;
+  --muted: #6b6b6b;
+  --faint: #9a9ca3;
+
+  --success: #1f8a4c;
+  --success-soft: #e8f5ee;
+  --warning: #b7791f;
+  --warning-soft: #fbf3e2;
+  --danger: #d93025;
+  --danger-soft: #fdecea;
+  --info: #266df0;
+  --info-soft: #eef3fe;
+  --ai: #7c3aed;
+  --ai-soft: #f3eefe;
+
+  --overlay: rgba(17, 18, 20, 0.4);
+  --shadow-menu: 0 1px 2px rgba(17, 18, 20, 0.06), 0 8px 24px rgba(17, 18, 20, 0.1);
+  --shadow-dialog: 0 2px 4px rgba(17, 18, 20, 0.06), 0 16px 48px rgba(17, 18, 20, 0.16);
+  --shadow-btn: 0 1px 1px rgba(17, 18, 20, 0.04);
+
+  --radius-tag: 6px;
+  --radius-control: 8px;
+  --radius-card: 12px;
+
+  --font-sans: "Inter Variable", Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  color-scheme: light;
+}
+
+.theme-dark {
+  --primary: #4c8bff;
+  --primary-hover: #6aa0ff;
+  --primary-soft: #16233d;
+  --bg: #111214;
+  --sidebar: #0b0c0e;
+  --subtle: #1c1d21;
+  --subtle-2: #17181b;
+  --border: #26282c;
+  --border-strong: #35373c;
+  --text: #edeef0;
+  --text-2: #c2c4c9;
+  --muted: #8f9197;
+  --faint: #5f6167;
+  --success-soft: #10261a;
+  --warning-soft: #2a2110;
+  --danger-soft: #2e1512;
+  --info-soft: #16233d;
+  --ai-soft: #231a36;
+  --overlay: rgba(0, 0, 0, 0.6);
+  --shadow-menu: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 24px rgba(0, 0, 0, 0.5);
+  --shadow-dialog: 0 2px 4px rgba(0, 0, 0, 0.5), 0 16px 48px rgba(0, 0, 0, 0.6);
+  color-scheme: dark;
+}
+
+.theme-navy {
+  --primary: #4c8bff;
+  --primary-hover: #6aa0ff;
+  --primary-soft: #16294d;
+  --bg: #0e1a33;
+  --sidebar: #0a1428;
+  --subtle: #172647;
+  --subtle-2: #13203d;
+  --border: #1e2c4a;
+  --border-strong: #2b3c5f;
+  --text: #edf1f8;
+  --text-2: #c3cbdc;
+  --muted: #8b97b0;
+  --faint: #5c688a;
+  --success-soft: #0f2a24;
+  --warning-soft: #2b2416;
+  --danger-soft: #331a20;
+  --info-soft: #16294d;
+  --ai-soft: #251d45;
+  --overlay: rgba(2, 8, 20, 0.65);
+  --shadow-menu: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 24px rgba(0, 0, 0, 0.5);
+  --shadow-dialog: 0 2px 4px rgba(0, 0, 0, 0.5), 0 16px 48px rgba(0, 0, 0, 0.6);
+  color-scheme: dark;
+}
+
+/* Mixed = light work area, dark sidebar. The sidebar reads its own tokens. */
+.theme-mixed {
+  --sidebar: #0b0c0e;
+}
+.theme-mixed .app-sidebar {
+  --bg: #0b0c0e;
+  --subtle: #1c1d21;
+  --border: #26282c;
+  --text: #edeef0;
+  --text-2: #c2c4c9;
+  --muted: #8f9197;
+  --faint: #5f6167;
+  --primary-soft: #16233d;
+  --primary: #4c8bff;
+  color-scheme: dark;
+}
+
+/* ---------- Tailwind theme mapping ---------- */
+@theme inline {
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-soft: var(--primary-soft);
+  --color-primary-fg: var(--primary-fg);
+  --color-bg: var(--bg);
+  --color-sidebar: var(--sidebar);
+  --color-subtle: var(--subtle);
+  --color-subtle-2: var(--subtle-2);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-text: var(--text);
+  --color-text-2: var(--text-2);
+  --color-muted: var(--muted);
+  --color-faint: var(--faint);
+  --color-success: var(--success);
+  --color-success-soft: var(--success-soft);
+  --color-warning: var(--warning);
+  --color-warning-soft: var(--warning-soft);
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+  --color-info: var(--info);
+  --color-info-soft: var(--info-soft);
+  --color-ai: var(--ai);
+  --color-ai-soft: var(--ai-soft);
+  --font-sans: var(--font-sans);
+  --radius-tag: var(--radius-tag);
+  --radius-control: var(--radius-control);
+  --radius-card: var(--radius-card);
+  --shadow-menu: var(--shadow-menu);
+  --shadow-dialog: var(--shadow-dialog);
+  --shadow-btn: var(--shadow-btn);
+  --text-xs: 12px;
+  --text-xs--line-height: 16px;
+  --text-sm: 13px;
+  --text-sm--line-height: 18px;
+  --text-base: 14px;
+  --text-base--line-height: 20px;
+  --text-lg: 16px;
+  --text-lg--line-height: 22px;
+  --text-xl: 20px;
+  --text-xl--line-height: 28px;
+  --text-2xl: 24px;
+  --text-2xl--line-height: 32px;
+}
+
+/* ---------- Base ---------- */
+@layer base {
+  * { border-color: var(--border); }
+  html, body, #root { height: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-sans);
+    font-size: 14px;
+    line-height: 20px;
+    font-feature-settings: "cv11", "ss01", "ss03";
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  button, input, select, textarea { font: inherit; color: inherit; }
+  button { cursor: pointer; }
+  button:disabled { cursor: not-allowed; }
+  :focus-visible { outline: 2px solid var(--primary); outline-offset: 1px; border-radius: 4px; }
+  ::selection { background: var(--primary-soft); }
+  [hidden] { display: none !important; }
+  h1, h2, h3, h4 { margin: 0; font-weight: 600; letter-spacing: -0.01em; }
+  h1 { font-size: 24px; line-height: 32px; font-weight: 700; letter-spacing: -0.02em; }
+  h2 { font-size: 20px; line-height: 28px; font-weight: 700; letter-spacing: -0.015em; }
+  h3 { font-size: 14px; line-height: 20px; }
+  p { margin: 0; }
+  a { color: var(--primary); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .tabular { font-variant-numeric: tabular-nums; }
+  /* thin scrollbars */
+  * { scrollbar-width: thin; scrollbar-color: var(--border-strong) transparent; }
+  *::-webkit-scrollbar { width: 8px; height: 8px; }
+  *::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 8px; border: 2px solid transparent; background-clip: content-box; }
+  *::-webkit-scrollbar-track { background: transparent; }
+}
+
+@keyframes fade-in { from { opacity: 0 } to { opacity: 1 } }
+@keyframes pop-in { from { opacity: 0; transform: translateY(-2px) scale(0.98) } to { opacity: 1; transform: none } }
+@keyframes slide-in-right { from { transform: translateX(16px); opacity: 0 } to { transform: none; opacity: 1 } }
+@keyframes pulse-dot { 0%, 100% { opacity: 1 } 50% { opacity: .35 } }
+.anim-pop { animation: pop-in 140ms ease-in-out; }
+.anim-fade { animation: fade-in 140ms ease-in-out; }
+.anim-slide-right { animation: slide-in-right 200ms ease-in-out; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
