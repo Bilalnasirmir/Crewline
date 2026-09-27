@@ -18,7 +18,7 @@ export function Select({
         id={id}
         className={cn(
           'group flex w-full min-w-0 items-center justify-between gap-2 rounded-control border border-border-strong bg-surface px-2.5 text-left text-base text-text transition-colors hover:border-border-strong focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/25 data-[placeholder]:text-faint disabled:opacity-50 [&>span:first-child]:truncate [&>span:first-child]:flex [&>span:first-child]:items-center [&>span:first-child]:gap-2',
-          size === 'sm' ? 'h-7 text-sm' : 'h-8',
+          size === 'sm' ? 'h-8 text-sm' : 'h-10',
           className, triggerClassName,
         )}
       >
@@ -42,7 +42,7 @@ export function Select({
                     key={o.value}
                     value={o.value}
                     disabled={o.disabled}
-                    className="relative flex h-8 cursor-pointer select-none items-center gap-2 rounded-[6px] pl-2 pr-8 text-base outline-none data-[highlighted]:bg-subtle data-[disabled]:opacity-50 [&_svg]:size-4 [&_svg]:text-muted"
+                    className="relative flex h-9 cursor-pointer select-none items-center gap-2 rounded-[7px] pl-3 pr-8 text-base outline-none data-[highlighted]:bg-subtle data-[disabled]:opacity-50 [&_svg]:size-4 [&_svg]:text-muted"
                   >
                     {o.icon}
                     <S.ItemText>{o.label}</S.ItemText>

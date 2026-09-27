@@ -12,39 +12,40 @@
   --surface: #ffffff;
   --sidebar: #ebebeb;
   --subtle: #f1f1f1;
-  --subtle-2: #f7f7f7;
-  --border: #e3e3e3;
+  --subtle-2: #f6f6f6;
+  --border: #e1e3e5;
   --border-strong: #c9cccf;
-  --topbar: #1a1a1a;
-  --topbar-2: #303030;
+  --topbar: #0a0a0a;
+  --topbar-2: #202020;
   --btn: #303030;
   --btn-hover: #1a1a1a;
 
   --text: #303030;
-  --text-2: #4a4a4a;
+  --text-2: #616161;
   --muted: #616161;
-  --faint: #8a8a8a;
+  --faint: #8c8c8c;
 
-  --success: #1f8a4c;
+  --success: #008060;
   --success-soft: #e8f5ee;
-  --warning: #b7791f;
+  --warning: #b98900;
   --warning-soft: #fbf3e2;
-  --danger: #d93025;
+  --danger: #d72c0d;
   --danger-soft: #fdecea;
-  --info: #266df0;
+  --info: #2c6ecb;
   --info-soft: #eef3fe;
   --ai: #7c3aed;
   --ai-soft: #f3eefe;
 
   --overlay: rgba(17, 18, 20, 0.4);
-  --shadow-menu: 0 1px 2px rgba(0, 0, 0, 0.06), 0 8px 24px rgba(0, 0, 0, 0.12);
-  --shadow-dialog: 0 2px 4px rgba(0, 0, 0, 0.06), 0 16px 48px rgba(0, 0, 0, 0.18);
+  --shadow-menu: 0 4px 12px rgba(0, 0, 0, 0.10);
+  --shadow-dialog: 0 12px 32px rgba(0, 0, 0, 0.14);
   --shadow-btn: 0 1px 0 rgba(0, 0, 0, 0.05);
-  --shadow-card: 0 1px 0 rgba(26, 26, 26, 0.07), 0 0 0 1px rgba(0, 0, 0, 0.03);
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.04), 0 0 0 1px #e1e3e5;
 
   --radius-tag: 6px;
   --radius-control: 8px;
-  --radius-card: 12px;
+  --radius-card: 16px;
+  --radius-menu: 12px;
 
   --font-sans: "Inter Variable", Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   color-scheme: light;
@@ -137,6 +138,7 @@
   --color-primary-soft: var(--primary-soft);
   --color-primary-fg: var(--primary-fg);
   --color-bg: var(--bg);
+  --radius-menu: var(--radius-menu);
   --color-surface: var(--surface);
   --color-topbar: var(--topbar);
   --color-topbar-2: var(--topbar-2);
@@ -171,16 +173,16 @@
   --shadow-btn: var(--shadow-btn);
   --text-xs: 12px;
   --text-xs--line-height: 16px;
-  --text-sm: 12px;
-  --text-sm--line-height: 16px;
-  --text-base: 13px;
+  --text-sm: 13px;
+  --text-sm--line-height: 18px;
+  --text-base: 14px;
   --text-base--line-height: 20px;
   --text-lg: 16px;
   --text-lg--line-height: 22px;
   --text-xl: 20px;
-  --text-xl--line-height: 28px;
+  --text-xl--line-height: 26px;
   --text-2xl: 24px;
-  --text-2xl--line-height: 32px;
+  --text-2xl--line-height: 30px;
 }
 
 /* ---------- Base ---------- */
@@ -192,9 +194,9 @@
     background: var(--bg);
     color: var(--text);
     font-family: var(--font-sans);
-    font-size: 13px;
+    font-size: 14px;
     line-height: 20px;
-    font-weight: 450;
+    font-weight: 400;
     font-feature-settings: "cv11", "ss01", "ss03";
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
@@ -205,10 +207,10 @@
   :focus-visible { outline: 2px solid var(--primary); outline-offset: 1px; border-radius: 4px; }
   ::selection { background: var(--primary-soft); }
   [hidden] { display: none !important; }
-  h1, h2, h3, h4 { margin: 0; font-weight: 650; letter-spacing: -0.01em; color: var(--text); }
-  h1 { font-size: 24px; line-height: 32px; font-weight: 700; letter-spacing: -0.02em; }
-  h2 { font-size: 20px; line-height: 24px; font-weight: 650; }
-  h3 { font-size: 13px; line-height: 20px; font-weight: 650; }
+  h1, h2, h3, h4 { margin: 0; font-weight: 600; color: var(--text); }
+  h1 { font-size: 24px; line-height: 30px; font-weight: 600; letter-spacing: -0.01em; }
+  h2 { font-size: 20px; line-height: 26px; font-weight: 600; }
+  h3 { font-size: 16px; line-height: 22px; font-weight: 600; }
   p { margin: 0; }
   a { color: var(--primary); text-decoration: none; }
   a:hover { text-decoration: underline; }
@@ -221,10 +223,10 @@
 }
 
 @keyframes fade-in { from { opacity: 0 } to { opacity: 1 } }
-@keyframes pop-in { from { opacity: 0; transform: translateY(-2px) scale(0.98) } to { opacity: 1; transform: none } }
+@keyframes pop-in { from { opacity: 0; transform: translateY(-4px) } to { opacity: 1; transform: none } }
 @keyframes slide-in-right { from { transform: translateX(16px); opacity: 0 } to { transform: none; opacity: 1 } }
 @keyframes pulse-dot { 0%, 100% { opacity: 1 } 50% { opacity: .35 } }
-.anim-pop { animation: pop-in 140ms ease-in-out; }
+.anim-pop { animation: pop-in 180ms cubic-bezier(.16,1,.3,1); }
 .anim-fade { animation: fade-in 140ms ease-in-out; }
 .anim-slide-right { animation: slide-in-right 200ms ease-in-out; }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }

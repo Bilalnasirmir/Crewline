@@ -24,6 +24,6 @@ export const CommandGroup = ({ className, ...p }: React.ComponentPropsWithoutRef
   <C.Group className={cn('[&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5 [&_[cmdk-group-heading]]:text-xs [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:text-muted', className)} {...p} />
 )
 export const CommandItem = ({ className, ...p }: React.ComponentPropsWithoutRef<typeof C.Item>) => (
-  <C.Item className={cn('flex h-8 cursor-pointer select-none items-center gap-2 rounded-[6px] px-2 text-base outline-none data-[selected=true]:bg-subtle data-[disabled=true]:opacity-50 [&_svg]:size-4 [&_svg]:shrink-0 [&_svg]:text-muted', className)} {...p} />
+  <C.Item className={cn('flex h-9 cursor-pointer select-none items-center gap-2 rounded-[7px] px-3 text-base outline-none data-[selected=true]:bg-subtle data-[disabled=true]:opacity-50 [&_svg]:size-4 [&_svg]:shrink-0 [&_svg]:text-muted', className)} {...p} />
 )
 export const CommandSeparator = (p: React.ComponentPropsWithoutRef<typeof C.Separator>) => <C.Separator className="-mx-1 my-1 h-px bg-border" {...p} />

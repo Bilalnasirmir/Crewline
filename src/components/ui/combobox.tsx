@@ -31,7 +31,7 @@ export function Combobox({
           disabled={disabled}
           className={cn(
             'flex w-full min-w-0 items-center justify-between gap-2 rounded-control border border-border-strong bg-surface px-2.5 text-left text-base transition-colors hover:border-border-strong focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/25 disabled:opacity-50',
-            size === 'sm' ? 'min-h-7 text-sm' : 'min-h-8', multiple && vals.length ? 'py-1' : '', className,
+            size === 'sm' ? 'min-h-8 text-sm' : 'min-h-10', multiple && vals.length ? 'py-1' : '', className,
           )}
         >
           <span className={cn('flex min-w-0 flex-1 flex-wrap items-center gap-1', !vals.length && 'text-faint')}>

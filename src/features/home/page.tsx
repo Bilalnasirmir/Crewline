@@ -53,7 +53,7 @@ export function HomePage() {
       <PageHeader title="Home" actions={<Button size="sm" onClick={() => setCustom(true)}><SlidersHorizontal />Customize</Button>} />
       <PageBody wide>
         {/* Max hero */}
-        <section className="mb-8 pt-2">
+        <section className="mb-8 pt-4">
           <div className="mx-auto max-w-[760px]">
             <div className="text-center">
               <span className="mx-auto mb-3 flex size-10 items-center justify-center rounded-full bg-ai-soft text-ai"><Sparkles className="size-5" /></span>
@@ -62,7 +62,7 @@ export function HomePage() {
             <div className="mt-4"><Composer hint={null} placeholder="e.g. “Build a campaign for my Mississauga leads” or “Why did Win-back replies drop?”" onSend={(t) => ask(t)} /></div>
             <div className="mt-3 flex flex-wrap justify-center gap-1.5">
               {[['Build a campaign', Megaphone, 'Build an outbound campaign for Mississauga Leads by text and call'], ['Find people in Brooklyn', Users, 'Find people in Brooklyn'], ['What should I fix today?', Sparkles, 'What should I fix today?'], ['Bookings on Sep 23', CalendarDays, 'How many bookings did we have on September 23?'], ['Reduce my costs', Receipt, 'How can I reduce my costs?']].map(([l, I, q]: any) => (
-                <button key={l} onClick={() => ask(q)} className="flex h-8 items-center gap-1.5 rounded-control bg-surface px-3 text-sm font-semibold shadow-card hover:bg-subtle-2"><I className="size-3.5 text-muted" />{l}</button>
+                <button key={l} onClick={() => ask(q)} className="flex h-9 items-center gap-1.5 rounded-control border border-border bg-surface px-3.5 text-base font-medium hover:bg-subtle-2"><I className="size-3.5 text-muted" />{l}</button>
               ))}
             </div>
           </div>
@@ -85,7 +85,7 @@ export function HomePage() {
 
         {/* filters */}
         <div className="mb-4 flex flex-wrap items-center gap-2">
-          <Select size="sm" className="w-[220px]" value={camp} onValueChange={setCamp} options={[{ value: 'all', label: 'All campaigns' }, ...s.campaigns.map((c) => ({ value: c.id, label: c.name, icon: <DirIcon dir={c.dir} size={12} withTip={false} /> }))]} />
+          <Select className="w-[220px]" value={camp} onValueChange={setCamp} options={[{ value: 'all', label: 'All campaigns' }, ...s.campaigns.map((c) => ({ value: c.id, label: c.name, icon: <DirIcon dir={c.dir} size={12} withTip={false} /> }))]} />
           <Segmented size="sm" value={dir} onChange={setDir} options={[{ value: 'all', label: 'All' }, { value: 'out', label: 'Outbound', icon: <DirIcon dir="out" size={12} withTip={false} /> }, { value: 'in', label: 'Inbound', icon: <DirIcon dir="in" size={12} withTip={false} /> }]} />
           <Select size="sm" className="w-[200px]" value={folder} onValueChange={setFolder} options={[{ value: 'all', label: 'All lead folders' }, ...s.folders.filter((x) => !x.group).map((x) => ({ value: x.id, label: x.name }))]} />
           {(camp !== 'all' || dir !== 'all' || folder !== 'all') && <Button size="sm" variant="ghost" onClick={() => { setCamp('all'); setDir('all'); setFolder('all') }}><X />Clear</Button>}

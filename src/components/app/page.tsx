@@ -6,16 +6,16 @@ import { cn } from '@/lib/utils'
 /** Every page starts with the same 48px header row: breadcrumb/title on the left, actions on the right. */
 export function PageHeader({ title, crumbs, actions, icon, sub, className, children }: { title: React.ReactNode; crumbs?: { label: string; to?: string }[]; actions?: React.ReactNode; icon?: React.ReactNode; sub?: React.ReactNode; className?: string; children?: React.ReactNode }) {
   return (
-    <div className={cn('flex min-h-14 shrink-0 items-center justify-between gap-3 px-4 pt-3 md:px-6', className)}>
+    <div className={cn('flex min-h-[72px] shrink-0 items-center justify-between gap-3 px-4 pt-4 pb-2 md:px-6', className)}>
       <div className="flex min-w-0 items-center gap-2">
         {icon && <span className="text-text [&_svg]:size-5">{icon}</span>}
         {crumbs?.map((c, i) => (
           <React.Fragment key={i}>
-            {c.to ? <Link to={c.to} className="truncate text-base text-muted hover:text-text hover:no-underline">{c.label}</Link> : <span className="truncate text-base text-muted">{c.label}</span>}
+            {c.to ? <Link to={c.to} className="truncate text-lg text-muted hover:text-text hover:no-underline">{c.label}</Link> : <span className="truncate text-lg text-muted">{c.label}</span>}
             <ChevronRight className="size-3.5 shrink-0 text-faint" />
           </React.Fragment>
         ))}
-        <h1 className="truncate text-xl font-bold leading-7 tracking-tight">{title}</h1>
+        <h1 className="truncate text-2xl font-semibold">{title}</h1>
         {sub && <span className="hidden truncate text-sm text-muted sm:inline">{sub}</span>}
         {children}
       </div>

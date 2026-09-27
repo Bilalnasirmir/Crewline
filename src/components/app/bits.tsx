@@ -44,8 +44,8 @@ export function CampaignChip({ id, className }: { id: string | null | undefined;
 /** KPI tile. Compact, click-through, optional delta and tooltip. */
 export function Kpi({ label, value, delta, up, to, tip, onClick, className, sub }: { label: React.ReactNode; value: React.ReactNode; delta?: React.ReactNode; up?: boolean; to?: string; tip?: React.ReactNode; onClick?: () => void; className?: string; sub?: React.ReactNode }) {
   const body = (
-    <Card className={cn('flex h-[88px] flex-col justify-between p-4 transition-colors', (to || onClick) && 'cursor-pointer hover:bg-subtle-2', className)} onClick={onClick}>
-      <span className="truncate text-sm text-muted">{label}</span>
+    <Card className={cn('flex h-[96px] flex-col justify-between p-5 transition-colors', (to || onClick) && 'cursor-pointer hover:bg-subtle-2', className)} onClick={onClick}>
+      <span className="truncate text-base font-medium">{label}</span>
       <div className="flex items-end justify-between gap-2">
         <span className="text-2xl font-bold tabular tracking-tight text-text">{value}</span>
         {delta !== undefined && (

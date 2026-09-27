@@ -84,23 +84,23 @@ export function ContactsPage() {
       {/* views */}
       <div className="flex h-10 shrink-0 items-center gap-1 overflow-x-auto px-3 [scrollbar-width:none] md:px-6">
         {([['rows', 'All people', Rows3], ['folders', 'Folders', LayoutGrid], ['dnc', 'Do-Not-Contact', ShieldBan], ['health', 'Database health', HeartPulse]] as const).map(([k, l, I]) => (
-          <button key={k} onClick={() => setView(k)} className={cn('flex h-8 shrink-0 items-center gap-1.5 whitespace-nowrap rounded-control px-3 text-base font-semibold transition-colors', view === k ? 'bg-surface text-text shadow-card' : 'text-muted hover:bg-[#e3e3e3] hover:text-text')}><I className="size-4" />{l}{k === 'dnc' && <span className="rounded-tag bg-subtle px-1.5 text-xs text-muted">{s.dnc.length}</span>}</button>
+          <button key={k} onClick={() => setView(k)} className={cn('flex h-9 shrink-0 items-center gap-1.5 whitespace-nowrap rounded-[9px] px-3 text-base font-medium transition-colors', view === k ? 'bg-surface text-text shadow-[0_1px_2px_rgba(0,0,0,0.04),0_0_0_1px_#e1e3e5]' : 'text-muted hover:bg-white/55 hover:text-text')}><I className="size-4" />{l}{k === 'dnc' && <span className="rounded-tag bg-subtle px-1.5 text-xs text-muted">{s.dnc.length}</span>}</button>
         ))}
       </div>
 
       {view === 'rows' && (<>
         <div className="shrink-0 px-4 py-3 md:px-6">
           <div className="flex flex-wrap gap-2">
-            {tiles.map((t) => <Tip key={t.k} content={t.d}><button onClick={() => onTile(t.k)} className="flex min-w-[150px] flex-1 items-center justify-between gap-3 rounded-card bg-surface px-3 py-2 text-left shadow-card transition-colors hover:bg-subtle-2"><span className="min-w-0"><span className="block truncate text-sm text-muted">{t.l}</span><span className="block text-lg font-semibold tabular leading-6">{nf(t.n)}</span></span><t.I className={cn('size-4 shrink-0', t.tone)} /></button></Tip>)}
+            {tiles.map((t) => <Tip key={t.k} content={t.d}><button onClick={() => onTile(t.k)} className="flex min-w-[150px] flex-1 items-center justify-between gap-3 rounded-card border border-border bg-surface px-4 py-3 text-left transition-colors hover:bg-subtle-2"><span className="min-w-0"><span className="block truncate text-base font-medium">{t.l}</span><span className="block text-xl font-semibold tabular">{nf(t.n)}</span></span><t.I className={cn('size-4 shrink-0', t.tone)} /></button></Tip>)}
           </div>
         </div>
         <div className="flex shrink-0 flex-wrap items-center gap-2 px-4 py-2 md:px-6">
-            <div className="flex h-9 min-w-[280px] flex-1 items-center gap-2 rounded-control border border-border-strong bg-surface pl-3 pr-1 focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20">
+            <div className="flex h-10 min-w-[280px] flex-1 items-center gap-2 rounded-control border border-border-strong bg-surface pl-3 pr-1 focus-within:border-info focus-within:ring-2 focus-within:ring-info/30">
               <AiMark /><input value={nl} onChange={(e) => setNl(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && runNl()} placeholder="Build filters with AI — “women in Mississauga who have emails”" className="h-full min-w-0 flex-1 bg-transparent text-base outline-none placeholder:text-faint" />
               <Tip content="Speak your filter"><Button variant="ghost" size="icon-xs" onClick={() => { setNl('people in Brooklyn who bought in the last 3 months'); setTimeout(() => runNl('people in Brooklyn who bought in the last 3 months'), 50) }} aria-label="Voice"><Mic /></Button></Tip>
               <Button variant="ai" size="sm" className="h-7" onClick={() => runNl()}><Sparkles />Apply</Button>
             </div>
-            <div className="relative"><Search className="absolute left-2.5 top-2.5 size-4 text-muted" /><Input className="h-9 w-[260px] pl-8" placeholder="Search name, phone, email, zip…" value={q} onChange={(e) => setQ(e.target.value)} /></div>
+            <div className="relative"><Search className="absolute left-2.5 top-2.5 size-4 text-muted" /><Input className="w-[260px] pl-9" placeholder="Search name, phone, email, zip…" value={q} onChange={(e) => setQ(e.target.value)} /></div>
         </div>
         <Toolbar
           left={<FilterChips filters={filters} setFilters={setFilters} match={match} setMatch={setMatch} />}
@@ -110,9 +110,9 @@ export function ContactsPage() {
           </>}
         />
         {nlNote && <div className="mx-4 mb-2 flex items-center gap-2 rounded-control bg-ai-soft px-3 py-1.5 text-sm md:mx-6"><AiMark /><span className="flex-1">{nlNote}{filters.length > 0 && <> Showing <b>{nf(rows.length)}</b> people.</>}</span>{filters.length > 0 && <Button size="sm" variant="ghost" onClick={() => setDlg('save')}><FolderPlus />Save as folder</Button>}<button onClick={() => setNlNote('')} className="text-muted hover:text-text"><X className="size-3.5" /></button></div>}
-        {folder && <div className="mx-4 mb-2 flex items-center gap-2 rounded-control bg-surface px-3 py-1.5 text-sm shadow-card md:mx-6"><FolderOpen className="size-4 text-muted" /><span>Folder: <b>{folder.name}</b> · {nf(folder.count ?? rows.length)} people{folder.src && <span className="text-muted"> · {folder.src}</span>}</span><Button size="sm" variant="ghost" className="ml-1" onClick={() => nav(`/campaigns/new?folder=${folder.id}`)}><Megaphone />Start campaign</Button><button onClick={() => { sp.delete('folder'); setSp(sp, { replace: true }) }} className="ml-auto flex h-6 items-center gap-1 rounded-control px-2 text-muted hover:bg-subtle hover:text-text"><X className="size-3.5" />Show whole database</button></div>}
+        {folder && <div className="mx-4 mb-2 flex items-center gap-2 rounded-[10px] border border-border bg-surface px-4 py-2 text-base md:mx-6"><FolderOpen className="size-4 text-muted" /><span>Folder: <b>{folder.name}</b> · {nf(folder.count ?? rows.length)} people{folder.src && <span className="text-muted"> · {folder.src}</span>}</span><Button size="sm" variant="ghost" className="ml-1" onClick={() => nav(`/campaigns/new?folder=${folder.id}`)}><Megaphone />Start campaign</Button><button onClick={() => { sp.delete('folder'); setSp(sp, { replace: true }) }} className="ml-auto flex h-6 items-center gap-1 rounded-control px-2 text-muted hover:bg-subtle hover:text-text"><X className="size-3.5" />Show whole database</button></div>}
         {sel.size > 0 && <BulkBar sel={sel} clear={() => setSel(new Set())} onSave={() => setDlg('save')} onEnrich={() => { setEnrichIds([...sel]); setDlg('enrich') }} />}
-        <div className="mx-4 min-h-0 flex-1 overflow-auto rounded-card bg-surface shadow-card md:mx-6" onContextMenu={(e) => { e.preventDefault() }}>
+        <div className="mx-4 min-h-0 flex-1 overflow-auto rounded-card border border-border bg-surface md:mx-6" onContextMenu={(e) => { e.preventDefault() }}>
           <Table>
             <thead><tr>
               <Th className="w-9 pl-4 pr-0"><Checkbox checked={allSel ? true : sel.size ? 'indeterminate' : false} onCheckedChange={() => setSel(allSel ? new Set() : new Set(rows.map((c) => c.id)))} aria-label="Select all" /></Th>
@@ -203,10 +203,10 @@ function Row({ c, cols, selected, onSelect, onSave }: { c: Contact; cols: string
   return (
     <DropdownMenu modal={false}>
       <Tr clickable selected={selected} onClick={() => nav(`/contacts/${c.id}`)} onContextMenu={(e) => { e.preventDefault(); (e.currentTarget.querySelector('[data-rowmenu]') as HTMLElement)?.click() }}>
-        <Td className="h-8 w-9 pl-4 pr-0" onClick={(e) => e.stopPropagation()}><Checkbox checked={selected} onCheckedChange={onSelect} aria-label="Select" /></Td>
-        <Td className="h-8"><span className="flex items-center gap-2"><Avatar name={c.name || '?'} size={20} /><span className={cn('truncate font-medium', !c.name && 'text-warning')}>{c.name || 'Name missing'}</span>{c.dnc && <Tip content="On Do-Not-Contact"><ShieldBan className="size-3.5 text-danger" /></Tip>}</span></Td>
-        {COLS.filter(([k]) => cols.includes(k)).map(([k]) => <Td key={k} className="h-8 max-w-[240px]">{cell[k]}</Td>)}
-        <Td className="h-8 w-8 pr-2" onClick={(e) => e.stopPropagation()}><DropdownMenuTrigger asChild><Button data-rowmenu variant="ghost" size="icon-xs" className="opacity-0 group-hover:opacity-100 data-[state=open]:opacity-100" aria-label="Row menu"><MoreHorizontal /></Button></DropdownMenuTrigger></Td>
+        <Td className="w-9 pl-4 pr-0" onClick={(e) => e.stopPropagation()}><Checkbox checked={selected} onCheckedChange={onSelect} aria-label="Select" /></Td>
+        <Td><span className="flex items-center gap-2"><Avatar name={c.name || '?'} size={20} /><span className={cn('truncate font-medium', !c.name && 'text-warning')}>{c.name || 'Name missing'}</span>{c.dnc && <Tip content="On Do-Not-Contact"><ShieldBan className="size-3.5 text-danger" /></Tip>}</span></Td>
+        {COLS.filter(([k]) => cols.includes(k)).map(([k]) => <Td key={k} className="max-w-[240px]">{cell[k]}</Td>)}
+        <Td className="w-8 pr-2" onClick={(e) => e.stopPropagation()}><DropdownMenuTrigger asChild><Button data-rowmenu variant="ghost" size="icon-xs" className="opacity-0 group-hover:opacity-100 data-[state=open]:opacity-100" aria-label="Row menu"><MoreHorizontal /></Button></DropdownMenuTrigger></Td>
       </Tr>
       <DropdownMenuContent align="end" className="w-56">
         <DropdownMenuItem onSelect={() => nav(`/contacts/${c.id}`)}><Users />Open profile</DropdownMenuItem>
@@ -250,7 +250,7 @@ function FoldersView({ onOpen }: { onOpen: (id: string) => void }) {
   const Tree = ({ parent, depth }: { parent: string | null; depth: number }) => <>{folders.filter((f) => f.parent === parent).map((f) => <div key={f.id}><button onClick={() => (f.group || folders.some((x) => x.parent === f.id) ? setCur(f.id) : onOpen(f.id))} onDoubleClick={() => onOpen(f.id)} className={cn('flex h-7 w-full items-center gap-1.5 rounded-control pr-2 text-sm hover:bg-subtle', cur === f.id && 'bg-subtle font-medium')} style={{ paddingLeft: 8 + depth * 14 }}>{f.group ? <Folder className="size-4 text-warning" /> : <Folder className="size-4 text-primary" />}<span className="truncate">{f.name}</span>{f.count !== undefined && <span className="ml-auto text-xs text-muted tabular">{nf(f.count)}</span>}</button><Tree parent={f.id} depth={depth + 1} /></div>)}</>
   return (
     <div className="flex min-h-0 flex-1">
-      <aside className="mx-4 mb-4 hidden w-[240px] shrink-0 flex-col rounded-card bg-surface shadow-card md:flex md:ml-6">
+      <aside className="mx-4 mb-4 hidden w-[240px] shrink-0 flex-col rounded-card border border-border bg-surface md:flex md:ml-6">
         <div className="flex h-10 items-center justify-between border-b border-border px-3 text-sm font-medium"><span>All folders</span><Button size="icon-xs" variant="ghost" onClick={() => mk(true)} aria-label="New group"><FolderPlus /></Button></div>
         <div className="min-h-0 flex-1 overflow-y-auto p-2"><button onClick={() => setCur(null)} className={cn('flex h-7 w-full items-center gap-1.5 rounded-control px-2 text-sm hover:bg-subtle', cur === null && 'bg-subtle font-medium')}><LayoutGrid className="size-4 text-muted" />Top level</button><Tree parent={null} depth={0} /></div>
       </aside>
@@ -262,7 +262,7 @@ function FoldersView({ onOpen }: { onOpen: (id: string) => void }) {
             {children(cur).map((f) => (
               <DropdownMenu key={f.id} modal={false}>
                 <div className="relative">
-                  <button onDoubleClick={() => (f.group ? setCur(f.id) : onOpen(f.id))} onClick={() => f.group && setCur(f.id)} onContextMenu={(e) => { e.preventDefault(); (e.currentTarget.parentElement?.querySelector('[data-fmenu]') as HTMLElement)?.click() }} className="flex w-full items-start gap-3 rounded-card bg-surface p-3 pr-9 text-left shadow-card transition-colors hover:bg-subtle-2">
+                  <button onDoubleClick={() => (f.group ? setCur(f.id) : onOpen(f.id))} onClick={() => f.group && setCur(f.id)} onContextMenu={(e) => { e.preventDefault(); (e.currentTarget.parentElement?.querySelector('[data-fmenu]') as HTMLElement)?.click() }} className="flex w-full items-start gap-3 rounded-card border border-border bg-surface p-4 pr-10 text-left transition-colors hover:bg-subtle-2">
                     <span className={cn('flex size-9 shrink-0 items-center justify-center rounded-control', f.group ? 'bg-warning-soft text-warning' : 'bg-primary-soft text-primary')}><Folder className="size-4" /></span>
                     <span className="min-w-0 flex-1">
                       {renaming === f.id ? <Input autoFocus className="h-7" value={nm} onChange={(e) => setNm(e.target.value)} onBlur={() => { patch('folders', (fs) => fs.map((x) => (x.id === f.id ? { ...x, name: nm || x.name } : x))); setRenaming(null) }} onKeyDown={(e) => e.key === 'Enter' && (e.target as HTMLInputElement).blur()} onClick={(e) => e.stopPropagation()} /> : <span className="block truncate text-base font-medium">{f.name}</span>}
@@ -301,7 +301,7 @@ function DncView({ onImport }: { onImport: () => void }) {
     <div className="flex min-h-0 flex-1 flex-col">
       <Toolbar left={<><span className="text-sm text-muted">Numbers here are skipped in every campaign, by every agent. Campaigns show what was skipped and let you send anyway.</span></>}
         right={<><div className="relative"><Search className="absolute left-2.5 top-2 size-3.5 text-muted" /><Input className="h-8 w-[200px] pl-8" placeholder="Search" value={q} onChange={(e) => setQ(e.target.value)} /></div><Button size="sm" onClick={onImport}><Upload />Import list</Button><Button size="sm" variant="primary" onClick={() => setAdd(true)}><Plus />Add number</Button></>} />
-      <div className="mx-4 mb-4 min-h-0 flex-1 overflow-auto rounded-card bg-surface shadow-card md:mx-6"><Table><thead><tr><Th>Name</Th><Th>Phone</Th><Th>Reason</Th><Th>Added</Th><Th>By</Th><Th>Comment</Th><Th className="w-8" /></tr></thead>
+      <div className="mx-4 mb-4 min-h-0 flex-1 overflow-auto rounded-card border border-border bg-surface md:mx-6"><Table><thead><tr><Th>Name</Th><Th>Phone</Th><Th>Reason</Th><Th>Added</Th><Th>By</Th><Th>Comment</Th><Th className="w-8" /></tr></thead>
         <tbody>{rows.map((d) => <Tr key={d.id}><Td className="font-medium">{d.name}</Td><Td className="tabular">{d.phone}</Td><Td><Badge tone={d.reason === 'Litigator' ? 'red' : d.reason === 'Opted out' ? 'amber' : 'neutral'}>{d.reason}</Badge></Td><Td className="text-muted">{d.added}</Td><Td className="text-muted">{d.by}</Td><Td className="max-w-[280px] truncate text-muted">{d.comment || '—'}</Td><Td><Button variant="ghost" size="icon-xs" onClick={() => { patch('dnc', (x) => x.filter((y) => y.id !== d.id)); toast.success('Removed from Do-Not-Contact') }} aria-label="Remove"><Trash2 /></Button></Td></Tr>)}</tbody></Table></div>
       <Dialog open={add} onOpenChange={setAdd}><DialogContent title="Add to Do-Not-Contact" size="sm" footer={<><Button onClick={() => setAdd(false)}>Cancel</Button><Button variant="primary" onClick={() => { patch('dnc', (x) => [{ id: 'd' + Date.now(), name: f.name || '—', phone: f.phone, reason: f.reason, added: 'Today', by: 'Bilal Nasir', comment: f.comment }, ...x]); setAdd(false); toast.success('Added') }}>Add</Button></>}>
         <div className="space-y-3"><div className="grid grid-cols-2 gap-3"><div className="space-y-1.5"><label className="text-sm font-medium text-text-2">Name</label><Input value={f.name} onChange={(e) => setF({ ...f, name: e.target.value })} /></div><div className="space-y-1.5"><label className="text-sm font-medium text-text-2">Phone</label><Input value={f.phone} onChange={(e) => setF({ ...f, phone: e.target.value })} autoFocus /></div></div>

@@ -2,10 +2,10 @@ import * as React from 'react'
 import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '@/lib/utils'
 
-const badge = cva('inline-flex h-5 shrink-0 items-center gap-1 whitespace-nowrap rounded-tag px-1.5 text-xs font-medium [&_svg]:size-3', {
+const badge = cva('inline-flex h-[22px] shrink-0 items-center gap-1 whitespace-nowrap rounded-full px-2.5 text-xs font-medium [&_svg]:size-3', {
   variants: {
     tone: {
-      neutral: 'bg-subtle text-text-2',
+      neutral: 'bg-[#e8e8e8] text-text-2',
       blue: 'bg-info-soft text-info',
       green: 'bg-success-soft text-success',
       amber: 'bg-warning-soft text-warning',

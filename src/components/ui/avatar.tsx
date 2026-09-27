@@ -8,7 +8,7 @@ export function Avatar({ name, size = 24, className, square, src }: { name: stri
   const i = hash(name) % palette.length
   return (
     <span
-      className={cn('inline-flex shrink-0 select-none items-center justify-center overflow-hidden font-semibold leading-none', square ? 'rounded-[6px]' : 'rounded-full', className)}
+      className={cn('inline-flex shrink-0 select-none items-center justify-center overflow-hidden font-semibold leading-none', square ? 'rounded-[10px]' : 'rounded-full', className)}
       style={{ width: size, height: size, background: palette[i], color: inks[i], fontSize: Math.max(9, Math.round(size * 0.38)) }}
       aria-hidden
     >

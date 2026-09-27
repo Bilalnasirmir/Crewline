@@ -2,11 +2,11 @@ import * as React from 'react'
 import { cn } from '@/lib/utils'
 
 export function Card({ className, ...p }: React.HTMLAttributes<HTMLDivElement>) {
-  return <div className={cn('rounded-card bg-surface shadow-card', className)} {...p} />
+  return <div className={cn('rounded-card border border-border bg-surface shadow-[0_1px_2px_rgba(0,0,0,0.04)]', className)} {...p} />
 }
 export function CardHeader({ className, title, description, action, icon }: { className?: string; title: React.ReactNode; description?: React.ReactNode; action?: React.ReactNode; icon?: React.ReactNode }) {
   return (
-    <div className={cn('flex min-h-11 items-center justify-between gap-3 border-b border-border px-4 py-2', className)}>
+    <div className={cn('flex min-h-12 items-center justify-between gap-3 border-b border-border px-5 py-2.5', className)}>
       <div className="flex min-w-0 items-center gap-2">
         {icon && <span className="text-muted [&_svg]:size-4">{icon}</span>}
         <div className="min-w-0">
@@ -19,7 +19,7 @@ export function CardHeader({ className, title, description, action, icon }: { cl
   )
 }
 export function CardBody({ className, ...p }: React.HTMLAttributes<HTMLDivElement>) {
-  return <div className={cn('p-4', className)} {...p} />
+  return <div className={cn('p-5', className)} {...p} />
 }
 
 export function EmptyState({ icon, title, description, action, className, compact }: { icon?: React.ReactNode; title: React.ReactNode; description?: React.ReactNode; action?: React.ReactNode; className?: string; compact?: boolean }) {
