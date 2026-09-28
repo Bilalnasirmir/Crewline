@@ -1,13 +1,15 @@
 # Crewline: Project Brief and Handover
 
 Handover date: 28 September 2026 (Asia/Karachi). Owner: Bilal Nasir (bilalnasirmir@gmail.com). Repo: https://github.com/Bilalnasirmir/Crewline (branch `main`).
+Last updated: 28 September 2026, Round 5 (Polaris restyle of tokens, components, shell and Home; approved by the owner).
 
 This document is the single source of truth for continuing the project in Claude Code. When it conflicts with anything older, this document wins. The owner's own words are kept verbatim in `docs/`:
 
 | File | What it is | Authority |
 | --- | --- | --- |
-| `docs/DESIGN_SYSTEM.md` | The owner's master UI design-system prompt (Shopify-style) | **Highest** for anything visual |
-| `docs/reference-screenshots/*.png` | 12 Shopify admin screenshots the owner supplied | Visual source of truth, next to DESIGN_SYSTEM.md |
+| `docs/POLARIS_MASTER_PROMPT.md` | The owner's latest UI instruction (28 Sep 2026): follow the current Shopify admin / Polaris system, typography first, official Polaris tokens over screenshot guesses | **Highest** for anything visual. The verified values it led to are in §4 and `src/index.css` |
+| `docs/DESIGN_SYSTEM.md` | The owner's earlier master design-system prompt (Shopify-style) | Mood, principles and component list still apply. **Its pixel sizes are superseded** (they were measured from screenshots taken at 125% zoom) |
+| `docs/reference-screenshots/*.png` | 12 Shopify admin screenshots the owner supplied, **captured at 125% display scaling** | Use for visual validation. Colours are exact; divide any measured size by 1.25 |
 | `docs/UPDATE_BRIEF.md` | The owner's full feature brief (sections 1–15 = features, 17 = open questions) | **Highest** for features and behaviour. Its section 16 (Attio design) is **superseded** by DESIGN_SYSTEM.md |
 | `docs/ORIGINAL_DESCRIPTION.md` | The owner's first description of the product | Product intent |
 | `docs/legacy/prototype-v2/` | The previous, rejected vanilla-JS prototype | Reference only for feature behaviour and sample data. Never reuse its look, CSS or layout |
@@ -72,8 +74,19 @@ Superseded decisions are marked ~~struck~~ and followed by the final decision.
 ### Round 4: the Shopify design system (current direction)
 14. ~~Attio-inspired design (Inter, #266DF0 blue primary, white canvas, flat)~~. **Final:** "I need this kind of design system and UI, **same fonts, this is from Shopify**." The owner supplied 6 Shopify admin screenshots.
 15. The restyle was applied. The owner: "you are still not following it", and supplied 6 more screenshots plus the **master design-system prompt** (`docs/DESIGN_SYSTEM.md`). The exact values were applied (v3.2).
-16. **Latest open complaint, not yet resolved:** "You are not able to put **same font size, font color, font style**, it doesn't look good, please make it according to that [DESIGN_SYSTEM.md]." Then: "go ahead". No further changes were made after this message. **This is the first thing to fix** (see section 5).
+16. ~~Latest open complaint:~~ "You are not able to put **same font size, font color, font style**, it doesn't look good, please make it according to that [DESIGN_SYSTEM.md]." **Resolved in Round 5** (items 20–21).
 17. The owner decided to move the project to **Claude Code** and asked for this handover.
+
+### Round 5: Claude Code, Polaris restyle (28 Sep 2026)
+18. "We're just building the front end… it has to be the 100% completed front end because we're not gonna redevelop front end, we're just gonna redevelop the back end." **Final:** the front end is the production front end, not a throwaway demo. Keep all data access behind the store actions so a backend can replace the simulated results later.
+19. The owner supplied the **Polaris master prompt** (`docs/POLARIS_MASTER_PROMPT.md`): follow the current Shopify admin / Polaris system as closely as possible, typography first, official Polaris tokens over screenshot estimates, never fake "ShopifyInter", no generic AI UI, original branding only.
+20. Findings, all verified:
+    - The reference screenshots were captured at **125% display scaling**. The older specs (64px top bar, 268px sidebar, 14px body, 36px buttons, 40px inputs, 16px card radius) were measured from them and were 20–25% too big. That was the root cause of the font complaints.
+    - The app enabled Inter stylistic sets (`cv11`, `ss01`, `ss03`) that change letter shapes. Removed. Polaris' own global style is `font-feature-settings: "calt" 0`.
+    - **ShopifyInter is not public.** Polaris' public font stack is Inter + system fonts, so Crewline uses Inter, honestly named.
+    - **Polaris React cannot be installed:** its licence limits it to apps that integrate with Shopify and requires standalone apps to look visually distinct. So Crewline keeps its own components and matches the public Polaris token values.
+21. The restyle was applied to the tokens, every shared component, the shell (with nested sidebar sub-navigation) and Home. It was verified by pixel-comparing renders at 1.25× with the screenshots; for example, the sidebar "Settings" label is 63×15 px in both. **The owner approved Home and the overall look:** "Yes i am happy with home". Pushed to GitHub.
+22. The owner will continue building in a **Claude Code cloud session**, starting from this repo.
 
 ### Standing preferences and rules from the owner
 - User-friendliness above everything. It must be organised and categorised, never messy.
@@ -89,23 +102,24 @@ Superseded decisions are marked ~~struck~~ and followed by the final decision.
 Status legend: ✅ built in the new React app · 🟡 partly built · ⬜ not built yet (stub page). For ⬜ items, the full behaviour is in `docs/UPDATE_BRIEF.md`, with a working reference in `docs/legacy/prototype-v2/js/`.
 
 ### 3.1 App shell ✅
-- **Top bar** (64px, #0A0A0A): brand mark + "Crewline" on the left. Centered global search, 40px tall and about 620px wide, on #202020 with a #363636 border, 12px radius and a CTRL K badge. It opens a command palette (people, campaigns, agents, pages, quick actions, "Ask Max: …"). On the right: Live/Paused toggle for the simulation, **Assigned to me** with a red count, notifications popover with a count badge, Max side-panel toggle, and account menu (green 36px avatar with 10px radius, "Bilal's Group").
-- **Sidebar** (268px, #EBEBEB): items 36px tall, 9px radius, 18px icons. The active item is a white surface; hover is white at 55%. Groups: (no label) Get Started, Home, Max; **Work**: Inbox, Contacts, Campaigns, Stages, Bookings, AI Agents; **Business**: Expenses, Reports (directly above Settings), Settings. At the bottom: Plans & pricing, Theme menu, Collapse.
+- **Top bar** (56px, #0A0A0A): brand mark + "Crewline" on the left. Centered global search, 36px tall and up to 544px wide, on #282828 with a #3C3C3C border, 8px radius and a CTRL K badge. It opens a command palette (people, campaigns, agents, pages, quick actions, "Ask Max: …"). On the right: Live/Paused toggle for the simulation, **Assigned to me** with a red count, notifications popover with a count badge, Max side-panel toggle, and account menu (green 28px avatar with 8px radius, "Bilal's Group").
+- **Sidebar** (240px, #EBEBEB; Polaris navigation): items 28px tall, 8px radius, a 20px icon slot (18px Lucide icon) and the label at 36px. Top-level labels are 13px/550; the selected item is 13px/650 on #FAFAFA; hover is #F1F1F1. Group headings are 12px/650 #303030. Groups: (no label) Get Started, Home, Max; **Work**: Inbox, Contacts, Campaigns, Stages, Bookings, AI Agents; **Business**: Expenses, Reports (directly above Settings), Settings. At the bottom: Plans & pricing, Theme menu, Collapse.
+  - **Sub-navigation:** a section's children appear under it while you are in that section, in 13px/450 #616161. The selected child is 13px/650 on #FAFAFA with an L-shaped connector from the parent icon, and the parent then loses its highlight, as in Shopify's "Customers → Segments". Current children: Contacts → Folders / Do-Not-Contact / Database health (`/contacts?view=folders|dnc|health`), Campaigns → New campaign. Add more in `NAV` in `src/components/app/shell.tsx`.
   - **Retractable:** collapsed shows icons only, with the name on hover (tooltip).
   - Mobile: it becomes a drawer.
   - Counts: Inbox unread (red), Get Started remaining steps.
 - **Themes:** Light (default), Dark, Dark blue, Mixed. Tokens switch through a class on `<html>`.
-- **Max side panel** on every page except /max, opened by the "Ask Max" floating button or the top-bar icon. It has **Guided mode**, a step checklist per screen ("Do this now").
+- **Max side panel** on every page except /max, opened by the compact "Ask Max" floating button (bottom right) or the top-bar icon. It has **Guided mode**, a step checklist per screen ("Do this now"). Pages keep 64px of bottom padding so content can scroll clear of the button.
 - **Toasts** appear bottom-right with Undo where relevant. Every icon-only button has a tooltip.
 - **Live simulation:** every 8 seconds an agent moves a lead one stage (the first tick moves Umar Ali New → Contacted), a new inbound lead arrives, the receptionist books a slot, or Mia sends messages. The activity feed updates everywhere.
 
 ### 3.2 Get Started ⬜
 AI-guided onboarding, "Hello, let's get started." Steps: install the web app (recommended), add contacts, make a campaign, connect channels, learn stages and set them, set up AI agents, invite teammates. Plus resources (intro video, support). Every step has "Get it done with AI", and there is a "describe your business and AI builds it" option. It is also the first item in Settings. Sample data: `gs` in `src/data/seed.ts`.
 
-### 3.3 Home ✅ (needs restyle review)
+### 3.3 Home ✅ (Polaris restyle approved by the owner, 28 Sep 2026)
 - A **Max chat hero at the top** ("Good evening, Bilal. What do you want to do?") with a composer (attach, voice note, live voice) and quick chips. Sending opens /max with the message.
 - **Needs your attention** list, each with Open and "Fix with AI", plus "Let AI finish it with me".
-- **Filters** (several at once, default all): campaign, All/Outbound/Inbound, lead folder.
+- **Filters** (several at once, default all): campaign, All/Outbound/Inbound, lead folder. They use `Select variant="button"`, Shopify's "Today ⌄" filter style.
 - **Customizable KPIs:** conversations today, calls made, calls answered, texts & emails, appointments & orders, sales closed, revenue, AI cost, handed to you, reply rate. Each KPI has a hover tooltip and links through.
 - **Panels:** bookings per day (chart), stage funnel, live agent activity, Assigned to me, coming up today, inbound vs outbound, your AI team. A **Customize dialog** shows or hides panels and KPIs (saved in localStorage).
 
@@ -122,7 +136,7 @@ AI-guided onboarding, "Hello, let's get started." Steps: install the web app (re
   - Improve agent shows a plan card that bumps Robert's version and score.
 - **Guided mode** runs in the side panel with a per-route step list.
 
-### 3.5 Contacts ✅ (needs restyle review)
+### 3.5 Contacts ✅ (works; picks up the new components, but its page layout is not yet tuned to Polaris; that is the next step)
 - Tabs: **All people · Folders · Do-Not-Contact · Database health**.
 - **Tiles:** Missing details (opens a breakdown dialog with "Fill missing data with AI"), Duplicates (list with Merge / Overwrite / Skip, plus Merge all), Not responding, Dead numbers, Do-Not-Contact.
 - **Build filters with AI** box (text or voice). It turns plain English into filter chips and shows a note on what it understood or what is missing, plus "Save as folder".
@@ -322,56 +336,74 @@ Each item has kind-specific actions: open chat, assign to receptionist, choose a
 
 ---
 
-## 4. Design rules (CURRENT: Shopify admin style)
+## 4. Design rules (CURRENT: Shopify admin / Polaris, verified 28 Sep 2026)
 
-**Read `docs/DESIGN_SYSTEM.md` in full and study `docs/reference-screenshots/`.** They override everything else visual. Summary:
+**Read `docs/POLARIS_MASTER_PROMPT.md` (binding) and `docs/DESIGN_SYSTEM.md` (mood and principles).** Every value below is a token in `src/index.css` or lives in `src/components/ui/*`. Change those, never hard-code a style on one page.
 
-- **Mood:** calm, precise, polished, predictable, expensive, like a mature enterprise operating system. Mostly grayscale; colour only for meaning or status. No gradients, glassmorphism, neon, giant headings, giant buttons, pill buttons, heavy shadows or decorative animation.
+**Where the values come from:** the public Polaris token set (`@shopify/polaris-tokens`) and Polaris component CSS, both read from the source. Each value was then checked against the reference screenshots by pixel measurement. **The screenshots are at 125% display scaling, so divide any size you measure in them by 1.25.** Colours in them are exact.
+
+- **Mood:** calm, precise, restrained, dense like the Shopify admin. Mostly grayscale; colour only for meaning or status. No gradients, glassmorphism, neon, AI purple, hero sections, giant headings, pill buttons, heavy shadows or decorative animation.
+- **Font:** Inter, self-hosted as "Inter Variable", then the Polaris system stack (-apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue). It is never labelled "ShopifyInter". The body uses `font-feature-settings: "calt" 0` with antialiasing; no other stylistic sets.
+- **Weights:** 450 regular, 550 medium, 650 semibold, 700 bold. Tailwind's `font-normal/medium/semibold/bold` are remapped to these.
+- **Type roles:**
+
+  | Role | Class / element | Size / line height | Weight |
+  | --- | --- | --- | --- |
+  | Page title | `h1`, `text-xl` | 18/24, −0.2px (measured on 4 Shopify screenshots) | 650 |
+  | Big number (metric value) | `text-2xl` | 20/24, −0.2px | 650 |
+  | Section title (outside cards) | `h2`, `text-lg` | 14/20 | 650 |
+  | Card title | `h3` | 13/20 | 650 |
+  | Body, table cells, inputs, nav | `text-sm` = `text-base` | 13/20 | 450 (nav 550) |
+  | Buttons, badges, tabs, table headers, captions | `text-xs` | 12/16 | 550 (captions 450) |
+  | Tiny counts | `text-2xs` | 11/12 | 650 |
+
 - **Colours:**
 
-  | Token | Value |
-  | --- | --- |
-  | bg | #F1F1F1 |
-  | surface | #FFFFFF |
-  | surface-subdued | #F6F6F6 |
-  | sidebar | #EBEBEB |
-  | topbar | #0A0A0A |
-  | dark surface / search | #202020 (search border #363636) |
-  | text | #303030 |
-  | text secondary | #616161 |
-  | text subdued | #707070 |
-  | text disabled | #8C8C8C |
-  | border | #E1E3E5 |
-  | border subtle | #E6E6E6 |
-  | input border | #C9CCCF |
-  | info | #2C6ECB |
-  | success | #008060 |
-  | warning | #B98900 |
-  | critical | #D72C0D |
+  | Token | Value | Token | Value |
+  | --- | --- | --- | --- |
+  | text | #303030 | bg | #F1F1F1 |
+  | text-2 / muted | #616161 | surface | #FFFFFF |
+  | faint (icon-secondary) | #8A8A8A | subtle-2 (hover, table header) | #F7F7F7 |
+  | disabled | #B5B5B5 | subtle (selected) | #F1F1F1 |
+  | icon | #4A4A4A | subtle-3 (modal header) | #F3F3F3 |
+  | primary (link, focus) | #005BD3 | border / row divider | #E3E3E3 / #EBEBEB |
+  | btn (primary button) | #303030, hover #1A1A1A | input-border | #8A8A8A, hover #616161 |
+  | fill-tertiary (header buttons) | #E3E3E3, hover #D4D4D4 | sidebar / hover / selected | #EBEBEB / #F1F1F1 / #FAFAFA |
+  | topbar / search / border | #0A0A0A / #282828 / #3C3C3C | overlay | rgba(0,0,0,.5) |
 
-- **Font:** "ShopifyInter", then Inter, then system fonts. Inter is self-hosted via `@fontsource-variable/inter`.
-  - Scale: 12/16, 13/18, **14/20 body**, 16/22, 18/24 section, 20/26, **24/30 page title at 600**.
-  - Weights: 400 / 500 / 600 / 700.
-- **Spacing:** 4px grid (4, 8, 12, 16, 20, 24, 32, 40, 48, 64). Main content padding 24px.
-- **Radius:** 6 small, **8 buttons and inputs**, 12 dropdowns, **14–16 cards**, 999 **badges only**. Nav items and tabs use 9px.
-- **Layout:** 64px top bar, 268px sidebar with 36px items, 14px/500 text and 18px icons. The active item is a white surface; hover is rgba(255,255,255,.55). Nested nav is indented 36–40px.
-- **Buttons:** 36px tall, 14px padding, 8px radius, 14px/600.
-  - Primary: #303030 with white text, hover #1A1A1A.
-  - Secondary: white with a #C9CCCF border.
-  - Tertiary: transparent.
-- **Inputs:** 40px tall, white, #C9CCCF border, 8px radius, 12px padding, 14px text, 2px subtle blue focus.
-- **Cards:** white, 1px #E1E3E5 border, 16px radius, 16–24px padding, shadow at most 0 1px 2px rgba(0,0,0,.04).
-- **Metric cards:** 4-column grid with a 16px gap. Title 14/500, value 20–24/600, support text 12–14 #616161, 16px info icon.
-- **Tables:** header 13–14/500 #616161, rows 42–48px, 1px #E1E3E5 dividers, no zebra striping, no heavy grid.
-- **Badges:** pill, 3px 9px padding, 12/500. Neutral is #E8E8E8 with #616161 text; semantic colours use soft backgrounds.
-- **Dropdowns:** white, #E1E3E5 border, 12px radius, shadow 0 4px 12px rgba(0,0,0,.1). Items 36–40px with 7px radius and hover #F6F6F6. Motion is 150–200ms opacity plus translateY(-4px).
-- **Toggles** are 36×20 with a 16px knob. **Banners** are soft (for example light blue) with a 10px radius and 12px 16px padding.
-- **Empty states:** illustration, heading, explanation and a primary action, centred. **Onboarding cards:** a 3-column grid with heading, description, illustration and CTA.
-- **Icons:** Lucide only, outline, stroke 1.8–2, sizes 16 / 18 / 20 / 24. **Avatars:** 34–36px with a 10px radius.
-- **Tabs:** 36–40px tall; the selected tab has an #F1F1F1 background and 9px radius.
-- **Charts:** subtle, #E6E6E6 grid, 12px #707070 axis labels, thin lines.
-- **Motion:** 120 / 180 / 240ms, `cubic-bezier(.2,0,.2,1)`. Respect prefers-reduced-motion.
-- **Responsive:** 4 columns → 2 on tablet → 1 on mobile. The sidebar becomes a drawer, tables scroll horizontally and actions stack.
+  Status colours: success #047B5D (badge #AFFEBF with #014B40 text); warning text #5E4200 (badge #FFD6A4); critical #C70A24 (badge #FED1D7 with #8E0B21); info text #003A5A (badge #D5EBFF). AI actions stay neutral and are marked only by the Lucide `Sparkles` icon.
+- **Sizes:**
+  - Top bar 56px; sidebar 240px (60px collapsed); nav items 28px.
+  - Buttons: 28px on desktop and 32px on phones; micro 24px, large 32px. Padding 6px 12px.
+  - Inputs and form selects: 32px (36px on phones, with 16px text so iOS doesn't zoom).
+  - Table header 36px; rows 33px. Badges 20px.
+- **Radius:** 8px for buttons, inputs, nav items, tabs and badges; 12px for cards, menus, popovers and banners; 16px for modals. Round (full) only for count bubbles and the Ask Max button.
+- **Shadows (Polaris tokens):**
+  - Card: the bevel edge (inset, drawn above the content like Polaris ShadowBevel) plus `0 1px 0 rgba(26,26,26,.07)`.
+  - Menus: shadow-300. Tooltips: shadow-400. Modals: shadow-600.
+  - Buttons use Polaris' button bevels, with no gradients.
+- **Buttons** (`Button`):
+  - `primary`: #303030.
+  - `secondary`: white with a bevel. This is the default.
+  - `ghost`: Polaris tertiary, transparent.
+  - `header`: flat #E3E3E3, for secondary actions in a page header, as in Shopify's "More actions ⌄".
+  - Also `destructive`, `destructive-solid`, `link`.
+  - `ai` looks like `secondary`.
+- **Filters in toolbars:** `Select variant="button"`, which looks like a secondary button and sizes to its label. Use the `field` variant only inside forms.
+- **Tabs / Segmented:** 28px, 12px/550, #303030 text; the selected tab gets a `rgba(0,0,0,.08)` fill. No underlines, no pills.
+- **Checkbox, radio, switch:** the selected state is #303030.
+- **Tooltips:** white with shadow-400, 13px text.
+- **Modals:** a grey header bar (#F3F3F3) with a 14px/650 title, a 16px body, and the footer actions on the right.
+- **Banner:** a white card with a coloured icon tile (info #91D0FF).
+- **Page pattern:**
+  - `PageHeader`: 16px from the top bar, then an optional icon, the title, and actions on the right 8px apart. It sits 12px above the content.
+  - Content has 16px side padding.
+  - `PageBody wide` = max 1200px (dashboards), `narrow` = 662px (forms); tables run full width.
+  - Card gap 16px; metric grid gap 12px.
+  - Lists inside cards use top dividers (#EBEBEB).
+  - Charts: #EBEBEB horizontal grid, 12px #616161 axis labels.
+- **Motion:** 120 / 180 / 240ms, no bounce and no scale on hover. Respect reduced motion.
+- **Responsive:** 4 → 2 → 1 columns. Grid children need `min-w-0` or charts force sideways scrolling. The sidebar becomes a drawer; rows and card-header actions wrap on phones.
 - **Originality:** never copy Shopify's logo, name, illustrations or assets. Only the visual language.
 
 ### What the owner liked and disliked
@@ -379,7 +411,7 @@ Each item has kind-specific actions: open chat, assign to receptionist, choose a
   - v1/v2: messy layout, controls of different sizes, native browser dropdowns, wrong font.
   - The Attio-style rebuild: "I don't like the design and fonts and layouts."
   - Early Shopify restyles: font size, colour and style still not matching.
-- **Liked:** the v1 feature set ("I like it") and the Shopify admin look in the screenshots.
+- **Liked:** the v1 feature set ("I like it") and the Shopify admin look in the screenshots. **Approved:** the Polaris restyle of the shell and Home (28 Sep 2026), shown side by side with the Shopify screenshot at the same scale.
 - Wants **real dropdowns and menus** (Radix, done), **consistent control sizes** and **big-CRM organisation**.
 - **Max must look and answer like Claude or ChatGPT.**
 
@@ -389,50 +421,47 @@ Each item has kind-specific actions: open chat, assign to receptionist, choose a
 
 ### Finished (React app in this repo)
 - Project setup: Vite, React, TypeScript, Tailwind v4 and Radix UI (via the `radix-ui` package), plus lucide-react, Zustand, React Router (hash routes), Recharts, cmdk, sonner and self-hosted Inter.
-- The design-token system in `src/index.css`, with 4 themes.
-- Component library (`src/components/ui/*`): Button, Input/Textarea/Field, Select, Combobox, DropdownMenu, Popover, Dialog/Sheet, Tabs/Segmented, Switch/Checkbox/Radio/ChoiceRow/Progress/Slider/Kbd/Skeleton, Badge/Count, Avatar/AgentAvatar, Command, Table, Card/CardHeader/EmptyState/PropertyList, Tooltip.
+- The design-token system in `src/index.css`, with 4 themes, now on verified Polaris values (§4).
+- Component library (`src/components/ui/*`), all restyled to Polaris: Button, Input/Textarea/Field, Select (field and button variants), Combobox, DropdownMenu, Popover, Dialog/Sheet, Tabs/Segmented, Switch/Checkbox/Radio/ChoiceRow/Progress/Slider/Kbd/Skeleton, Badge/Count, Avatar/AgentAvatar, Command, Table, Card/CardHeader/CardBody/EmptyState/**Banner**/PropertyList, Tooltip.
+- `cn()` in `src/lib/utils.ts` knows the custom Tailwind names (`text-2xs`, `rounded-card`, `shadow-btn`…), so tailwind-merge doesn't drop them.
 - App components: AppShell, TopBar, Sidebar, ThemeMenu, CommandPalette, PageHeader/Toolbar/PageBody/Section, StageTag, AgentChip, ContactChip, CampaignChip, Kpi, BarRow, and the AiMark/DirIcon/DirTag/PlatIcon/PlatBadge icons.
 - The typed sample data (`src/data/seed.ts`, `types.ts`) and the store with the live simulation (`src/store/index.ts`).
 - Modules: **Home, Max (page, panel and engine), Contacts (all tabs, dialogs, profile), Campaigns tiles.**
 
+- **Typography and visual fidelity: resolved and approved** for the shell and Home (Round 5). The sidebar has nested sub-navigation.
+
 ### Half-done
-- **Typography and visual match to the Shopify screenshots.** Tokens follow DESIGN_SYSTEM.md, but the owner says font size, colour and style still don't match. **Fix this first**, before any new module. Compare side by side with `docs/reference-screenshots` at 100% zoom. Things to check:
-  - Page titles: the screenshots look about 20–24px, weight about 650, colour #303030.
-  - Sidebar labels: about 14–15px, weight 550–600. Shopify's nav reads slightly bolder than regular.
-  - Body: 14px, weight about 450 in the screenshots. Use variable Inter at 450/550/650 to match ShopifyInter.
-  - Letter-spacing, and card title weight (Shopify card titles are 14px/650).
-  - Muted text colour #616161.
-  - Remove any leftover places using a 12–13px size or `text-muted` where Shopify uses #303030. Several Home and Contacts elements still use the older small sizes.
-  - Kpi values currently render bold at 24px; the spec is 20–24/600.
+- **Contacts, Max and Campaigns** use the new shared components, so they already look much closer. Their page-level layouts still carry older local styles, and each still needs its own Polaris pass. Examples: Contacts' own view tabs and toolbars, the search box, the table's sticky name column (it sets `bg-surface`, which hides row hover), `Toolbar` padding inside tabs, and the Max side-panel header.
 - Campaigns: tiles only. The wizard and detail pages are stubs. The follow-up editor and LineList are written but unused.
-- The Home and Contacts layouts were built before the Shopify switch. They were restyled with tokens, but not re-laid-out to Shopify's page pattern: page header, a centred content column of about 1000–1200px for non-table pages, and card sections with a heading outside the card, as in `05-growth-page.png`. The **sidebar has no nested sub-navigation yet**; the spec shows children under a parent, like Contacts → Folders / Do-Not-Contact / Database health, or Campaigns → New campaign.
 
 ### Not built (stub pages)
 Get Started, Inbox, Campaign wizard, Campaign detail, Stages, Bookings, AI Agents (list and editor), Expenses, Reports, Settings, Pricing, Assigned to me.
 
 ### Known bugs and gaps
 - Several rename/tag/new-folder actions use `window.prompt`. Replace them with proper dialogs.
-- The Dark, Dark blue and Mixed themes were designed for the older look. Check contrast and surfaces after the Shopify switch. The primary-button text colour was fixed with a `--btn-fg` token.
+- The Dark, Dark blue and Mixed themes have values for every new token, but have not been reviewed visually since the Polaris restyle.
 - The Home filters scale numbers with a multiplier. The data isn't truly filtered.
 - The Max engine is keyword-based. Unmatched text shows a "Build / Find / Analyze" clarifier.
 - The bundle is about 1.1MB (a Vite warning). Consider route code-splitting.
 - The "Fill missing" button on the contact profile only shows a toast.
-- Mobile was checked only lightly.
+- Mobile: Home was checked at 375px (no sideways scroll, rows wrap). Other screens are not checked yet.
+- `vite.config.ts` uses `__dirname`; Vite warns that it should become `import.meta.dirname`. Harmless for now.
 - Vercel deploy through the v0 connector failed with `403 Cannot create tokens for this app`. Previews were published as a claude.ai artifact instead: https://claude.ai/artifact/QvBoe5zLTRvrZBd68X26rr (private; the latest version is v3.2 plus the fixes in this handover). The owner can connect the repo to Vercel himself for automatic deploys.
 
 ---
 
 ## 6. What to build next (in order)
 
-1. **Fix typography and visual fidelity** on the shell, Home, Max and Contacts until the owner approves. Screen by screen, compared with the screenshots. Add nested sidebar sub-navigation. Adopt Shopify's page pattern (card sections with headings outside, centred columns, onboarding cards, empty states with simple original SVG illustrations).
-2. **Get Started** (onboarding cards grid, like `02-onboarding-cards.png`).
-3. **Campaigns:** the wizard (0–9 with the journey tracker) and the detail page (all tabs and banners).
-4. **Stages** (board, list, review, new-stage dialog, in/out tabs, follow-up stages).
-5. **Inbox** (chat, email, calls, dial pad, composer, quotation).
-6. **AI Agents** (types, tiles, leaderboard, editor, test and review panels, guided builder, creating animation).
-7. **Bookings** (calendar views, dashboard, queries, setup and booking-settings pop-up).
-8. **Assigned to me**, **Expenses**, **Reports**, **Settings**, **Pricing**.
-9. Run the `consistent-ui` skill for a drift audit, check mobile, split the bundle.
+1. **Polaris pass on Contacts** (next): view tabs and search/filter row inside the table card, as in `03-segments-table.png` / `12-reports-table.png`; filter pills; toolbar selects as `variant="button"`; header secondary actions as `variant="header"`; the index table with the row hover fixed on the sticky column; the folders view; the profile page. Show the owner, get approval, commit.
+2. **Polaris pass on Max** (page and side panel), then the **Campaigns** tiles page.
+3. **Get Started** (onboarding cards grid, like `02-onboarding-cards.png`).
+4. **Campaigns:** the wizard (0–9 with the journey tracker) and the detail page (all tabs and banners).
+5. **Stages** (board, list, review, new-stage dialog, in/out tabs, follow-up stages).
+6. **Inbox** (chat, email, calls, dial pad, composer, quotation).
+7. **AI Agents** (types, tiles, leaderboard, editor, test and review panels, guided builder, creating animation).
+8. **Bookings** (calendar views, dashboard, queries, setup and booking-settings pop-up).
+9. **Assigned to me**, **Expenses**, **Reports**, **Settings**, **Pricing**.
+10. Run the `consistent-ui` skill for a drift audit, review the dark themes, check mobile, split the bundle.
 
 ### Ideas discussed but not built
 - Put the finished screens into **Figma** for the owner's team (the Figma connector and skills are available).
@@ -444,7 +473,13 @@ Get Started, Inbox, Campaign wizard, Campaign detail, Stages, Bookings, AI Agent
 
 ## 7. Everything else Claude Code must know
 
-- **How to run:** `npm install`, then `npm run dev` (local preview) and `npm run build` (static output in `dist/`, hash routing, `base: './'`, so it works from any static host).
+- **How to run:** `npm install`, then `npm run dev` (local preview on port 5173; `.claude/launch.json` has a `crewline-dev` entry) and `npm run build` (static output in `dist/`, hash routing, `base: './'`, so it works from any static host).
+- **How to verify a screen visually (use this for every restyle):**
+  1. Check the computed styles in the browser first (font family, size, weight, line height, letter spacing). Font first, spacing second.
+  2. Capture the page at **device scale factor 1.25** and a 1532×720 viewport, so it matches the reference screenshots pixel for pixel. Headless Chrome/Edge: `--window-size=1532,720 --force-device-scale-factor=1.25 --screenshot`. Playwright: `deviceScaleFactor: 1.25`.
+  3. Compare identical elements. Measuring the width and height of the same word ("Home", "Settings", "Search") is the most reliable test of font size and weight.
+  4. Show the owner the reference and Crewline stacked in one image.
+- **Owner's machine** (Windows 11, 125% scaling): Node.js 24 LTS and Git were installed on 28 Sep 2026. The local copy lives in `Downloads\crewline-handover\crewline`.
 - **Architecture:**
   - `src/main.tsx`: routes.
   - `src/components/app/shell.tsx`: the layout.

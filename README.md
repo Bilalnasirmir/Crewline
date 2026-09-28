@@ -15,7 +15,7 @@ npm run preview    # serve the build at http://localhost:4173
 ## Where things are
 ```
 src/
-  index.css              design tokens (colours, type scale, radii, themes)
+  index.css              design tokens: verified Polaris values (colours, type scale, radii, shadows, themes)
   main.tsx               routes (hash router)
   components/ui/         buttons, inputs, selects, dialogs, tables, cards…
   components/app/        app shell (top bar, sidebar), page layout, shared bits
@@ -29,10 +29,11 @@ src/
     shared/              reusable editors (follow-ups, line lists)
     stub.tsx             placeholder for screens not built yet
 docs/
-  DESIGN_SYSTEM.md       design spec (Shopify admin look), binding
+  POLARIS_MASTER_PROMPT.md  owner's binding UI instruction (Shopify admin / Polaris)
+  DESIGN_SYSTEM.md       earlier design spec: mood and principles (sizes superseded)
   UPDATE_BRIEF.md        owner's feature brief (verbatim)
   ORIGINAL_DESCRIPTION.md
-  reference-screenshots/ 12 reference screenshots
+  reference-screenshots/ 12 reference screenshots (captured at 125% scaling)
   legacy/prototype-v2/   older plain-JS prototype (reference only)
 PROJECT_BRIEF.md         full handover: decisions, screens, status, next steps
 CLAUDE.md                short instructions for Claude Code
