@@ -18,7 +18,7 @@ export function Tip({
           side={side}
           align={align}
           sideOffset={6}
-          className={cn('z-[10000] max-w-[280px] rounded-control bg-[#1c1d21] px-2.5 py-1.5 text-xs leading-4 text-white shadow-menu anim-pop', className)}
+          className={cn('z-[10000] max-w-[275px] rounded-control bg-surface px-2 py-1 text-sm text-text shadow-tooltip anim-pop', className)}
         >
           {content}
         </T.Content>

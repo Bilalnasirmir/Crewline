@@ -28,8 +28,8 @@ export function MaxPanel() {
     <>
       {!open && (
         <Tip content="Ask Max (⌘J)" side="left">
-          <button onClick={() => setOpen(true)} className="fixed bottom-5 right-5 z-[90] flex h-10 items-center gap-2 rounded-full border border-border-strong bg-surface px-3.5 text-base font-medium shadow-menu transition-transform hover:scale-[1.02]" aria-label="Open Max">
-            <Sparkles className="size-4 text-ai" />Ask Max
+          <button onClick={() => setOpen(true)} className="fixed bottom-4 right-4 z-[90] flex h-8 items-center gap-1.5 rounded-full bg-surface px-3 text-xs font-medium text-text shadow-[var(--shadow-btn),var(--shadow-menu)] transition-colors hover:bg-btn-2-hover" aria-label="Open Max">
+            <Sparkles className="size-4 text-icon" />Ask Max
           </button>
         </Tip>
       )}

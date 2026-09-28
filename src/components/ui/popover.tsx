@@ -15,7 +15,7 @@ export const PopoverContent = React.forwardRef<HTMLDivElement, React.ComponentPr
         align={align}
         sideOffset={sideOffset}
         collisionPadding={8}
-        className={cn('z-[1000] w-72 rounded-menu border border-border bg-surface p-3 shadow-menu outline-none anim-pop', className)}
+        className={cn('z-[1000] w-72 rounded-menu border border-border bg-surface p-3 text-sm shadow-menu outline-none anim-pop', className)}
         {...props}
       />
     </P.Portal>

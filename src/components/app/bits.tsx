@@ -13,7 +13,7 @@ export function StageTag({ name, stages, tip, className, size = 'md' }: { name: 
   const st = stages?.find((s) => s.name === name)
   const color = st?.color ?? '#8A93A6'
   const el = (
-    <span className={cn('inline-flex max-w-full items-center gap-1.5 rounded-tag font-medium', size === 'sm' ? 'h-[18px] px-1.5 text-[11px]' : 'h-5 px-1.5 text-xs', className)} style={{ background: color + '1a', color }}>
+    <span className={cn('inline-flex max-w-full items-center gap-1.5 rounded-tag font-medium', size === 'sm' ? 'h-4 px-1.5 text-2xs' : 'h-5 px-2 text-xs', className)} style={{ background: color + '1a', color }}>
       <span className="size-1.5 shrink-0 rounded-full" style={{ background: color }} /><span className="truncate">{name}</span>
     </span>
   )
@@ -41,13 +41,14 @@ export function CampaignChip({ id, className }: { id: string | null | undefined;
   return <Link to={`/campaigns/${c.id}`} className={cn('truncate text-text hover:text-primary hover:no-underline', className)} onClick={(e) => e.stopPropagation()}>{c.name}</Link>
 }
 
-/** KPI tile. Compact, click-through, optional delta and tooltip. */
+/** Metric card (Polaris analytics style): heading-sm title with a dotted underline when it has a
+ *  definition, heading-lg value, 12px change line. Clicks through. */
 export function Kpi({ label, value, delta, up, to, tip, onClick, className, sub }: { label: React.ReactNode; value: React.ReactNode; delta?: React.ReactNode; up?: boolean; to?: string; tip?: React.ReactNode; onClick?: () => void; className?: string; sub?: React.ReactNode }) {
   const body = (
-    <Card className={cn('flex h-[96px] flex-col justify-between p-5 transition-colors', (to || onClick) && 'cursor-pointer hover:bg-subtle-2', className)} onClick={onClick}>
-      <span className="truncate text-base font-medium">{label}</span>
-      <div className="flex items-end justify-between gap-2">
-        <span className="text-2xl font-bold tabular tracking-tight text-text">{value}</span>
+    <Card className={cn('flex flex-col gap-1 p-4 transition-colors', (to || onClick) && 'cursor-pointer hover:bg-subtle-2', className)} onClick={onClick}>
+      <h3 className={cn('truncate', tip && 'self-start underline decoration-border-strong decoration-dotted decoration-1 underline-offset-4')}>{label}</h3>
+      <div className="flex items-baseline justify-between gap-2">
+        <span className="text-2xl font-semibold tabular text-text">{value}</span>
         {delta !== undefined && (
           <span className={cn('flex items-center gap-0.5 text-xs font-medium', up === undefined ? 'text-muted' : up ? 'text-success' : 'text-danger')}>
             {up === true && <ArrowUpRight className="size-3" />}{up === false && <ArrowDownRight className="size-3" />}{delta}
@@ -68,7 +69,7 @@ export function BarRow({ label, value, max, color, right, onClick }: { label: Re
   return (
     <div className={cn('grid grid-cols-[132px_1fr_56px] items-center gap-3 py-1', onClick && 'cursor-pointer rounded-control hover:bg-subtle-2')} onClick={onClick}>
       <span className="truncate text-sm">{label}</span>
-      <div className="h-2 overflow-hidden rounded-full bg-subtle"><div className="h-full rounded-full" style={{ width: `${max ? Math.max(2, (value / max) * 100) : 0}%`, background: color ?? 'var(--primary)' }} /></div>
+      <div className="h-2 overflow-hidden rounded-full bg-fill-selected"><div className="h-full rounded-full" style={{ width: `${max ? Math.max(2, (value / max) * 100) : 0}%`, background: color ?? 'var(--primary)' }} /></div>
       <span className="text-right text-sm tabular">{right ?? nf(value)}</span>
     </div>
   )

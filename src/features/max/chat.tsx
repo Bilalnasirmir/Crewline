@@ -177,16 +177,16 @@ export function Composer({ onSend, placeholder = 'Ask Max anything — type, spe
   return (
     <div className="space-y-1.5">
       {live && (
-        <div className="flex items-center gap-3 rounded-card border border-ai/40 bg-ai-soft/40 px-3 py-2 anim-pop">
-          <span className="flex size-8 items-center justify-center rounded-full bg-ai text-white"><AudioLines className="size-4 animate-pulse" /></span>
+        <div className="flex items-center gap-3 rounded-card bg-subtle-2 px-3 py-2 anim-pop">
+          <span className="flex size-8 items-center justify-center rounded-full bg-btn text-btn-fg"><AudioLines className="size-4 animate-pulse" /></span>
           <div className="flex-1 text-sm"><div className="font-medium">Live voice conversation</div><div className="text-muted">Max is listening… say what you want to do.</div></div>
-          <Button size="sm" onClick={() => { setLive(false); onSend('Find people in Brooklyn who bought internet', { voice: true }) }}><Square />End</Button>
+          <Button onClick={() => { setLive(false); onSend('Find people in Brooklyn who bought internet', { voice: true }) }}><Square />End</Button>
         </div>
       )}
-      <div className={cn('rounded-[14px] border border-border-strong bg-surface shadow-btn transition-colors focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20', compact && 'rounded-card')}>
-        {att.length > 0 && <div className="flex flex-wrap gap-1 px-3 pt-2">{att.map((a) => <span key={a} className="inline-flex h-6 items-center gap-1 rounded-tag bg-subtle px-2 text-xs"><Paperclip className="size-3" />{a}<button onClick={() => setAtt(att.filter((x) => x !== a))} className="text-muted hover:text-text"><X className="size-3" /></button></span>)}</div>}
+      <div className="rounded-card border border-border-strong bg-surface shadow-card transition-colors focus-within:border-input-border-hover focus-within:outline-2 focus-within:outline-offset-1 focus-within:outline-primary">
+        {att.length > 0 && <div className="flex flex-wrap gap-1 px-3 pt-2">{att.map((a) => <span key={a} className="inline-flex h-5 items-center gap-1 rounded-tag bg-neutral-badge px-2 text-xs font-medium"><Paperclip className="size-3" />{a}<button onClick={() => setAtt(att.filter((x) => x !== a))} className="text-muted hover:text-text" aria-label={`Remove ${a}`}><X className="size-3" /></button></span>)}</div>}
         <textarea ref={ref} rows={1} autoFocus={autoFocus} value={v} onChange={(e) => setV(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); submit() } }} placeholder={rec ? 'Listening…' : placeholder}
-          className={cn('block w-full resize-none bg-transparent px-3.5 pt-3 text-base leading-6 outline-none placeholder:text-faint', compact ? 'min-h-[40px]' : 'min-h-[48px]')} />
+          className={cn('block w-full resize-none bg-transparent px-3 pt-3 text-lg outline-none focus-visible:outline-none', compact ? 'min-h-10' : 'min-h-12')} />
         <div className="flex items-center gap-0.5 px-2 pb-2">
           <input ref={fileRef} type="file" multiple hidden onChange={(e) => { const fs = Array.from(e.target.files ?? []).map((f) => f.name); if (fs.length) setAtt([...att, ...fs]); e.target.value = '' }} />
           <Tip content="Attach a file, photo or screenshot"><Button variant="ghost" size="icon-sm" onClick={() => fileRef.current?.click()} aria-label="Attach"><Paperclip /></Button></Tip>
@@ -196,7 +196,7 @@ export function Composer({ onSend, placeholder = 'Ask Max anything — type, spe
           <Button variant="primary" size="icon-sm" onClick={submit} disabled={!v.trim() && !att.length} aria-label="Send" className="rounded-full"><ArrowUp /></Button>
         </div>
       </div>
-      {hint && <p className="text-center text-xs text-faint">{hint}</p>}
+      {hint && <p className="text-center text-xs text-muted">{hint}</p>}
     </div>
   )
 }

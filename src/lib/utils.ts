@@ -1,5 +1,16 @@
 import { clsx, type ClassValue } from 'clsx'
-import { twMerge } from 'tailwind-merge'
+import { extendTailwindMerge } from 'tailwind-merge'
+
+// Teach tailwind-merge the custom theme names from index.css, so `text-2xs` isn't mistaken for a colour.
+const twMerge = extendTailwindMerge({
+  extend: {
+    theme: {
+      text: ['2xs'],
+      radius: ['tag', 'control', 'card', 'menu', 'dialog'],
+      shadow: ['bevel', 'card', 'menu', 'tooltip', 'dialog', 'btn', 'btn-primary'],
+    },
+  },
+})
 
 export const cn = (...inputs: ClassValue[]) => twMerge(clsx(inputs))
 

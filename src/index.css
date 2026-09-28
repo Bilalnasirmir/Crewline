@@ -1,54 +1,99 @@
 @import "tailwindcss";
 @import "@fontsource-variable/inter";
 
-/* ---------- Design tokens: one set of names, four themes ---------- */
+/* ---------- Design tokens: one set of names, four themes ----------
+   Source of truth: the public Polaris token set (@shopify/polaris-tokens) and
+   Polaris component styles, checked 28 Sep 2026, plus colours sampled from
+   docs/reference-screenshots (those were captured at 125% display scaling,
+   so divide any size measured in them by 1.25).
+   Font: Polaris' public stack is Inter + system fonts. "ShopifyInter" is only
+   served inside Shopify's own admin, so it is deliberately not declared. */
 :root {
-  --primary: #266df0;
-  --primary-hover: #1e57c0;
-  --primary-soft: #eef3fe;
+  /* Interactive: links, focus rings, selection */
+  --primary: #005bd3;                    /* text-link, border-focus */
+  --primary-hover: #004299;
+  --primary-soft: #eaf4ff;               /* bg-surface-info */
   --primary-fg: #ffffff;
 
-  --bg: #f1f1f1;
-  --surface: #ffffff;
-  --sidebar: #ebebeb;
-  --subtle: #f1f1f1;
-  --subtle-2: #f6f6f6;
-  --border: #e1e3e5;
-  --border-strong: #c9cccf;
-  --topbar: #0a0a0a;
-  --topbar-2: #202020;
-  --btn: #303030;
-  --btn-hover: #1a1a1a;
+  /* Surfaces */
+  --bg: #f1f1f1;                         /* bg */
+  --surface: #ffffff;                    /* bg-surface */
+  --subtle: #f1f1f1;                     /* bg-surface-selected */
+  --subtle-2: #f7f7f7;                   /* bg-surface-secondary, bg-surface-hover */
+  --subtle-3: #f3f3f3;                   /* bg-surface-tertiary, bg-surface-active */
+  --fill-hover: rgba(0, 0, 0, 0.05);     /* bg-fill-transparent-hover */
+  --fill-selected: rgba(0, 0, 0, 0.08);  /* bg-fill-transparent-selected */
+  --fill-tertiary: #e3e3e3;              /* bg-fill-tertiary: page-header actions (sampled) */
+  --fill-tertiary-hover: #d4d4d4;        /* bg-fill-tertiary-hover */
+  --fill-tertiary-active: #cccccc;       /* bg-fill-tertiary-active */
+  --sidebar: #ebebeb;                    /* nav-bg */
+  --nav-hover: #f1f1f1;                  /* nav-bg-surface-hover */
+  --nav-selected: #fafafa;               /* nav-bg-surface-selected */
+  --topbar: #0a0a0a;                     /* sampled from the reference */
+  --topbar-2: #282828;                   /* top-bar search field, sampled */
+  --topbar-border: #3c3c3c;              /* top-bar search border, sampled */
+  --border: #e3e3e3;                     /* border */
+  --border-2: #ebebeb;                   /* border-secondary: table rows, dividers */
+  --border-strong: #cccccc;              /* border-tertiary */
+  --input-border: #8a8a8a;               /* input-border */
+  --input-border-hover: #616161;         /* input-border-hover */
+  --input-bg: #fdfdfd;                   /* input-bg-surface */
+  --btn: #303030;                        /* bg-fill-brand */
+  --btn-hover: #1a1a1a;                  /* bg-fill-brand-hover */
   --btn-fg: #ffffff;
+  --btn-2-hover: #fafafa;                /* bg-fill-hover */
+  --btn-2-active: #f7f7f7;               /* bg-fill-active */
 
-  --text: #303030;
-  --text-2: #616161;
-  --muted: #616161;
-  --faint: #8c8c8c;
+  /* Text and icons */
+  --text: #303030;                       /* text */
+  --text-2: #616161;                     /* text-secondary */
+  --muted: #616161;                      /* text-secondary */
+  --faint: #8a8a8a;                      /* icon-secondary */
+  --disabled: #b5b5b5;                   /* text-disabled */
+  --icon: #4a4a4a;                       /* icon */
 
-  --success: #008060;
-  --success-soft: #e8f5ee;
-  --warning: #b98900;
-  --warning-soft: #fbf3e2;
-  --danger: #d72c0d;
-  --danger-soft: #fdecea;
-  --info: #2c6ecb;
-  --info-soft: #eef3fe;
-  --ai: #7c3aed;
-  --ai-soft: #f3eefe;
+  /* Status: text/icon colour, soft surface, badge fill. Status only, never decoration. */
+  --success: #047b5d;                    /* bg-fill-success, text-success-secondary */
+  --success-text: #014b40;               /* text-success */
+  --success-soft: #cdfed4;               /* bg-surface-success */
+  --success-badge: #affebf;              /* bg-fill-success-secondary */
+  --warning: #5e4200;                    /* text-warning */
+  --warning-fill: #ffb800;               /* bg-fill-warning */
+  --warning-soft: #fff1e3;               /* bg-surface-warning */
+  --warning-badge: #ffd6a4;              /* bg-fill-warning-secondary */
+  --danger: #c70a24;                     /* bg-fill-critical, text-critical-secondary */
+  --danger-text: #8e0b21;                /* text-critical */
+  --danger-soft: #fee8eb;                /* bg-surface-critical */
+  --danger-badge: #fed1d7;               /* bg-fill-critical-secondary */
+  --info: #003a5a;                       /* text-info */
+  --info-fill: #91d0ff;                  /* bg-fill-info */
+  --info-soft: #eaf4ff;                  /* bg-surface-info */
+  --info-badge: #d5ebff;                 /* bg-fill-info-secondary */
+  --neutral-badge: rgba(0, 0, 0, 0.06);  /* bg-fill-transparent-secondary */
+  /* AI actions stay neutral (no "AI purple"); the Sparkles icon marks them. */
+  --ai: #303030;
+  --ai-soft: #f1f1f1;
 
-  --overlay: rgba(17, 18, 20, 0.4);
-  --shadow-menu: 0 4px 12px rgba(0, 0, 0, 0.10);
-  --shadow-dialog: 0 12px 32px rgba(0, 0, 0, 0.14);
-  --shadow-btn: 0 1px 0 rgba(0, 0, 0, 0.05);
-  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.04), 0 0 0 1px #e1e3e5;
+  /* Elevation (Polaris shadow tokens) */
+  --overlay: rgba(0, 0, 0, 0.5);
+  --shadow-bevel: inset 1px 0 0 0 rgba(0, 0, 0, 0.13), inset -1px 0 0 0 rgba(0, 0, 0, 0.13), inset 0 -1px 0 0 rgba(0, 0, 0, 0.17), inset 0 1px 0 0 rgba(204, 204, 204, 0.5); /* shadow-bevel-100 */
+  --shadow-card: 0 1px 0 0 rgba(26, 26, 26, 0.07);           /* shadow-100 */
+  --shadow-menu: 0 4px 6px -2px rgba(26, 26, 26, 0.2);       /* shadow-300 */
+  --shadow-tooltip: 0 8px 16px -4px rgba(26, 26, 26, 0.22);  /* shadow-400 */
+  --shadow-dialog: 0 20px 20px -8px rgba(26, 26, 26, 0.28);  /* shadow-600 */
+  --shadow-btn: inset 0 -1px 0 0 #b5b5b5, inset 0 0 0 1px rgba(0, 0, 0, 0.1), inset 0 0.5px 0 1.5px #ffffff; /* shadow-button */
+  --shadow-btn-primary: inset 0 -1px 0 1px rgba(0, 0, 0, 0.8), inset 0 0 0 1px #303030, inset 0 0.5px 0 1.5px rgba(255, 255, 255, 0.25); /* shadow-button-primary */
 
-  --radius-tag: 6px;
-  --radius-control: 8px;
-  --radius-card: 16px;
-  --radius-menu: 12px;
+  /* Radius (Polaris border-radius tokens) */
+  --radius-tag: 8px;                     /* 200: badges, tags */
+  --radius-control: 8px;                 /* 200: buttons, inputs, nav items, tabs */
+  --radius-card: 12px;                   /* 300: cards, banners */
+  --radius-menu: 12px;                   /* 300: popovers, menus */
+  --radius-dialog: 16px;                 /* 400: modals */
 
-  --font-sans: "Inter Variable", Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  /* Typography: the Polaris font stack. "Inter Variable" is the self-hosted Inter file. */
+  --font-sans: "Inter Variable", Inter, -apple-system, BlinkMacSystemFont, "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+
   color-scheme: light;
 }
 
@@ -58,29 +103,63 @@
   --primary-soft: #16233d;
   --bg: #111214;
   --surface: #1c1d21;
+  --subtle: #26282c;
+  --subtle-2: #212226;
+  --subtle-3: #2a2c30;
+  --fill-hover: rgba(255, 255, 255, 0.06);
+  --fill-selected: rgba(255, 255, 255, 0.1);
+  --fill-tertiary: #2c2e33;
+  --fill-tertiary-hover: #35373c;
+  --fill-tertiary-active: #3a3c42;
   --sidebar: #161719;
+  --nav-hover: #1f2024;
+  --nav-selected: #26282c;
   --topbar: #0b0c0e;
   --topbar-2: #26282c;
+  --topbar-border: #35373c;
+  --border: #2c2e33;
+  --border-2: #26282c;
+  --border-strong: #3a3c42;
+  --input-border: #4a4d54;
+  --input-border-hover: #6b6e75;
+  --input-bg: #17181b;
   --btn: #ededed;
   --btn-hover: #ffffff;
   --btn-fg: #111214;
-  --shadow-card: 0 0 0 1px rgba(255,255,255,0.06);
-  --subtle: #1c1d21;
-  --subtle-2: #17181b;
-  --border: #26282c;
-  --border-strong: #35373c;
+  --btn-2-hover: #26282c;
+  --btn-2-active: #2a2c30;
   --text: #edeef0;
-  --text-2: #c2c4c9;
-  --muted: #8f9197;
-  --faint: #5f6167;
+  --text-2: #b4b7bd;
+  --muted: #a0a3aa;
+  --faint: #6b6e75;
+  --disabled: #55585e;
+  --icon: #c2c4c9;
+  --success: #3fb68b;
+  --success-text: #8fe3bf;
   --success-soft: #10261a;
+  --success-badge: #15392a;
+  --warning: #e0b04a;
   --warning-soft: #2a2110;
+  --warning-badge: #3d2e10;
+  --danger: #ff6b6b;
+  --danger-text: #ff9a9a;
   --danger-soft: #2e1512;
+  --danger-badge: #45191c;
+  --info: #8cc8ff;
+  --info-fill: #1d4f7a;
   --info-soft: #16233d;
-  --ai-soft: #231a36;
+  --info-badge: #1a3450;
+  --neutral-badge: rgba(255, 255, 255, 0.1);
+  --ai: #edeef0;
+  --ai-soft: #26282c;
   --overlay: rgba(0, 0, 0, 0.6);
-  --shadow-menu: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 24px rgba(0, 0, 0, 0.5);
-  --shadow-dialog: 0 2px 4px rgba(0, 0, 0, 0.5), 0 16px 48px rgba(0, 0, 0, 0.6);
+  --shadow-bevel: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+  --shadow-card: none;
+  --shadow-menu: 0 8px 24px rgba(0, 0, 0, 0.5);
+  --shadow-tooltip: 0 8px 24px rgba(0, 0, 0, 0.5);
+  --shadow-dialog: 0 16px 48px rgba(0, 0, 0, 0.6);
+  --shadow-btn: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+  --shadow-btn-primary: none;
   color-scheme: dark;
 }
 
@@ -90,47 +169,90 @@
   --primary-soft: #16294d;
   --bg: #0e1a33;
   --surface: #14224a;
+  --subtle: #1b2b55;
+  --subtle-2: #172647;
+  --subtle-3: #1e2f5c;
+  --fill-hover: rgba(255, 255, 255, 0.06);
+  --fill-selected: rgba(255, 255, 255, 0.1);
+  --fill-tertiary: #1e2f5c;
+  --fill-tertiary-hover: #253869;
+  --fill-tertiary-active: #2b3f73;
   --sidebar: #0f1d3d;
+  --nav-hover: #152649;
+  --nav-selected: #1b2d57;
   --topbar: #0a1428;
   --topbar-2: #1a2b52;
+  --topbar-border: #2b3c5f;
+  --border: #22335a;
+  --border-2: #1e2c4a;
+  --border-strong: #2b3c5f;
+  --input-border: #3d5078;
+  --input-border-hover: #5a6d94;
+  --input-bg: #111d3d;
   --btn: #ededed;
   --btn-hover: #ffffff;
-  --btn-fg: #111214;
-  --shadow-card: 0 0 0 1px rgba(255,255,255,0.06);
-  --subtle: #172647;
-  --subtle-2: #13203d;
-  --border: #1e2c4a;
-  --border-strong: #2b3c5f;
+  --btn-fg: #0e1a33;
+  --btn-2-hover: #1b2b55;
+  --btn-2-active: #1e2f5c;
   --text: #edf1f8;
-  --text-2: #c3cbdc;
+  --text-2: #b7c1d6;
   --muted: #8b97b0;
   --faint: #5c688a;
+  --disabled: #4a5675;
+  --icon: #c3cbdc;
+  --success: #3fb68b;
+  --success-text: #8fe3bf;
   --success-soft: #0f2a24;
+  --success-badge: #143a31;
+  --warning: #e0b04a;
   --warning-soft: #2b2416;
+  --warning-badge: #3d3118;
+  --danger: #ff6b6b;
+  --danger-text: #ff9a9a;
   --danger-soft: #331a20;
+  --danger-badge: #4a1f28;
+  --info: #8cc8ff;
+  --info-fill: #1d4f7a;
   --info-soft: #16294d;
-  --ai-soft: #251d45;
+  --info-badge: #1b355f;
+  --neutral-badge: rgba(255, 255, 255, 0.1);
+  --ai: #edf1f8;
+  --ai-soft: #1b2b55;
   --overlay: rgba(2, 8, 20, 0.65);
-  --shadow-menu: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 24px rgba(0, 0, 0, 0.5);
-  --shadow-dialog: 0 2px 4px rgba(0, 0, 0, 0.5), 0 16px 48px rgba(0, 0, 0, 0.6);
+  --shadow-bevel: inset 0 0 0 1px rgba(255, 255, 255, 0.07);
+  --shadow-card: none;
+  --shadow-menu: 0 8px 24px rgba(0, 0, 0, 0.5);
+  --shadow-tooltip: 0 8px 24px rgba(0, 0, 0, 0.5);
+  --shadow-dialog: 0 16px 48px rgba(0, 0, 0, 0.6);
+  --shadow-btn: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+  --shadow-btn-primary: none;
   color-scheme: dark;
 }
 
 /* Mixed = light work area, dark sidebar. The sidebar reads its own tokens. */
 .theme-mixed {
-  --sidebar: #161719;
+  --sidebar: #1a1a1a;
 }
 .theme-mixed .app-sidebar {
-  --bg: #161719;
-  --surface: #26282c;
-  --subtle: #1c1d21;
-  --border: #26282c;
-  --text: #edeef0;
-  --text-2: #c2c4c9;
-  --muted: #8f9197;
-  --faint: #5f6167;
-  --primary-soft: #16233d;
+  --bg: #1a1a1a;
+  --surface: #303030;
+  --subtle: #2a2a2a;
+  --subtle-2: #262626;
+  --nav-hover: #262626;
+  --nav-selected: #303030;
+  --fill-hover: rgba(255, 255, 255, 0.06);
+  --fill-selected: rgba(255, 255, 255, 0.1);
+  --border: #303030;
+  --border-2: #2a2a2a;
+  --text: #f1f1f1;
+  --text-2: #b5b5b5;
+  --muted: #b5b5b5;
+  --faint: #8a8a8a;
+  --disabled: #616161;
+  --icon: #e3e3e3;
+  --neutral-badge: rgba(255, 255, 255, 0.1);
   --primary: #4c8bff;
+  --primary-soft: #16233d;
   color-scheme: dark;
 }
 
@@ -141,80 +263,135 @@
   --color-primary-soft: var(--primary-soft);
   --color-primary-fg: var(--primary-fg);
   --color-bg: var(--bg);
-  --radius-menu: var(--radius-menu);
   --color-surface: var(--surface);
+  --color-subtle: var(--subtle);
+  --color-subtle-2: var(--subtle-2);
+  --color-subtle-3: var(--subtle-3);
+  --color-fill-hover: var(--fill-hover);
+  --color-fill-selected: var(--fill-selected);
+  --color-fill-tertiary: var(--fill-tertiary);
+  --color-fill-tertiary-hover: var(--fill-tertiary-hover);
+  --color-fill-tertiary-active: var(--fill-tertiary-active);
+  --color-sidebar: var(--sidebar);
+  --color-nav-hover: var(--nav-hover);
+  --color-nav-selected: var(--nav-selected);
   --color-topbar: var(--topbar);
   --color-topbar-2: var(--topbar-2);
+  --color-topbar-border: var(--topbar-border);
+  --color-border: var(--border);
+  --color-border-2: var(--border-2);
+  --color-border-strong: var(--border-strong);
+  --color-input-border: var(--input-border);
+  --color-input-border-hover: var(--input-border-hover);
+  --color-input-bg: var(--input-bg);
   --color-btn: var(--btn);
   --color-btn-hover: var(--btn-hover);
   --color-btn-fg: var(--btn-fg);
-  --shadow-card: var(--shadow-card);
-  --color-sidebar: var(--sidebar);
-  --color-subtle: var(--subtle);
-  --color-subtle-2: var(--subtle-2);
-  --color-border: var(--border);
-  --color-border-strong: var(--border-strong);
+  --color-btn-2-hover: var(--btn-2-hover);
+  --color-btn-2-active: var(--btn-2-active);
   --color-text: var(--text);
   --color-text-2: var(--text-2);
   --color-muted: var(--muted);
   --color-faint: var(--faint);
+  --color-disabled: var(--disabled);
+  --color-icon: var(--icon);
   --color-success: var(--success);
+  --color-success-text: var(--success-text);
   --color-success-soft: var(--success-soft);
+  --color-success-badge: var(--success-badge);
   --color-warning: var(--warning);
+  --color-warning-fill: var(--warning-fill);
   --color-warning-soft: var(--warning-soft);
+  --color-warning-badge: var(--warning-badge);
   --color-danger: var(--danger);
+  --color-danger-text: var(--danger-text);
   --color-danger-soft: var(--danger-soft);
+  --color-danger-badge: var(--danger-badge);
   --color-info: var(--info);
+  --color-info-fill: var(--info-fill);
   --color-info-soft: var(--info-soft);
+  --color-info-badge: var(--info-badge);
+  --color-neutral-badge: var(--neutral-badge);
   --color-ai: var(--ai);
   --color-ai-soft: var(--ai-soft);
+
   --font-sans: var(--font-sans);
+
+  /* Polaris type scale mapped onto Tailwind's size utilities */
+  --text-2xs: 11px;                      /* body-xs */
+  --text-2xs--line-height: 12px;
+  --text-xs: 12px;                       /* body-sm, heading-xs */
+  --text-xs--line-height: 16px;
+  --text-sm: 13px;                       /* body-md */
+  --text-sm--line-height: 20px;
+  --text-base: 13px;                     /* body-md (default body) */
+  --text-base--line-height: 20px;
+  --text-lg: 14px;                       /* body-lg, heading-md */
+  --text-lg--line-height: 20px;
+  --text-xl: 18px;                       /* page titles: font-size-450, as the Shopify admin renders them */
+  --text-xl--line-height: 24px;
+  --text-xl--letter-spacing: -0.2px;
+  --text-2xl: 20px;                      /* heading-lg: big numbers */
+  --text-2xl--line-height: 24px;
+  --text-2xl--letter-spacing: -0.2px;
+  --text-3xl: 24px;                      /* heading-xl */
+  --text-3xl--line-height: 32px;
+  --text-3xl--letter-spacing: -0.2px;
+
+  /* Polaris weights: regular 450, medium 550, semibold 650, bold 700 */
+  --font-weight-normal: 450;
+  --font-weight-medium: 550;
+  --font-weight-semibold: 650;
+  --font-weight-bold: 700;
+
   --radius-tag: var(--radius-tag);
   --radius-control: var(--radius-control);
   --radius-card: var(--radius-card);
+  --radius-menu: var(--radius-menu);
+  --radius-dialog: var(--radius-dialog);
+  --shadow-bevel: var(--shadow-bevel);
+  --shadow-card: var(--shadow-card);
   --shadow-menu: var(--shadow-menu);
+  --shadow-tooltip: var(--shadow-tooltip);
   --shadow-dialog: var(--shadow-dialog);
   --shadow-btn: var(--shadow-btn);
-  --text-xs: 12px;
-  --text-xs--line-height: 16px;
-  --text-sm: 13px;
-  --text-sm--line-height: 18px;
-  --text-base: 14px;
-  --text-base--line-height: 20px;
-  --text-lg: 16px;
-  --text-lg--line-height: 22px;
-  --text-xl: 20px;
-  --text-xl--line-height: 26px;
-  --text-2xl: 24px;
-  --text-2xl--line-height: 30px;
+  --shadow-btn-primary: var(--shadow-btn-primary);
 }
 
-/* ---------- Base ---------- */
+/* ---------- Base (mirrors Polaris' global styles) ---------- */
 @layer base {
   * { border-color: var(--border); }
   html, body, #root { height: 100%; }
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+  /* body-md: 13px / 20px, regular 450, contextual alternates off */
   body {
     margin: 0;
     background: var(--bg);
     color: var(--text);
     font-family: var(--font-sans);
-    font-size: 14px;
+    font-size: 13px;
     line-height: 20px;
-    font-weight: 400;
-    font-feature-settings: "cv11", "ss01", "ss03";
-    -webkit-font-smoothing: antialiased;
-    text-rendering: optimizeLegibility;
+    font-weight: 450;
+    font-feature-settings: "calt" 0;
+    letter-spacing: normal;
   }
-  button, input, select, textarea { font: inherit; color: inherit; }
+  button, input, select, textarea { font: inherit; color: inherit; letter-spacing: inherit; }
   button { cursor: pointer; }
   button:disabled { cursor: not-allowed; }
-  :focus-visible { outline: 2px solid var(--primary); outline-offset: 1px; border-radius: 4px; }
+  :focus-visible { outline: 2px solid var(--primary); outline-offset: 1px; }
   ::selection { background: var(--primary-soft); }
+  ::placeholder { color: var(--muted); opacity: 1; }
   [hidden] { display: none !important; }
-  h1, h2, h3, h4 { margin: 0; font-weight: 600; color: var(--text); }
-  h1 { font-size: 24px; line-height: 30px; font-weight: 600; letter-spacing: -0.01em; }
-  h2 { font-size: 20px; line-height: 26px; font-weight: 600; }
-  h3 { font-size: 16px; line-height: 22px; font-weight: 600; }
+  /* Polaris heading variants */
+  h1, h2, h3, h4 { margin: 0; color: var(--text); font-weight: 650; }
+  h1 { font-size: 18px; line-height: 24px; letter-spacing: -0.2px; } /* page titles: 18px, measured on 4 Shopify admin screenshots */
+  h2 { font-size: 14px; line-height: 20px; }                         /* heading-md: section titles */
+  h3 { font-size: 13px; line-height: 20px; }                         /* heading-sm: card titles */
+  h4 { font-size: 12px; line-height: 16px; }                         /* heading-xs */
   p { margin: 0; }
   a { color: var(--primary); text-decoration: none; }
   a:hover { text-decoration: underline; }
@@ -224,13 +401,18 @@
   *::-webkit-scrollbar { width: 8px; height: 8px; }
   *::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 8px; border: 2px solid transparent; background-clip: content-box; }
   *::-webkit-scrollbar-track { background: transparent; }
+  /* Phones: 16px text in fields stops iOS zooming on focus (Polaris does the same). */
+  @media (max-width: 767px) {
+    input:not([type="checkbox"]):not([type="radio"]), textarea, select { font-size: 16px; }
+  }
 }
 
+/* ---------- Motion: 120 / 180 / 240ms, functional only ---------- */
 @keyframes fade-in { from { opacity: 0 } to { opacity: 1 } }
 @keyframes pop-in { from { opacity: 0; transform: translateY(-4px) } to { opacity: 1; transform: none } }
 @keyframes slide-in-right { from { transform: translateX(16px); opacity: 0 } to { transform: none; opacity: 1 } }
 @keyframes pulse-dot { 0%, 100% { opacity: 1 } 50% { opacity: .35 } }
-.anim-pop { animation: pop-in 180ms cubic-bezier(.16,1,.3,1); }
-.anim-fade { animation: fade-in 140ms ease-in-out; }
-.anim-slide-right { animation: slide-in-right 200ms ease-in-out; }
+.anim-pop { animation: pop-in 180ms cubic-bezier(.16, 1, .3, 1); }
+.anim-fade { animation: fade-in 120ms cubic-bezier(.2, 0, .2, 1); }
+.anim-slide-right { animation: slide-in-right 240ms cubic-bezier(.16, 1, .3, 1); }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }

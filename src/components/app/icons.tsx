@@ -21,7 +21,7 @@ export function DirIcon({ dir, size = 14, className, withTip = true }: { dir: 'i
 }
 export function DirTag({ dir, className }: { dir: 'in' | 'out' | 'both'; className?: string }) {
   return (
-    <span className={cn('inline-flex h-5 items-center gap-1 rounded-tag px-1.5 text-xs font-medium', dir === 'in' ? 'bg-success-soft text-success' : dir === 'both' ? 'bg-subtle text-text-2' : 'bg-info-soft text-info', className)}>
+    <span className={cn('inline-flex h-5 items-center gap-1 rounded-tag px-2 text-xs font-medium', dir === 'in' ? 'bg-success-badge text-success-text' : dir === 'both' ? 'bg-neutral-badge text-text-2' : 'bg-info-badge text-info', className)}>
       <DirIcon dir={dir} size={12} withTip={false} />{dir === 'in' ? 'Inbound' : dir === 'out' ? 'Outbound' : 'Both'}
     </span>
   )
@@ -50,7 +50,7 @@ export function PlatIcon({ p, size = 14, className, tip = true, mono }: { p: Pla
   return tip ? <Tip content={d.label}>{el}</Tip> : el
 }
 export function PlatBadge({ p, className }: { p: Platform; className?: string }) {
-  return <span className={cn('inline-flex h-5 items-center gap-1 rounded-tag bg-subtle px-1.5 text-xs font-medium text-text-2', className)}><PlatIcon p={p} size={12} tip={false} />{PLATFORMS[p].label}</span>
+  return <span className={cn('inline-flex h-5 items-center gap-1 rounded-tag bg-neutral-badge px-2 text-xs font-medium text-text-2', className)}><PlatIcon p={p} size={12} tip={false} />{PLATFORMS[p].label}</span>
 }
 export const QueryIcon = HelpCircle
 export type { LucideIcon }
