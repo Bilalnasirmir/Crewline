@@ -104,16 +104,16 @@ Status legend: ✅ built in the new React app · 🟡 partly built · ⬜ not bu
 ### 3.1 App shell ✅
 - **Top bar** (56px, #0A0A0A): brand mark + "Crewline" on the left. Centered global search, 36px tall and up to 544px wide, on #282828 with a #3C3C3C border, 8px radius and a CTRL K badge. It opens a command palette (people, campaigns, agents, pages, quick actions, "Ask Max: …"). On the right: Live/Paused toggle for the simulation, **Assigned to me** with a red count, notifications popover with a count badge, Max side-panel toggle, and account menu (green 28px avatar with 8px radius, "Bilal's Group").
 - **Sidebar** (240px, #EBEBEB; Polaris navigation): items 28px tall, 8px radius, a 20px icon slot (18px Lucide icon) and the label at 36px. Top-level labels are 13px/550; the selected item is 13px/650 on #FAFAFA; hover is #F1F1F1. Group headings are 12px/650 #303030. Groups: (no label) Get Started, Home, Max; **Work**: Inbox, Contacts, Campaigns, Stages, Bookings, AI Agents; **Business**: Expenses, Reports (directly above Settings), Settings. At the bottom: Plans & pricing, Theme menu, Collapse.
-  - **Sub-navigation:** a section's children appear under it while you are in that section, in 13px/450 #616161. The selected child is 13px/650 on #FAFAFA with an L-shaped connector from the parent icon, and the parent then loses its highlight, as in Shopify's "Customers → Segments". Current children: Contacts → Folders / Do-Not-Contact / Database health (`/contacts?view=folders|dnc|health`), Campaigns → New campaign. Add more in `NAV` in `src/components/app/shell.tsx`.
+  - **Sub-navigation:** a section's children appear under it while you are in that section, in 13px/450 #616161. The selected child is 13px/650 on #FAFAFA with an L-shaped connector from the parent icon, and the parent then loses its highlight, as in Shopify's "Customers → Segments". Current children: Inbox → Email / Calls; Contacts → Folders / Do-Not-Contact / Database health (`/contacts?view=folders|dnc|health`); Campaigns → New campaign; Stages → List / Review for me; Bookings → Calendar / Queries; AI Agents → Leaderboard; Reports → Report library. Add more in `NAV` in `src/components/app/shell.tsx`.
   - **Retractable:** collapsed shows icons only, with the name on hover (tooltip).
   - Mobile: it becomes a drawer.
   - Counts: Inbox unread (red), Get Started remaining steps.
 - **Themes:** Light (default), Dark, Dark blue, Mixed. Tokens switch through a class on `<html>`.
-- **Max side panel** on every page except /max, opened by the compact "Ask Max" floating button (bottom right) or the top-bar icon. It has **Guided mode**, a step checklist per screen ("Do this now"). Pages keep 64px of bottom padding so content can scroll clear of the button.
+- **Max side panel** on every page except /max, opened by the compact "Ask Max" floating button (bottom right) or the top-bar icon. The floating button is hidden on screens with their own message box in that corner (Inbox, the agent editor); the top-bar icon and ⌘J still open Max there. It has **Guided mode**, a step checklist per screen ("Do this now"). Pages keep 64px of bottom padding so content can scroll clear of the button.
 - **Toasts** appear bottom-right with Undo where relevant. Every icon-only button has a tooltip.
 - **Live simulation:** every 8 seconds an agent moves a lead one stage (the first tick moves Umar Ali New → Contacted), a new inbound lead arrives, the receptionist books a slot, or Mia sends messages. The activity feed updates everywhere.
 
-### 3.2 Get Started ⬜
+### 3.2 Get Started ✅
 AI-guided onboarding, "Hello, let's get started." Steps: install the web app (recommended), add contacts, make a campaign, connect channels, learn stages and set them, set up AI agents, invite teammates. Plus resources (intro video, support). Every step has "Get it done with AI", and there is a "describe your business and AI builds it" option. It is also the first item in Settings. Sample data: `gs` in `src/data/seed.ts`.
 
 ### 3.3 Home ✅ (Polaris restyle approved by the owner, 28 Sep 2026)
@@ -136,7 +136,7 @@ AI-guided onboarding, "Hello, let's get started." Steps: install the web app (re
   - Improve agent shows a plan card that bumps Robert's version and score.
 - **Guided mode** runs in the side panel with a per-route step list.
 
-### 3.5 Contacts ✅ (works; picks up the new components, but its page layout is not yet tuned to Polaris; that is the next step)
+### 3.5 Contacts ✅
 - Tabs: **All people · Folders · Do-Not-Contact · Database health**.
 - **Tiles:** Missing details (opens a breakdown dialog with "Fill missing data with AI"), Duplicates (list with Merge / Overwrite / Skip, plus Merge all), Not responding, Dead numbers, Do-Not-Contact.
 - **Build filters with AI** box (text or voice). It turns plain English into filter chips and shows a note on what it understood or what is missing, plus "Save as folder".
@@ -166,7 +166,7 @@ AI-guided onboarding, "Hello, let's get started." Steps: install the web app (re
   - **Journey:** tabs All / Chats / Calls / Emails / Sales / Stages / Bookings, grouped Today / Yesterday / This week / Earlier. Coloured icons have hover labels. Call recordings, and "Open" jumps to the conversation.
   - **Right column:** campaign and stage (a stage select that updates everywhere), folder, lead source, agent, tries, last contact, purchases, notes, recent conversations.
 
-### 3.6 Campaigns 🟡
+### 3.6 Campaigns ✅
 - **Built:** the tiles page (`src/features/campaigns/page.tsx`, routed at /campaigns).
   - Each tile shows the In/Out tag, status, name, business, sub-type and start date.
   - **Customizable metrics:** up to 6 of people, reached, replied, interested, booked, won, revenue, cost, cost per booking, reply rate, or **any stage**, each with a tooltip.
@@ -201,7 +201,7 @@ AI-guided onboarding, "Hello, let's get started." Steps: install the web app (re
   - `src/features/shared/followups.tsx`: the follow-up editor. It has "Let AI handle this" (default on), separate Outbound/Inbound tabs with "Copy to", steps (If / after / then / by agent / using template), and a drop-lead rule.
   - `src/features/shared/led.tsx`: `LineList` (type a sentence, press Enter to add an item, with an optional Required/Preferred/Optional importance and AI/voice buttons) and `OptionRow`.
 
-### 3.7 Stages ⬜
+### 3.7 Stages ✅
 Renamed from "Pipeline".
 - **Board** with drag and drop, **list view** and a **campaign switcher**.
 - **Outbound / Inbound tabs** with one-click copy between them.
@@ -213,7 +213,7 @@ Renamed from "Pipeline".
 - The AI follows the **latest** message (for example "Yes" at 4:30, then "I need time" at 4:35 moves the lead to Pending).
 - In a **human chat**, a pop-up asks "This lead qualifies for X. Move it?"
 
-### 3.8 Bookings ⬜
+### 3.8 Bookings ✅
 Renamed from "Calendar".
 - **Day / Week / Month** views, date filter and other filters.
 - **Campaign selector at the top**: services, hours and settings are per campaign.
@@ -233,7 +233,7 @@ Renamed from "Calendar".
 - Simulation of two callers asking for the same slot at once (no double booking).
 - Sample data: `bookings`, `services`, `staff`, `hours`, `queries`.
 
-### 3.9 AI Agents ⬜
+### 3.9 AI Agents ✅
 - **Six type tabs** with **3 default agents each:**
 
   | Type | Default agents |
@@ -268,7 +268,7 @@ Renamed from "Calendar".
 - A **Monday.com-style "Creating agent…" animation** when an agent is created. This is the only place with expressive animation.
 - **Analyze with AI.** Multi-tenant note: edits apply only inside the user's own workspace.
 
-### 3.10 Inbox ⬜
+### 3.10 Inbox ✅
 - Top buttons **Chat · Email · Calls**, then **All / Inbound / Outbound**, then **platform checkboxes** (WhatsApp, SMS, Instagram, Messenger, TikTok, Facebook, web chat), then search.
 - **Chat:**
   - WhatsApp-style ticks: one tick sent, two ticks delivered, **blue** ticks read.
@@ -285,20 +285,20 @@ Renamed from "Calendar".
 - **Right panel:** contact details, **campaign**, **lead folder**, colour-coded history, and the query icon for receptionist queries.
 - Sample data: `convos`, `emails`, `calls`.
 
-### 3.11 Expenses ⬜
+### 3.11 Expenses ✅
 - Total spend at the top.
 - **Breakdown table:** WhatsApp API, AI calling per minute, ElevenLabs characters, AI text and email tokens, SMS, telephony, data lookups, plan.
 - Filters by API, platform, channel and campaign. Per-day chart, by campaign and budget.
 - **Ask AI** ("How can I reduce costs?"), with the report saved to Reports.
 - It must feel elegant and high-end. Sample data: `expenses`, `expDaily`.
 
-### 3.12 Reports ⬜
+### 3.12 Reports ✅
 - Dashboards with infographics and filters (campaigns, agents, bookings, expenses, inbound vs outbound separable).
 - **Report library** with Windows-style folders and subfolders, named and dated.
 - **Generate with AI** (voice or text), which produces a report document you can save into a folder and analyze again.
 - AI reports from Max, Expenses and Campaigns land here. Sample data: `reportFolders`, `reports`.
 
-### 3.13 Settings ⬜
+### 3.13 Settings ✅
 Categorised and non-technical. It covers:
 - Business, Appearance (themes), Team and roles, Notifications matrix
 - Channels (numbers, SMS registration, email DNS, WhatsApp, social)
@@ -310,7 +310,7 @@ Categorised and non-technical. It covers:
 
 Routes are `/settings/<section>` (for example `/settings/channels` and `/settings/business`, already linked from notifications).
 
-### 3.14 Assigned to me ⬜
+### 3.14 Assigned to me ✅
 Route `/assigned`, linked from the top bar and Home. It lists items the AI can't decide:
 - Human handoff
 - Booking request in a non-booking campaign
@@ -321,7 +321,7 @@ Route `/assigned`, linked from the top bar and Home. It lists items the AI can't
 
 Each item has kind-specific actions: open chat, assign to receptionist, choose a stage (AI learns), update the number, resolve. Sample data: `assigned`.
 
-### 3.15 Pricing ⬜
+### 3.15 Pricing ✅ (placeholder plans)
 3–4 placeholder packages with a monthly/yearly toggle (details come at the end of development).
 
 ### 3.16 Global behaviours (apply everywhere)
@@ -419,55 +419,39 @@ Each item has kind-specific actions: open chat, assign to receptionist, choose a
 
 ## 5. Status: finished, half-done and known bugs
 
-### Finished (React app in this repo)
-- Project setup: Vite, React, TypeScript, Tailwind v4 and Radix UI (via the `radix-ui` package), plus lucide-react, Zustand, React Router (hash routes), Recharts, cmdk, sonner and self-hosted Inter.
-- The design-token system in `src/index.css`, with 4 themes, now on verified Polaris values (§4).
-- Component library (`src/components/ui/*`), all restyled to Polaris: Button, Input/Textarea/Field, Select (field and button variants), Combobox, DropdownMenu, Popover, Dialog/Sheet, Tabs/Segmented, Switch/Checkbox/Radio/ChoiceRow/Progress/Slider/Kbd/Skeleton, Badge/Count, Avatar/AgentAvatar, Command, Table, Card/CardHeader/CardBody/EmptyState/**Banner**/PropertyList, Tooltip.
-- `cn()` in `src/lib/utils.ts` knows the custom Tailwind names (`text-2xs`, `rounded-card`, `shadow-btn`…), so tailwind-merge doesn't drop them.
-- App components: AppShell, TopBar, Sidebar, ThemeMenu, CommandPalette, PageHeader/Toolbar/PageBody/Section, StageTag, AgentChip, ContactChip, CampaignChip, Kpi, BarRow, and the AiMark/DirIcon/DirTag/PlatIcon/PlatBadge icons.
-- The typed sample data (`src/data/seed.ts`, `types.ts`) and the store with the live simulation (`src/store/index.ts`).
-- Modules: **Home, Max (page, panel and engine), Contacts (all tabs, dialogs, profile), Campaigns tiles.**
-
-- **Typography and visual fidelity: resolved and approved** for the shell and Home (Round 5). The sidebar has nested sub-navigation.
+### Finished (React app in this repo) — every screen is built, 28 Sep 2026
+- Project setup: Vite, React, TypeScript, Tailwind v4 and Radix UI (via the `radix-ui` package), plus lucide-react, Zustand, React Router (hash routes, one lazy-loaded chunk per module), Recharts, cmdk, sonner, @dnd-kit and self-hosted Inter.
+- Tokens (`src/index.css`, 4 themes on verified Polaris values, §4), the component library (`src/components/ui/*`) and the app components (shell, page header/tabs, index-table pieces, Kpi, chips, `askText`/`askConfirm` dialogs).
+- **Every module:** Home, Max (page, panel, engine), Get Started, Inbox (chat, email, calls), Contacts (all views, dialogs, profile), Campaigns (tiles/table, 10-step wizard, detail with tabs), Stages (board, list, review, follow-up stages, stage dialog), Bookings (dashboard, day/week/month calendar, queries, booking dialog, setup, double-booking demo, Ask AI that opens the calendar), AI Agents (types, tiles, leaderboard, editor with 10 sections, Test panel with text/voice note/call, Review panel with a live score, versions, “Update your agent” gate, guided AI builder, creating animation, Analyze with AI), Assigned to me, Expenses, Reports (dashboards, folder library, report viewer, Generate with AI), Settings (26 sections at `/settings/<section>`), Pricing.
+- **Agent review score** is worked out from each agent’s setup plus findings from real conversations (`src/data/review.ts`); the store keeps every agent’s saved score in step. Fixes (“Fix with AI”, “Optimize everything”) change the actual settings.
+- Checked: `npm run build` is clean; all 26 main routes open with no console errors; the new screens were checked at 375px, and in the Dark, Dark blue and Mixed themes.
 
 ### Half-done
-- **Contacts, Max and Campaigns** use the new shared components, so they already look much closer. Their page-level layouts still carry older local styles, and each still needs its own Polaris pass. Examples: Contacts' own view tabs and toolbars, the search box, the table's sticky name column (it sets `bg-surface`, which hides row hover), `Toolbar` padding inside tabs, and the Max side-panel header.
-- Campaigns: tiles only. The wizard and detail pages are stubs. The follow-up editor and LineList are written but unused.
-
-### Not built (stub pages)
-Get Started, Inbox, Campaign wizard, Campaign detail, Stages, Bookings, AI Agents (list and editor), Expenses, Reports, Settings, Pricing, Assigned to me.
+- Nothing is half-built. Everything runs on sample data: actions that need a real backend (payments, calls, PDFs, sending email) show a short “(demo)” toast or a sample result.
 
 ### Known bugs and gaps
-- Several rename/tag/new-folder actions use `window.prompt`. Replace them with proper dialogs.
-- The Dark, Dark blue and Mixed themes have values for every new token, but have not been reviewed visually since the Polaris restyle.
-- The Home filters scale numbers with a multiplier. The data isn't truly filtered.
-- The Max engine is keyword-based. Unmatched text shows a "Build / Find / Analyze" clarifier.
-- The bundle is about 1.1MB (a Vite warning). Consider route code-splitting.
-- The "Fill missing" button on the contact profile only shows a toast.
-- Mobile: Home was checked at 375px (no sideways scroll, rows wrap). Other screens are not checked yet.
-- `vite.config.ts` uses `__dirname`; Vite warns that it should become `import.meta.dirname`. Harmless for now.
-- Vercel deploy through the v0 connector failed with `403 Cannot create tokens for this app`. Previews were published as a claude.ai artifact instead: https://claude.ai/artifact/QvBoe5zLTRvrZBd68X26rr (private; the latest version is v3.2 plus the fixes in this handover). The owner can connect the repo to Vercel himself for automatic deploys.
+- The Home and Reports filters scale sample numbers with a multiplier; the data isn’t truly filtered.
+- The Max engine and the agent Test panel are keyword-based simulations.
+- The main bundle chunk is about 705 kB (211 kB gzipped); Vite warns above 500 kB. Every module except Home and Max is already lazy-loaded.
+- Pricing plans and prices are placeholders (the owner will define them at the end).
+- Deleting all contacts is switched off on sample data.
+- `vite.config.ts` uses `__dirname`; harmless.
+- Vercel deploy through the v0 connector failed with `403 Cannot create tokens for this app`. Previews are published as a claude.ai artifact instead: https://claude.ai/artifact/QvBoe5zLTRvrZBd68X26rr (private). The owner can connect the repo to Vercel for automatic deploys.
 
 ---
 
 ## 6. What to build next (in order)
 
-1. **Polaris pass on Contacts** (next): view tabs and search/filter row inside the table card, as in `03-segments-table.png` / `12-reports-table.png`; filter pills; toolbar selects as `variant="button"`; header secondary actions as `variant="header"`; the index table with the row hover fixed on the sticky column; the folders view; the profile page. Show the owner, get approval, commit.
-2. **Polaris pass on Max** (page and side panel), then the **Campaigns** tiles page.
-3. **Get Started** (onboarding cards grid, like `02-onboarding-cards.png`).
-4. **Campaigns:** the wizard (0–9 with the journey tracker) and the detail page (all tabs and banners).
-5. **Stages** (board, list, review, new-stage dialog, in/out tabs, follow-up stages).
-6. **Inbox** (chat, email, calls, dial pad, composer, quotation).
-7. **AI Agents** (types, tiles, leaderboard, editor, test and review panels, guided builder, creating animation).
-8. **Bookings** (calendar views, dashboard, queries, setup and booking-settings pop-up).
-9. **Assigned to me**, **Expenses**, **Reports**, **Settings**, **Pricing**.
-10. Run the `consistent-ui` skill for a drift audit, review the dark themes, check mobile, split the bundle.
+1. **Owner review** of the full front end (click through the preview), then commit and push to `main` once approved.
+2. Fix anything the owner flags, one screen at a time.
+3. Run the `consistent-ui` skill for a drift audit across all screens.
+4. Optionally split the main chunk further (load Home’s charts and the sample data lazily).
+5. **Backend phase** (later, out of scope now): replace the store actions in `src/store/index.ts` with API calls; the screens already call only store actions.
 
 ### Ideas discussed but not built
 - Put the finished screens into **Figma** for the owner's team (the Figma connector and skills are available).
-- A **backend phase** later: the first developer briefing doc has the module and backend structure. It is out of scope for now.
 - Deploy to Vercel from the GitHub repo.
-- Voice cloning, a live voice conversation with Max, a PDF/presentation export from Max, competitor research by Max. These are simulated only for now.
+- Real voice cloning, live voice with Max, real PDF/presentation export, competitor research by Max. These are simulated for now.
 
 ---
 

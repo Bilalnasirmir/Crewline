@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Dialog } from 'radix-ui'
-import { Sparkles, Users, Megaphone, Kanban, CalendarDays, Bot, Inbox, Settings, Receipt, BarChart3, Home, Rocket, Search } from 'lucide-react'
+import { Sparkles, Users, Megaphone, Kanban, CalendarDays, Bot, Inbox, Settings, Receipt, BarChart3, Home, Rocket, Search, UserCheck, Tag } from 'lucide-react'
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command'
 import { Avatar, AgentAvatar } from '@/components/ui/avatar'
 import { useStore } from '@/store'
@@ -11,6 +11,7 @@ const PAGES = [
   ['Home', '/home', Home], ['Get Started', '/get-started', Rocket], ['Max', '/max', Sparkles], ['Inbox', '/inbox', Inbox], ['Contacts', '/contacts', Users],
   ['Campaigns', '/campaigns', Megaphone], ['Stages', '/stages', Kanban], ['Bookings', '/bookings', CalendarDays], ['AI Agents', '/agents', Bot],
   ['Expenses', '/expenses', Receipt], ['Reports', '/reports', BarChart3], ['Settings', '/settings', Settings],
+  ['Assigned to me', '/assigned', UserCheck], ['Plans & pricing', '/pricing', Tag],
 ] as const
 
 export function CommandPalette({ open, onOpenChange }: { open: boolean; onOpenChange: (o: boolean) => void }) {

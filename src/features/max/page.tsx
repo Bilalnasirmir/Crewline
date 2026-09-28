@@ -3,10 +3,10 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { Plus, Search, MoreHorizontal, Pencil, Trash2, Sparkles, Megaphone, Users, Receipt, BarChart3, Bot, PanelLeft } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { PageHeader } from '@/components/app/page'
 import { useMax } from './store'
+import { askText } from '@/components/app/ask'
 import { Composer, ThreadView } from './chat'
 
 const SUGGEST = [
@@ -30,14 +30,14 @@ export function MaxPage() {
     <div className="flex min-h-0 flex-1">
       {/* history rail */}
       <aside className={cn('hidden w-[260px] shrink-0 flex-col border-r border-border bg-surface md:flex', !histOpen && 'md:hidden')}>
-        <div className="flex h-12 items-center gap-2 border-b border-border px-3"><span className="text-base font-bold">Chats</span><Button variant="ghost" size="icon-sm" className="ml-auto" onClick={newThread} aria-label="New chat"><Plus /></Button></div>
-        <div className="p-2"><div className="relative"><Search className="absolute left-2.5 top-2 size-3.5 text-muted" /><Input className="h-7 pl-7 text-sm" placeholder="Search chats" value={q} onChange={(e) => setQ(e.target.value)} /></div></div>
+        <div className="flex h-12 shrink-0 items-center gap-2 border-b border-border px-3"><h3>Chats</h3><Button variant="ghost" size="icon-sm" className="ml-auto" onClick={newThread} aria-label="New chat"><Plus /></Button></div>
+        <div className="p-2"><label className="flex h-8 items-center gap-2 rounded-control bg-subtle-2 px-2.5 focus-within:outline-2 focus-within:outline-offset-1 focus-within:outline-primary"><Search className="size-4 shrink-0 text-icon" /><input className="min-w-0 flex-1 bg-transparent text-sm outline-none" placeholder="Search chats" value={q} onChange={(e) => setQ(e.target.value)} /></label></div>
         <div className="min-h-0 flex-1 overflow-y-auto px-2 pb-2">
           {list.map((t) => (
-            <div key={t.id} className={cn('group flex h-8 items-center gap-1 rounded-control pl-2 pr-1 text-sm', t.id === active.id ? 'bg-subtle text-text' : 'text-text-2 hover:bg-subtle')}>
+            <div key={t.id} className={cn('group flex h-8 items-center gap-1 rounded-control pl-2 pr-1 text-sm transition-colors', t.id === active.id ? 'bg-fill-selected font-medium text-text' : 'text-text hover:bg-fill-hover')}>
               <button className="min-w-0 flex-1 truncate text-left" onClick={() => open(t.id)}>{t.title}</button>
               <DropdownMenu><DropdownMenuTrigger asChild><Button variant="ghost" size="icon-xs" className="opacity-0 group-hover:opacity-100 data-[state=open]:opacity-100" aria-label="Chat menu"><MoreHorizontal /></Button></DropdownMenuTrigger>
-                <DropdownMenuContent align="end"><DropdownMenuItem onSelect={() => { const n = window.prompt('Rename chat', t.title); if (n) rename(t.id, n) }}><Pencil />Rename</DropdownMenuItem><DropdownMenuItem danger onSelect={() => remove(t.id)}><Trash2 />Delete</DropdownMenuItem></DropdownMenuContent></DropdownMenu>
+                <DropdownMenuContent align="end"><DropdownMenuItem onSelect={async () => { const n = await askText({ title: 'Rename chat', label: 'Name', value: t.title }); if (n) rename(t.id, n) }}><Pencil />Rename</DropdownMenuItem><DropdownMenuItem danger onSelect={() => remove(t.id)}><Trash2 />Delete</DropdownMenuItem></DropdownMenuContent></DropdownMenu>
             </div>
           ))}
           {!list.length && <p className="px-2 py-6 text-center text-xs text-muted">No chats yet</p>}
@@ -46,14 +46,14 @@ export function MaxPage() {
       </aside>
       <div className="flex min-w-0 flex-1 flex-col bg-surface">
         <PageHeader title="Max" sub="your AI assistant — it can read, build and change anything in Crewline" icon={<Sparkles className="text-ai" />}
-          actions={<><Button variant="ghost" size="icon" className="hidden md:inline-flex" onClick={() => setHistOpen(!histOpen)} aria-label="Toggle chats"><PanelLeft /></Button><Button size="sm" onClick={newThread}><Plus />New chat</Button></>} />
+          actions={<><Button variant="ghost" size="icon" className="hidden md:inline-flex" onClick={() => setHistOpen(!histOpen)} aria-label="Toggle chats"><PanelLeft /></Button><Button variant="header" onClick={newThread}><Plus />New chat</Button></>} />
         <ThreadView empty={
           <div className="pt-[8vh]">
             <div className="mx-auto flex size-12 items-center justify-center rounded-full bg-ai-soft text-ai"><Sparkles className="size-6" /></div>
             <h1 className="mt-4 text-center">Good evening, Bilal. What do you want to do?</h1>
-            <p className="mt-1 text-center text-base text-muted">Ask in your own words. Max shows the options right here and never changes anything without asking.</p>
+            <p className="mt-1 text-center text-sm text-muted">Ask in your own words. Max shows the options right here and never changes anything without asking.</p>
             <div className="mt-8 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
-              {SUGGEST.map((s) => <button key={s.l} onClick={() => send(s.q)} className="flex items-start gap-3 rounded-card border border-border p-3 text-left transition-colors hover:bg-subtle-2"><s.I className="mt-0.5 size-4 shrink-0 text-muted" /><span><span className="block font-medium">{s.l}</span><span className="block text-sm text-muted">{s.d}</span></span></button>)}
+              {SUGGEST.map((s) => <button key={s.l} onClick={() => send(s.q)} className="flex items-start gap-3 rounded-card bg-surface p-3 text-left shadow-[0_0_#0000,var(--shadow-bevel),var(--shadow-card)] transition-colors hover:bg-subtle-2"><s.I className="mt-0.5 size-4 shrink-0 text-icon" /><span><span className="block text-sm font-medium">{s.l}</span><span className="block text-sm text-muted">{s.d}</span></span></button>)}
             </div>
           </div>
         } />

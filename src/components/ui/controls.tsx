@@ -31,6 +31,15 @@ export function Checkbox({ className, ...props }: React.ComponentPropsWithoutRef
   )
 }
 
+/** Visual-only checkbox for use inside a clickable tile (a real checkbox there would nest buttons). */
+export function CheckMark({ on, className }: { on: boolean; className?: string }) {
+  return (
+    <span aria-hidden className={cn('flex size-4 shrink-0 items-center justify-center rounded-sm border transition-colors', on ? 'border-btn bg-btn text-btn-fg' : 'border-input-border bg-surface', className)}>
+      {on && <Check className="size-3" strokeWidth={3} />}
+    </span>
+  )
+}
+
 export const RadioGroup = R.Root
 export function Radio({ className, ...props }: React.ComponentPropsWithoutRef<typeof R.Item>) {
   return (

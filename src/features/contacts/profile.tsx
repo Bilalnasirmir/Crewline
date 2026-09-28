@@ -1,8 +1,8 @@
 import * as React from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'sonner'
-import { MessageSquare, Phone, Mail, CalendarDays, FileText, DollarSign, Sparkles, Pencil, Check, X, Kanban, ShoppingBag, Upload, StickyNote, Play, MoreHorizontal, ShieldBan, Trash2, Tag, Folder } from 'lucide-react'
-import { cn, nf, money } from '@/lib/utils'
+import { MessageSquare, Phone, Mail, CalendarDays, FileText, DollarSign, Sparkles, Pencil, Check, X, Kanban, ShoppingBag, Upload, StickyNote, Play, ChevronDown, ShieldBan, Trash2, Tag, Folder } from 'lucide-react'
+import { cn, money } from '@/lib/utils'
 import { useStore, stagesFor } from '@/store'
 import { useMax } from '@/features/max/store'
 import { PageBody, PageHeader } from '@/components/app/page'
@@ -16,9 +16,11 @@ import { Avatar } from '@/components/ui/avatar'
 import { Tip } from '@/components/ui/tooltip'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
-import { AiMark, DirIcon, DirTag, PlatIcon } from '@/components/app/icons'
+import { DirIcon, DirTag, PlatIcon } from '@/components/app/icons'
 import { StageTag, AgentChip } from '@/components/app/bits'
-import { PhoneMenu } from './dialogs'
+import { PhoneMenu, EnrichDialog } from './dialogs'
+import { askText } from '@/components/app/ask'
+import { RecordSaleDialog } from '@/features/inbox/dialogs'
 import { score } from './filters'
 import { agoTxt, dNice } from '@/data/seed'
 
@@ -34,7 +36,7 @@ export function ContactProfile() {
   const { id } = useParams(); const nav = useNavigate(); const s = useStore(); const { send, newThread } = useMax()
   const c = s.contacts.find((x) => x.id === id)
   const [edit, setEdit] = React.useState<string | null>(null); const [val, setVal] = React.useState('')
-  const [tab, setTab] = React.useState('all')
+  const [tab, setTab] = React.useState('all'); const [enrich, setEnrich] = React.useState(false); const [sale, setSale] = React.useState(false)
   if (!c) return <div className="p-6 text-muted">This contact was removed.</div>
   const camp = s.campaigns.find((k) => k.id === c.camp); const stages = stagesFor(camp, s.stages); const folder = s.folders.find((f) => f.id === c.folder)
   const convos = s.convos.filter((v) => v.cid === c.id); const calls = s.calls.filter((l) => l.cid === c.id); const emails = s.emails.filter((e) => e.cid === c.id); const bks = s.bookings.filter((b) => b.cid === c.id)
@@ -54,9 +56,9 @@ export function ContactProfile() {
     <div className="flex min-h-0 flex-1 flex-col">
       <PageHeader crumbs={[{ label: 'Contacts', to: '/contacts' }]} title={c.name || 'Name missing'}
         actions={<>
-          <Button size="sm" variant="ai" onClick={() => { newThread(); send(`Analyze ${c.name || 'this contact'}'s conversations and tell me what to do next`); nav('/max') }}><Sparkles />Analyze with AI</Button>
-          <DropdownMenu><DropdownMenuTrigger asChild><Button size="icon" variant="ghost" aria-label="More"><MoreHorizontal /></Button></DropdownMenuTrigger><DropdownMenuContent align="end">
-            <DropdownMenuItem onSelect={() => { const t = window.prompt('Add a tag'); if (t) s.updateContact(c.id, { tags: [...c.tags, t] }) }}><Tag />Add tag</DropdownMenuItem>
+          <Button variant="header" onClick={() => { newThread(); send(`Analyze ${c.name || 'this contact'}'s conversations and tell me what to do next`); nav('/max') }}><Sparkles />Analyze with AI</Button>
+          <DropdownMenu><DropdownMenuTrigger asChild><Button variant="header">More actions<ChevronDown /></Button></DropdownMenuTrigger><DropdownMenuContent align="end">
+            <DropdownMenuItem onSelect={async () => { const t = await askText({ title: 'Add a tag', label: 'Tag', placeholder: 'e.g. VIP' }); if (t) s.updateContact(c.id, { tags: [...c.tags, t] }) }}><Tag />Add tag</DropdownMenuItem>
             <DropdownMenuItem onSelect={() => nav('/contacts?view=folders')}><Folder />Move to folder</DropdownMenuItem>
             <DropdownMenuItem onSelect={() => { s.updateContact(c.id, { dnc: !c.dnc }); toast.success(c.dnc ? 'Removed from Do-Not-Contact' : 'Added to Do-Not-Contact') }}><ShieldBan />{c.dnc ? 'Remove from' : 'Add to'} Do-Not-Contact</DropdownMenuItem>
             <DropdownMenuSeparator /><DropdownMenuItem danger onSelect={() => { s.patch('contacts', (cs) => cs.filter((x) => x.id !== c.id)); nav('/contacts'); toast.success('Deleted · undo within 30 days') }}><Trash2 />Delete</DropdownMenuItem></DropdownMenuContent></DropdownMenu>
@@ -75,16 +77,16 @@ export function ContactProfile() {
             <Button size="sm" onClick={() => nav(`/inbox?kind=chat&to=${c.id}`)}><MessageSquare />Text</Button>
             <PhoneMenu contact={c}><Button size="sm"><Phone />Call</Button></PhoneMenu>
             <Button size="sm" onClick={() => nav(`/inbox?kind=email&compose=${c.id}`)}><Mail />Email</Button>
-            <Button size="sm" onClick={() => nav(`/bookings?new=1&who=${encodeURIComponent(c.name)}`)}><CalendarDays />Book</Button>
+            <Button size="sm" onClick={() => nav(`/bookings?new=1&who=${c.id}`)}><CalendarDays />Book</Button>
             <Button size="sm" onClick={() => nav(`/inbox?kind=chat&to=${c.id}&quote=1`)}><FileText />Send quotation</Button>
-            <Button size="sm" onClick={() => { s.updateContact(c.id, { purchase: { product: 'Internet 1 Gig', amount: 50, date: '2026-09-27' }, sold: '2026-09-27' }); toast.success('Sale recorded · shows in history and dashboards') }}><DollarSign />Record sale</Button>
+            <Button size="sm" onClick={() => setSale(true)}><DollarSign />Record sale</Button>
           </div>
         </div>
 
         <div className="grid gap-4 lg:grid-cols-[300px_minmax(0,1fr)_300px]">
           {/* details */}
           <Card className="self-start">
-            <CardHeader title="Details" action={<Button size="sm" variant="ai" onClick={() => toast('Looking up missing details with AI…')}><Sparkles />Fill missing</Button>} />
+            <CardHeader title="Details" action={<Button size="sm" onClick={() => setEnrich(true)}><Sparkles />Fill missing</Button>} />
             <div className="divide-y divide-border px-4">
               {fields.map(([k, l, v]) => (
                 <div key={k} className="group flex min-h-9 items-center gap-2 py-1">
@@ -93,7 +95,7 @@ export function ContactProfile() {
                     : <><span className={cn('min-w-0 flex-1 truncate text-base', !v && 'text-warning')}>{v || 'Missing'}</span><Button size="icon-xs" variant="ghost" className="opacity-0 group-hover:opacity-100" onClick={() => { setEdit(k); setVal(v) }} aria-label={`Edit ${l}`}><Pencil /></Button></>}
                 </div>
               ))}
-              {s.customFields.map((f) => <div key={f.name} className="group flex min-h-9 items-center gap-2 py-1"><span className="w-[96px] shrink-0 truncate text-sm text-muted">{f.name}</span><span className={cn('flex-1 truncate text-base', !c.custom[f.name] && 'text-faint')}>{c.custom[f.name] || 'Empty'}</span><Button size="icon-xs" variant="ghost" className="opacity-0 group-hover:opacity-100" onClick={() => { const v = window.prompt(f.name, c.custom[f.name] ?? ''); if (v !== null) s.updateContact(c.id, { custom: { ...c.custom, [f.name]: v } }) }} aria-label="Edit"><Pencil /></Button></div>)}
+              {s.customFields.map((f) => <div key={f.name} className="group flex min-h-9 items-center gap-2 py-1"><span className="w-[96px] shrink-0 truncate text-sm text-muted">{f.name}</span><span className={cn('flex-1 truncate text-base', !c.custom[f.name] && 'text-faint')}>{c.custom[f.name] || 'Empty'}</span><Button size="icon-xs" variant="ghost" className="opacity-0 group-hover:opacity-100" onClick={async () => { const v = await askText({ title: f.name, label: `${f.name} for ${c.name || 'this contact'}`, value: c.custom[f.name] ?? '' }); if (v !== null) s.updateContact(c.id, { custom: { ...c.custom, [f.name]: v } }) }} aria-label="Edit"><Pencil /></Button></div>)}
             </div>
             <div className="border-t border-border px-4 py-3">
               <div className="mb-1.5 text-sm font-medium">Permission</div>
@@ -109,7 +111,7 @@ export function ContactProfile() {
             <div className="px-4 py-2">
               {groups.map(([day, items]) => (
                 <div key={day} className="py-2">
-                  <div className="mb-1 text-[11px] font-semibold uppercase tracking-wide text-faint">{day}</div>
+                  <h4 className="mb-1 text-muted">{day}</h4>
                   {items.map((h, i) => { const d = ICON[h.k]; return (
                     <div key={i} className="group flex gap-3 py-1.5">
                       <Tip content={<span><b>{d.l}</b> — {d.d}</span>}><span className={cn('mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-[6px]', d.c)}><d.I className="size-3.5" /></span></Tip>
@@ -142,14 +144,15 @@ export function ContactProfile() {
                   <Property label="Last contact">{agoTxt(c.lastDays)}</Property>
                 </PropertyList>
               </div></Card>
-            <Card><CardHeader title="Purchases" action={<Button size="sm" onClick={() => { s.updateContact(c.id, { purchase: { product: '5G Unlimited line', amount: 35, date: '2026-09-27' } }); toast.success('Sale recorded') }}><DollarSign />Record sale</Button>} />
+            <Card><CardHeader title="Purchases" action={<Button size="sm" onClick={() => setSale(true)}><DollarSign />Record sale</Button>} />
               {c.purchase ? <div className="flex items-center gap-3 p-4"><span className="flex size-8 items-center justify-center rounded-[6px] bg-success-soft text-success"><ShoppingBag className="size-4" /></span><div><div className="text-base font-medium">{c.purchase.product}</div><div className="text-xs text-muted">{money(c.purchase.amount)} · {dNice(c.purchase.date)}</div></div></div> : <p className="p-4 text-sm text-muted">No purchases yet.</p>}</Card>
             <Card><CardHeader title="Notes" description="For your team and agents" /><div className="p-4"><Textarea placeholder="e.g. Prefers calls after 5 PM" value={c.notes} onChange={(e) => s.updateContact(c.id, { notes: e.target.value })} className="min-h-[72px]" /></div></Card>
             <Card><CardHeader title="Recent conversations" />{convos.length ? <div>{convos.map((v) => <button key={v.id} onClick={() => nav(`/inbox?kind=chat&id=${v.id}`)} className="flex w-full items-center gap-2 border-b border-border px-4 py-2 text-left text-sm hover:bg-subtle-2 last:border-0"><PlatIcon p={v.plat} size={14} /><span className="flex-1 truncate">{(v.items.filter((i) => i.t === 'm').slice(-1)[0] as any)?.text}</span><span className="text-xs text-muted">{v.time}</span></button>)}{calls.length > 0 && <div className="px-4 py-2 text-xs text-muted">{calls.length} calls · {emails.length} emails</div>}</div> : <p className="p-4 text-sm text-muted">No conversations yet.</p>}</Card>
           </div>
         </div>
       </PageBody>
+      <EnrichDialog open={enrich} onOpenChange={setEnrich} ids={[c.id]} />
+      <RecordSaleDialog open={sale} onOpenChange={setSale} contact={c} />
     </div>
   )
 }
-export { nf, AiMark }

@@ -2,6 +2,7 @@ import { create } from 'zustand'
 import * as seed from '@/data/seed'
 import type * as T from '@/data/types'
 import { uid } from '@/lib/utils'
+import { reviewOf } from '@/data/review'
 
 export type Theme = 'light' | 'dark' | 'navy' | 'mixed'
 
@@ -20,6 +21,11 @@ export interface State {
   bookings: T.Booking[]; queries: T.Query[]; activity: T.Activity[]; assigned: T.Assigned[]; notifs: T.Notif[]; suggestions: T.Suggestion[]
   gs: T.GsStep[]; expenses: T.Expense[]; expDaily: number[]; reportFolders: T.ReportFolder[]; reports: T.Report[]
   team: T.TeamMember[]; numbers: T.PhoneNumber[]; voices: [string, string][]; maxThreads: T.MaxThread[]
+  bookingSet: Record<string, T.BookingSettings>; setups: Record<string, T.CampaignSetup>
+  /** Settings and small preferences, keyed by name (persisted in this browser). */
+  prefs: Record<string, any>
+  /** Contact id → when an agent last moved them (drives the live highlight on the board). */
+  recent: Record<string, number>
   tick: number
   // actions
   setTheme: (t: Theme) => void; toggleSidebar: () => void; setLive: (v: boolean) => void; setMaxPanel: (v: boolean) => void; setGuide: (g: string | null) => void
@@ -28,7 +34,9 @@ export interface State {
   updateContact: (id: string, p: Partial<T.Contact>) => void
   moveLead: (cid: string, stage: string, by: string, note?: string) => void
   addActivity: (a: Omit<T.Activity, 'id'>) => void
-  resolveAssigned: (id: string) => void
+  /** Close an item in Assigned to me, with a short note of what was done. */
+  resolveAssigned: (id: string, outcome?: string) => void
+  reopenAssigned: (id: string) => void
   markNotifsRead: () => void
   updateAgent: (id: string, p: Partial<T.Agent>) => void
   updateCampaign: (id: string, p: Partial<T.Campaign>) => void
@@ -36,6 +44,19 @@ export interface State {
   updateBooking: (id: string, p: Partial<T.Booking>) => void
   pushConvoItem: (vid: string, item: T.ConvoItem) => void
   updateConvo: (vid: string, p: Partial<T.Convo>) => void
+  /** A person sends a message: ticks go sent → delivered → read. */
+  sendMessage: (vid: string, text: string, who?: string) => void
+  startConvo: (cid: string, plat: T.Platform, o?: { agent?: string; camp?: string | null; text?: string; human?: boolean }) => string
+  setPref: (k: string, v: unknown) => void
+  addCampaign: (c: T.Campaign, setup: T.CampaignSetup) => void
+  saveSetup: (id: string, setup: T.CampaignSetup) => void
+  setupOf: (id: string) => T.CampaignSetup | undefined
+  addAgent: (a: T.Agent) => void
+  upsertStage: (pipe: T.Pipe, dir: 'in' | 'out', stage: T.Stage) => void
+  removeStage: (pipe: T.Pipe, dir: 'in' | 'out', id: string) => void
+  moveStage: (pipe: T.Pipe, dir: 'in' | 'out', id: string, by: -1 | 1) => void
+  copyStages: (pipe: T.Pipe, from: 'in' | 'out') => void
+  addReport: (r: Omit<T.Report, 'id'>) => T.Report
   liveTick: () => void
 }
 
@@ -45,10 +66,11 @@ export const useStore = create<State>((set, get) => ({
   homeKpis: readLS('homeKpis', ['convos', 'calls', 'answered', 'texts', 'booked', 'sales', 'revenue', 'cost']),
   biz: seed.biz, folders: seed.folders, campaigns: seed.campaigns, products: seed.products, stages: seed.stages,
   contacts: seed.contacts, dnc: seed.dnc, dups: seed.dups, deadRules: seed.deadRules, sources: seed.sources, customFields: seed.customFields,
-  agents: seed.agents, convos: seed.convos, emails: seed.emails, calls: seed.calls, staff: seed.staff, services: seed.services, hours: seed.hours,
+  agents: seed.agents.map((a) => ({ ...a, score: reviewOf(a).score })), convos: seed.convos, emails: seed.emails, calls: seed.calls, staff: seed.staff, services: seed.services, hours: seed.hours,
   bookings: seed.bookings, queries: seed.queries, activity: seed.activity, assigned: seed.assigned, notifs: seed.notifs, suggestions: seed.suggestions,
   gs: seed.gs, expenses: seed.expenses, expDaily: seed.expDaily, reportFolders: seed.reportFolders, reports: seed.reports,
-  team: seed.team, numbers: seed.numbers, voices: seed.voices, maxThreads: seed.maxThreads, tick: 0,
+  team: seed.team, numbers: seed.numbers, voices: seed.voices, maxThreads: seed.maxThreads,
+  bookingSet: seed.bookingSet, setups: {}, prefs: readLS('prefs', {}), recent: {}, tick: 0,
 
   setTheme: (theme) => { writeLS('theme', theme); set({ theme }) },
   toggleSidebar: () => set((s) => { writeLS('sidebar', !s.sidebarCollapsed); return { sidebarCollapsed: !s.sidebarCollapsed } }),
@@ -69,20 +91,60 @@ export const useStore = create<State>((set, get) => ({
     let patchC: Partial<T.Contact> = { stage, lastDays: 0 }
     if (stg?.rev && !c.sold) patchC = { ...patchC, sold: seed.dISO(0) }
     set({
+      recent: { ...s.recent, [cid]: Date.now() },
       contacts: s.contacts.map((x) => (x.id === cid ? { ...x, ...patchC } : x)),
       convos: s.convos.map((v) => (v.cid === cid ? { ...v, items: [...v.items, { t: 'ev', k: 'stage', text: `Stage moved to ${stage} by ${agentName}${note ? ' · ' + note : ''}`, time, stage }] } : v)),
       activity: [{ id: uid('ac'), icon: 'kanban', text: `<b>${agentName}</b> moved <b>${c.name || 'Unknown'}</b> to <b>${stage}</b>`, time: 'just now', k: 'stage', fresh: true }, ...s.activity.map((a) => ({ ...a, fresh: false }))].slice(0, 40),
     })
   },
   addActivity: (a) => set((s) => ({ activity: [{ ...a, id: uid('ac'), fresh: true }, ...s.activity.map((x) => ({ ...x, fresh: false }))].slice(0, 40) })),
-  resolveAssigned: (id) => set((s) => ({ assigned: s.assigned.map((a) => (a.id === id ? { ...a, done: true } : a)) })),
+  resolveAssigned: (id, outcome) => set((s) => ({ assigned: s.assigned.map((a) => (a.id === id ? { ...a, done: true, outcome: outcome ?? a.outcome } : a)) })),
+  reopenAssigned: (id) => set((s) => ({ assigned: s.assigned.map((a) => (a.id === id ? { ...a, done: false, outcome: undefined } : a)) })),
   markNotifsRead: () => set((s) => ({ notifs: s.notifs.map((n) => ({ ...n, read: true })) })),
-  updateAgent: (id, p) => set((s) => ({ agents: s.agents.map((a) => (a.id === id ? { ...a, ...p } : a)) })),
+  updateAgent: (id, p) => set((s) => ({ agents: s.agents.map((a) => { if (a.id !== id) return a; const n = { ...a, ...p }; return { ...n, score: reviewOf(n).score } }) })),
   updateCampaign: (id, p) => set((s) => ({ campaigns: s.campaigns.map((c) => (c.id === id ? { ...c, ...p } : c)) })),
   addBooking: (b) => { const nb = { ...b, id: uid('b') }; set((s) => ({ bookings: [...s.bookings, nb] })); return nb },
   updateBooking: (id, p) => set((s) => ({ bookings: s.bookings.map((b) => (b.id === id ? { ...b, ...p } : b)) })),
   pushConvoItem: (vid, item) => set((s) => ({ convos: s.convos.map((v) => (v.id === vid ? { ...v, items: [...v.items, item] } : v)) })),
   updateConvo: (vid, p) => set((s) => ({ convos: s.convos.map((v) => (v.id === vid ? { ...v, ...p } : v)) })),
+  sendMessage: (vid, text, who = 'you') => {
+    const time = new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })
+    const n = get().convos.find((v) => v.id === vid)?.items.length ?? 0
+    set((s) => ({ convos: s.convos.map((v) => (v.id === vid ? { ...v, time, unread: false, items: [...v.items, { t: 'm', d: 'o', who, text, time, st: 'sent' }] } : v)) }))
+    const tickTo = (st: T.MsgStatus) => set((s) => ({ convos: s.convos.map((v) => (v.id === vid ? { ...v, items: v.items.map((it, i) => (i === n && it.t === 'm' ? { ...it, st } : it)) } : v)) }))
+    setTimeout(() => tickTo('delivered'), 900)
+    setTimeout(() => tickTo('read'), 2600)
+  },
+  startConvo: (cid, plat, o = {}) => {
+    const s = get(); const c = s.contacts.find((x) => x.id === cid)
+    const have = s.convos.find((v) => v.cid === cid && v.plat === plat)
+    if (have) { if (o.text) get().sendMessage(have.id, o.text, o.human === false ? o.agent : 'you'); return have.id }
+    const id = uid('v'); const time = new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })
+    const agent = o.agent ?? c?.agent ?? 's1'
+    set({ convos: [{ id, cid, plat, dir: 'out', camp: o.camp ?? c?.camp ?? null, agent, unread: false, needs: false, human: o.human ?? true, time, items: [{ t: 'day', text: 'Today' }, ...(o.human === false ? [{ t: 'ev', k: 'sys', text: `${s.agents.find((a) => a.id === agent)?.name ?? 'The agent'} started this conversation for you${o.camp ? ` using the ${s.campaigns.find((k) => k.id === o.camp)?.name} instructions` : ''}`, time } as T.ConvoItem] : [])] }, ...s.convos] })
+    if (o.text) get().sendMessage(id, o.text, o.human === false ? agent : 'you')
+    return id
+  },
+  setPref: (k, v) => set((s) => { const prefs = { ...s.prefs, [k]: v }; writeLS('prefs', prefs); return { prefs } }),
+  addCampaign: (c, setup) => set((s) => ({ campaigns: [c, ...s.campaigns], setups: { ...s.setups, [c.id]: setup } })),
+  saveSetup: (id, setup) => set((s) => ({ setups: { ...s.setups, [id]: setup }, campaigns: s.campaigns.map((c) => (c.id === id ? { ...c, name: setup.name, dir: setup.dir, sub: setup.sub, biz: setup.biz, pipe: setup.pipe, ch: setup.ch, agents: setup.agents, weights: setup.weights, booking: setup.booking, folder: setup.folder ?? c.folder } : c)) })),
+  setupOf: (id) => { const s = get(); const c = s.campaigns.find((x) => x.id === id); return s.setups[id] ?? (c ? seed.setupFor(c) : undefined) },
+  addAgent: (a) => set((s) => ({ agents: [...s.agents, { ...a, score: reviewOf(a).score }] })),
+  upsertStage: (pipe, dir, stage) => set((s) => {
+    const L = s.stages[pipe][dir]; const i = L.findIndex((x) => x.id === stage.id)
+    // Keep won/lost stages at the end, so a new open stage lands before them.
+    const next = i >= 0 ? L.map((x) => (x.id === stage.id ? stage : x)) : (() => { const at = stage.type === 'open' || stage.type === 'pending' ? L.findIndex((x) => x.type === 'won' || x.type === 'lost') : -1; return at < 0 ? [...L, stage] : [...L.slice(0, at), stage, ...L.slice(at)] })()
+    return { stages: { ...s.stages, [pipe]: { ...s.stages[pipe], [dir]: next } } }
+  }),
+  removeStage: (pipe, dir, id) => set((s) => ({ stages: { ...s.stages, [pipe]: { ...s.stages[pipe], [dir]: s.stages[pipe][dir].filter((x) => x.id !== id) } } })),
+  moveStage: (pipe, dir, id, by) => set((s) => {
+    const L = [...s.stages[pipe][dir]]; const i = L.findIndex((x) => x.id === id); const j = i + by
+    if (i < 0 || j < 0 || j >= L.length) return {}
+    ;[L[i], L[j]] = [L[j], L[i]]
+    return { stages: { ...s.stages, [pipe]: { ...s.stages[pipe], [dir]: L } } }
+  }),
+  copyStages: (pipe, from) => set((s) => ({ stages: { ...s.stages, [pipe]: { ...s.stages[pipe], [from === 'out' ? 'in' : 'out']: s.stages[pipe][from].map((x) => ({ ...x, id: uid('st'), criteria: [...x.criteria] })) } } })),
+  addReport: (r) => { const nr = { ...r, id: uid('rp') }; set((s) => ({ reports: [nr, ...s.reports] })); return nr },
 
   liveTick: () => {
     const s = get(); if (!s.live) return

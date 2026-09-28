@@ -37,8 +37,8 @@ export function LineList({
 /** Toggle row used in every settings list: label + optional description + control on the right. */
 export function OptionRow({ title, description, children, className, icon }: { title: React.ReactNode; description?: React.ReactNode; children: React.ReactNode; className?: string; icon?: React.ReactNode }) {
   return (
-    <div className={cn('flex items-center justify-between gap-4 py-2.5', className)}>
-      <div className="flex min-w-0 items-start gap-2">{icon && <span className="mt-0.5 text-muted [&_svg]:size-4">{icon}</span>}<div className="min-w-0"><div className="text-base">{title}</div>{description && <div className="text-sm text-muted">{description}</div>}</div></div>
+    <div className={cn('flex flex-wrap items-center justify-between gap-x-4 gap-y-2 py-2.5', className)}>
+      <div className="flex min-w-[min(100%,200px)] flex-1 items-start gap-2">{icon && <span className="mt-0.5 text-muted [&_svg]:size-4">{icon}</span>}<div className="min-w-0"><div className="text-base">{title}</div>{description && <div className="text-sm text-muted">{description}</div>}</div></div>
       <div className="shrink-0">{children}</div>
     </div>
   )

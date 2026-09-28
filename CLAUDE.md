@@ -10,8 +10,8 @@ Crewline is an AI-agent CRM. **This phase is front end only**: a fully clickable
 5. `docs/UPDATE_BRIEF.md` and `docs/ORIGINAL_DESCRIPTION.md`: the owner's feature briefs, verbatim.
 
 ## Where things stand (28 Sep 2026)
-- Tokens (`src/index.css`), every shared component (`src/components/ui/*`), the shell with sidebar sub-navigation, and **Home** are restyled to Polaris. **The owner approved them.**
-- **Next:** a Polaris pass on **Contacts**, then Max, then Campaigns tiles; after that the unbuilt modules in the order of `PROJECT_BRIEF.md` §6.
+- **Every screen is built** on the Polaris system: Home, Max, Get Started, Inbox, Contacts, Campaigns (wizard + detail), Stages, Bookings, AI Agents (editor, test/review panels, builder), Assigned to me, Expenses, Reports, Settings (26 sections) and Pricing. Status and known gaps: `PROJECT_BRIEF.md` §5.
+- **Next:** the owner reviews the whole front end; fix what they flag; then commit and push to `main` after approval. The backend comes later and replaces the store actions.
 
 ## Design rules in one screen (details in PROJECT_BRIEF.md §4)
 - **Font:** Inter ("Inter Variable", self-hosted) + the Polaris system stack. **Never declare or claim "ShopifyInter"**; it is not public. Body uses `font-feature-settings: "calt" 0`.
