@@ -1,12 +1,12 @@
 import * as React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
-import { Upload, Sparkles, Check, Phone, PhoneCall, Copy, MessageSquare, Merge, SkipForward, Trash2, Plus, FolderPlus } from 'lucide-react'
+import { Upload, Sparkles, Check, Phone, Copy, MessageSquare, Merge, SkipForward, Trash2, Plus, FolderPlus } from 'lucide-react'
 import { cn, nf, uid } from '@/lib/utils'
 import { useStore } from '@/store'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent } from '@/components/ui/dialog'
-import { Field, Input, Textarea } from '@/components/ui/input'
+import { Field, Input } from '@/components/ui/input'
 import { Select } from '@/components/ui/select'
 import { Switch, ChoiceRow, Progress } from '@/components/ui/controls'
 import { Table, Td, Th, Tr } from '@/components/ui/table'
@@ -14,6 +14,7 @@ import { Badge } from '@/components/ui/badge'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { AgentAvatar } from '@/components/ui/avatar'
 import { AiMark } from '@/components/app/icons'
+import { askText } from '@/components/app/ask'
 import type { Contact } from '@/data/types'
 
 /* ---------- Add contact ---------- */
@@ -50,8 +51,8 @@ export function AddContactDialog({ open, onOpenChange, folder }: { open: boolean
               <DropdownMenuLabel>Your custom fields</DropdownMenuLabel>
               {customFields.map((cf) => <DropdownMenuItem key={cf.name} onSelect={() => setCustom([...custom, { name: cf.name, type: cf.type, value: '' }])}>{cf.name}<span className="ml-auto text-xs text-faint">{cf.type}</span></DropdownMenuItem>)}
               <DropdownMenuSeparator />
-              <DropdownMenuItem onSelect={() => { const n = window.prompt('New field name'); if (n) setCustom([...custom, { name: n, type: 'Text', value: '' }]) }}><Plus />New text field…</DropdownMenuItem>
-              <DropdownMenuItem onSelect={() => { const n = window.prompt('New dropdown field name'); if (n) setCustom([...custom, { name: n, type: 'Dropdown', value: '' }]) }}><Plus />New dropdown field…</DropdownMenuItem>
+              <DropdownMenuItem onSelect={async () => { const n = await askText({ title: 'New text field', label: 'Field name', placeholder: 'e.g. Pet’s name', hint: 'It becomes a filter, a column and something agents can fill in.', ok: 'Add field' }); if (n) setCustom([...custom, { name: n, type: 'Text', value: '' }]) }}><Plus />New text field…</DropdownMenuItem>
+              <DropdownMenuItem onSelect={async () => { const n = await askText({ title: 'New dropdown field', label: 'Field name', placeholder: 'e.g. Property type', ok: 'Add field' }); if (n) setCustom([...custom, { name: n, type: 'Dropdown', value: '' }]) }}><Plus />New dropdown field…</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
@@ -225,4 +226,3 @@ export function ContactSettingsDialog({ open, onOpenChange, tab = 'fields' }: { 
   )
 }
 
-export { PhoneCall, Textarea }

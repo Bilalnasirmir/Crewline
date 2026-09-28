@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Plus, Trash2, Sparkles, GripVertical } from 'lucide-react'
+import { Plus, Trash2, GripVertical } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useStore } from '@/store'
 import { Button } from '@/components/ui/button'
@@ -60,4 +60,3 @@ export function FollowUpEditor({ value, onChange, note, compact }: { value: Foll
     </div>
   )
 }
-export { Sparkles }

@@ -2,6 +2,7 @@ import * as React from 'react'
 import { ChevronRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { cn } from '@/lib/utils'
+import { Segmented } from '@/components/ui/tabs'
 
 /** Polaris page header: 16px from the top bar, optional icon + heading-lg title, actions on the right
  *  (28px buttons, 8px apart), 12px above the content. */
@@ -31,6 +32,16 @@ export function Toolbar({ left, right, className }: { left?: React.ReactNode; ri
     <div className={cn('flex shrink-0 flex-wrap items-center justify-between gap-2 px-4 pb-3', className)}>
       <div className="flex min-w-0 flex-wrap items-center gap-2">{left}</div>
       <div className="flex shrink-0 items-center gap-2">{right}</div>
+    </div>
+  )
+}
+
+/** Section tabs under the page header: Polaris tabs (28px, 12px / 550, selected = light fill). */
+export function PageTabs<T extends string>({ value, onChange, tabs, right, className }: { value: T; onChange: (v: T) => void; tabs: { value: T; label: React.ReactNode; icon?: React.ReactNode }[]; right?: React.ReactNode; className?: string }) {
+  return (
+    <div className={cn('flex shrink-0 flex-wrap items-center gap-2 px-4 pb-3', className)}>
+      <div className="-mx-1 flex min-w-0 flex-1 overflow-x-auto px-1 [scrollbar-width:none]"><Segmented value={value} onChange={onChange} options={tabs} /></div>
+      {right && <div className="flex shrink-0 flex-wrap items-center gap-2">{right}</div>}
     </div>
   )
 }

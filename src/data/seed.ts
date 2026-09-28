@@ -151,7 +151,7 @@ plan.forEach(([k, f, n]) => {
       email: hasE ? `${first.toLowerCase()}.${last.toLowerCase()}${rint(1, 89)}@${pick(['gmail.com', 'outlook.com', 'yahoo.com', 'icloud.com'])}` : '',
       address: hasA ? `${rint(12, 980)} ${pick(STREETS)}` : '', city: cy[0], region: cy[1], country: cy[2],
       zip: cy[3] + (cy[2] === 'Canada' ? ' ' + rint(1, 9) + pick(['A', 'B', 'K', 'R']) + rint(1, 9) : ''),
-      folder: f, camp: k, stage, dir: cp ? cp.dir : src[1], source: src[0],
+      folder: f, camp: k, stage, dir: cp ? (cp.dir === 'in' ? 'in' : 'out') : src[1], source: src[0],
       agent: cp ? pick(cp.agents.filter((a) => /^[sr]/.test(a))) : null,
       purchase: isRev && pr ? { product: pr.name, amount: pr.value, date: dISO(-rint(1, 60)) } : R() < 0.25 && pr ? { product: pr.name, amount: pr.value, date: dISO(-rint(60, 400)) } : null,
       lastDays: rint(0, 40), attempts: rint(0, 6), noReply: 0,
@@ -262,7 +262,8 @@ export const baseJob = (type: T.AgentType): T.Job => ({
   collect: ['Full name', 'Mobile number', 'Service address', 'Email', 'Best time to call'],
   rec: ['1–2 people and light use → Internet 500 or Phone line', '3+ people or streaming/gaming → Internet 1 Gig', 'Watches sports → add TV package'],
   whenQual: 'Order Booked', whenDisq: ['Add tag', 'Add reason', 'End conversation politely', 'Update database'], cantDecide: 'Mark as “Needs review”',
-  triggers: ['Customer asks for a human', 'Customer is angry', 'Customer requests a manager', 'Agent doesn’t know the answer', 'Qualification is unclear'], handTo: 'Sales team',
+  triggers: ['Customer asks for a human', 'Customer is angry', 'Customer requests a manager', 'Agent doesn’t know the answer', 'Qualification is unclear'],
+  handTo: type === 'reception' ? 'Front desk' : type === 'support' || type === 'tech' ? 'Support team' : type === 'finance' ? 'Bilal Nasir' : 'Sales team',
   restrict: ['Never change pricing', 'Never offer discounts above 10%', 'Never promise installation dates not in the calendar', 'Never ask for card numbers in chat'],
   follow: ['First follow-up by email after 1 day', 'Then a call after 2 days', 'Stop after 5 tries with no reply'],
   tone: 'Friendly', style: 'Short and clear', posture: type === 'sales' ? 'Consultative' : 'Neutral',
@@ -448,6 +449,12 @@ export const services: Record<string, T.Service[]> = {
 }
 export const hours: Record<string, Record<string, [string, string, boolean]>> = {}
 ;['k1', 'k2', 'k3', 'k4'].forEach((k) => { hours[k] = { Mon: ['08:00', '18:00', true], Tue: ['08:00', '18:00', true], Wed: ['08:00', '18:00', true], Thu: ['08:00', '19:00', true], Fri: ['08:00', '18:00', true], Sat: ['09:00', '15:00', true], Sun: k === 'k3' ? ['10:00', '16:00', true] : ['10:00', '14:00', false] } })
+export const bookingSet: Record<string, T.BookingSettings> = {
+  k3: { cap: 4, capLabel: 'chairs', interval: 15, notice: '2 hours', ahead: '60 days', reminders: [{ when: '24 hours before', via: 'Text' }, { when: '2 hours before', via: 'Text' }], confirm: ['sms', 'email'], page: true, slug: 'brightsmile-dental', sync: { gcal: true, sheets: false, excel: false, outlook: false }, closures: [{ date: '2026-10-12', note: 'Thanksgiving (Canada)' }, { date: '2026-12-25', note: 'Christmas Day' }], cols: ['Insurance'] },
+  k1: { cap: 3, capLabel: 'install teams', interval: 30, notice: '1 day', ahead: '30 days', reminders: [{ when: '1 day before', via: 'Text' }], confirm: ['sms'], page: false, slug: 'metro-mobile-install', sync: { gcal: false, sheets: true, excel: false, outlook: false }, closures: [], cols: [] },
+  k2: { cap: 2, capLabel: 'agents', interval: 15, notice: '3 hours', ahead: '21 days', reminders: [{ when: '24 hours before', via: 'Email' }, { when: '1 hour before', via: 'Text' }], confirm: ['sms', 'email'], page: true, slug: 'keystone-viewings', sync: { gcal: true, sheets: false, excel: false, outlook: true }, closures: [], cols: ['Property'] },
+  k4: { cap: 2, capLabel: 'install teams', interval: 30, notice: '1 day', ahead: '30 days', reminders: [{ when: '1 day before', via: 'Text' }], confirm: ['sms'], page: false, slug: 'metro-fiber', sync: { gcal: false, sheets: false, excel: false, outlook: false }, closures: [], cols: [] },
+}
 
 export const bookings: T.Booking[] = []
 let bn = 0
@@ -495,10 +502,23 @@ export const activity: T.Activity[] = [
 export const assigned: T.Assigned[] = [
   { id: 'a1', kind: 'hand', title: 'James Okafor wants to negotiate the price', desc: 'Robert (AI) booked a viewing, then James asked if the seller would take $1.05M and asked for a person.', cid: 'c31', camp: 'k2', convo: 'v2', time: '4:58 PM' },
   { id: 'a2', kind: 'book', title: 'Maria Rivera wants an installation appointment', desc: 'The Telecom — Mobility Q4 campaign doesn’t book appointments. Handle it yourself or let the receptionist (Rhea) book it.', cid: 'c1', camp: 'k1', convo: 'v1', time: '5:41 PM' },
-  { id: 'a3', kind: 'stage', title: 'Choose a stage for Daniel Nguyen', desc: 'We talked to Daniel: he liked the Hicks St condo, asked to move the viewing and said “we might wait until spring”. Please choose the stage.', cid: 'c33', camp: 'k2', convo: null, time: '2:14 PM', rec: true },
-  { id: 'a4', kind: 'angry', title: 'Upset caller about a billing charge', desc: 'Caller (647) 555-0122 is upset about a $24.99 roaming charge. Grace (Support) routed to Finance but the caller asked for a manager.', cid: null, camp: 'k1', convo: null, time: '1:02 PM', rec: true },
+  { id: 'a3', kind: 'stage', title: 'Choose a stage for Daniel Nguyen', desc: 'We talked to Daniel: he liked the Hicks St condo, asked to move the viewing and said “we might wait until spring”. Please choose the stage.', cid: 'c33', camp: 'k2', convo: null, time: '2:14 PM', rec: true, suggest: 'Pending',
+    summary: 'Liked 88 Hicks St. Asked to move Saturday’s viewing to 11 AM. Said they might wait until spring because of their lease. No offer discussed.',
+    tr: [['Robert', 'Hi Daniel, it’s Robert from Keystone Realty. You asked to move Saturday’s viewing?'], ['Daniel', 'Yes, can we do 11 instead of 10?'], ['Robert', 'Done, 11 AM with Agent Ali. How are you feeling about the condo so far?'], ['Daniel', 'We like it, but honestly we might wait until spring. Our lease ends in April.'], ['Robert', 'That makes sense. Would you still like to see it on Saturday?'], ['Daniel', 'Sure, we’ll come and look.']] },
+  { id: 'a4', kind: 'angry', title: 'Upset caller about a billing charge', desc: 'Caller (647) 555-0122 is upset about a $24.99 roaming charge. Grace (Support) routed to Finance but the caller asked for a manager.', cid: null, camp: 'k1', convo: null, time: '1:02 PM', rec: true,
+    summary: 'Charged $24.99 roaming on a trip to Buffalo. Says nobody told them. Refused the $10 credit Quinn offered and asked for a manager.',
+    tr: [['Grace', 'Thanks for calling Metro Mobile, this is Grace, an AI assistant. How can I help?'], ['Caller', 'You charged me twenty-five dollars for roaming and nobody told me!'], ['Grace', 'I’m sorry about that. I’ll bring in Quinn from billing to look at it.'], ['Quinn', 'I can offer a $10 credit today.'], ['Caller', 'No. I want to talk to a manager.']] },
   { id: 'a5', kind: 'qual', title: 'Unclear qualification: Omar Siddiqui', desc: 'Omar answered 2 of 3 required questions. He wouldn’t share his address on TikTok. Ellie marked this as “Needs review”.', cid: 'c61', camp: 'k4', convo: 'v8', time: '10:04 AM' },
-  { id: 'a6', kind: 'number', title: 'New number found for Ahmed Umar', desc: 'AI search found the same name and address with a new number: (905) 555-0162. Update the contact?', cid: 'c3', camp: 'k1', convo: 'v11', time: '9:10 AM' },
+  { id: 'a6', kind: 'number', title: 'New number found for Ahmed Umar', desc: 'AI search found the same name and address with a new number: (905) 555-0162. Update the contact?', cid: 'c3', camp: 'k1', convo: 'v11', time: '9:10 AM', newPhone: '(905) 555-0162' },
+  { id: 'a7', kind: 'stage', title: 'Choose a stage for Kevin Brown', desc: 'Kevin said “yes I’m interested”, then today “I need some time to think”. Ellie moved him to Pending but isn’t sure he still wants the offer.', cid: 'c2', camp: 'k1', convo: 'v9', time: '9:41 AM', suggest: 'Pending',
+    summary: 'Interested in 5G Unlimited yesterday. Today asked for time to think. Ellie promised to check in on Thursday.',
+    tr: [['Ellie', 'Hey Kevin! 5G Unlimited is $35 a line this month. Interested?'], ['Kevin', 'Yes I’m interested'], ['Kevin', 'Actually I need some time to think about it'], ['Ellie', 'Totally fine! I’ll check in on Thursday.']] },
+  { id: 'a8', kind: 'stage', title: 'Choose a stage for Hassan Ali', desc: 'You were chatting with Hassan when he said “OK, go ahead and set it up”. That matches Qualified, but you haven’t confirmed it.', cid: 'c60', camp: 'k4', convo: 'v6', time: '1:05 PM', suggest: 'Qualified',
+    summary: 'Filled the web form. 4 people at home, lots of streaming. Said “OK, go ahead and set it up.”',
+    tr: [['Hassan', 'Hi, I filled the form on your site. Is TV included?'], ['Mia', 'TV is a $10/month add-on. Can I ask a couple of quick questions?'], ['You', 'Hi Hassan, Bilal here. How many people are at home?'], ['Hassan', '4 of us, lots of streaming. OK, go ahead and set it up.']] },
+  { id: 'a9', kind: 'stage', title: 'Choose a stage for Emily Park', desc: 'Emily asked about Sunday hours and whitening, then said “maybe next week”. Rhea logged it as a query but it could be a booking request.', cid: 'c46', camp: 'k3', convo: 'v5', time: '2:36 PM', suggest: 'Requested', rec: true,
+    summary: 'Asked if the clinic is open on Sundays and about whitening ($350, 1 hour). Said “maybe next week, thanks”.',
+    tr: [['Emily', 'Are you open on Sundays? And do you do whitening?'], ['Rhea', 'Yes to both! Sundays 10 AM–4 PM. Whitening is about an hour with Dr. Lee and costs $350. Want me to check times?'], ['Emily', 'Maybe next week, thanks']] },
 ]
 export const notifs: T.Notif[] = [
   { id: 'n1', text: 'James Okafor asked for a person (Keystone Realty)', time: '4:58 PM', read: false, go: '/assigned' },
@@ -509,7 +529,7 @@ export const notifs: T.Notif[] = [
 ]
 export const suggestions: T.Suggestion[] = [
   { id: 'o1', area: 'Campaign', title: 'Fiber Win-back is paused with 228 people never contacted', fix: 'Resume it with Ellie (18% better reply rate on win-backs)', go: '/campaigns/k5' },
-  { id: 'o2', area: 'Agent', title: 'Robert’s qualifying criteria are not clear enough', fix: 'Add 2 required criteria (Review score 78 → 88)', go: '/agents/s3' },
+  { id: 'o2', area: 'Agent', title: 'Robert’s qualifying criteria are not clear enough', fix: 'Add 2 required criteria to raise the review score', go: '/agents/s3' },
   { id: 'o3', area: 'Setup', title: 'Your SMS sender registration is pending', fix: 'Texts are limited to 200/day until approved', go: '/settings/channels' },
   { id: 'o4', area: 'Contacts', title: '212 contacts look dead', fix: 'Move them to Dead numbers or find updated info with AI', go: '/contacts?tab=health' },
 ]
@@ -585,6 +605,25 @@ export const promptTemplates: Record<T.AgentType, string[]> = {
   reception: ['Default Receptionist template', 'Dental clinic', 'Restaurant reservations', 'Salon & spa', 'Doctor’s office'],
   finance: ['Default Finance template', 'Invoice follow-up', 'Payment plans'],
 }
+campaigns.forEach((c) => { c.budget = { k1: 600, k2: 400, k3: 500, k4: 450, k5: 120 }[c.id]; c.skipped = { k1: 12, k2: 4, k3: 0, k4: 3, k5: 7 }[c.id] })
+
+/** The wizard answers behind each campaign, so Settings reopens the same screens filled in. */
+export const setupFor = (c: T.Campaign): T.CampaignSetup => {
+  const by = c.agents.find((a) => /^[sr]/.test(a)) ?? c.agents[0] ?? 's1'
+  const job = baseJob(c.pipe === 'dental' ? 'reception' : 'sales')
+  return {
+    name: c.name, biz: c.biz, dir: c.dir, sub: c.sub, audience: 'folder', folder: c.folder, filter: '', selected: 0, contact: null,
+    ch: c.ch, pipe: c.pipe, agents: c.agents, weights: c.weights, aiAgents: false,
+    follow: { ai: true, out: [{ if: 'No reply to text', after: '4 hours', then: 'Call', by, tpl: 'Friendly check-in call' }, { if: 'No answer to call', after: '1 day', then: 'Email', by, tpl: 'Offer recap email' }], in: [{ if: 'No reply to text', after: '15 minutes', then: 'Call', by, tpl: 'Quick call-back' }], drop: { on: true, n: 5, cond: 'no reply' } },
+    booking: c.booking, takeover: true, qual: job.qual, disq: job.disq, script: job.script || `Hi {first_name}, it’s {agent} from ${c.biz}.`, kb: ['Metro Mobile — Plans & prices', 'FAQ & policies'],
+    dos: ['Confirm names, dates and prices back to the customer', 'Mention free installation this month'], donts: ['Never promise a date that isn’t on the calendar', 'Never offer more than 10% off'],
+    opening: { sms: `Hi {first_name}, it’s {agent} from ${c.biz} 👋 ${c.pipe === 'dental' ? 'It’s time for your 6-month check-up. Want me to find you a time?' : 'You can get Internet 1 Gig for $50 a month with free installation. Interested?'}`, email: `Hi {first_name},\n\nQuick note from ${c.biz}…`, wa: `Hi {first_name}! {agent} from ${c.biz} here.` },
+    callInfo: 'Introduce yourself as an AI assistant, confirm the person’s name, then give the offer in one sentence.', emailSubject: c.pipe === 'dental' ? 'Time for your check-up' : 'Your October offer from ' + c.biz, ab: true,
+    products: products[c.id] ?? { cur: '$', rev: stagesOf(c).find((s) => s.rev)?.name ?? '', cancel: 'full', cats: [] },
+    when: 'now', date: dISO(1), time: '09:00', hours: ['09:00', '20:00'], days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'], localTz: true, limit: 500,
+  }
+}
+
 export const maxThreads: T.MaxThread[] = [
   { id: 'mh1', title: 'Why did Win-back replies drop?', date: 'Today', msgs: [] },
   { id: 'mh2', title: 'Build a dental recall campaign', date: 'Yesterday', msgs: [] },

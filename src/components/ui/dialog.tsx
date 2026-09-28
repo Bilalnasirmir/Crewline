@@ -25,7 +25,7 @@ function PanelHeader({ title, description, hideClose }: { title?: React.ReactNod
 
 export function DialogContent({
   className, children, title, description, footer, size = 'md', hideClose, bodyClassName, ...props
-}: React.ComponentPropsWithoutRef<typeof D.Content> & {
+}: Omit<React.ComponentPropsWithoutRef<typeof D.Content>, 'title'> & {
   title?: React.ReactNode; description?: React.ReactNode; footer?: React.ReactNode; size?: keyof typeof widths; hideClose?: boolean; bodyClassName?: string
 }) {
   return (

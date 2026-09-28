@@ -9,7 +9,7 @@ import { Avatar, AgentAvatar } from '@/components/ui/avatar'
 import { Table, Td, Th, Tr } from '@/components/ui/table'
 import { AiMark, PlatIcon, DirIcon } from '@/components/app/icons'
 import { StageTag } from '@/components/app/bits'
-import { useStore } from '@/store'
+import { useStore, stagesFor } from '@/store'
 import { useMax } from './store'
 import type { Block, MaxMessage } from './engine'
 
@@ -72,7 +72,7 @@ function BlockView({ b, msg, last }: { b: Block; msg: MaxMessage; last: boolean 
           <div className="overflow-x-auto"><Table>
             <thead><tr><Th>Name</Th><Th>Phone</Th><Th>Email</Th><Th>City</Th><Th>Stage</Th></tr></thead>
             <tbody>{rows.map((c) => { const cp = campaigns.find((k) => k.id === c.camp); return (
-              <Tr key={c.id} clickable onClick={() => nav(`/contacts/${c.id}`)}><Td className="h-8"><span className="flex items-center gap-2"><Avatar name={c.name || '?'} size={20} />{c.name || <span className="text-warning">Name missing</span>}</span></Td><Td className="h-8 tabular">{c.phone}</Td><Td className="h-8">{c.email || <span className="text-warning">Missing</span>}</Td><Td className="h-8">{c.city}</Td><Td className="h-8">{cp ? <StageTag name={c.stage} stages={stages[cp.pipe][cp.dir]} size="sm" /> : '—'}</Td></Tr>
+              <Tr key={c.id} clickable onClick={() => nav(`/contacts/${c.id}`)}><Td className="h-8"><span className="flex items-center gap-2"><Avatar name={c.name || '?'} size={20} />{c.name || <span className="text-warning">Name missing</span>}</span></Td><Td className="h-8 tabular">{c.phone}</Td><Td className="h-8">{c.email || <span className="text-warning">Missing</span>}</Td><Td className="h-8">{c.city}</Td><Td className="h-8">{cp ? <StageTag name={c.stage} stages={stagesFor(cp, stages)} size="sm" /> : '—'}</Td></Tr>
             ) })}</tbody>
           </Table></div>
           <div className="flex flex-wrap gap-1.5 border-t border-border p-2">
@@ -115,7 +115,7 @@ function BlockView({ b, msg, last }: { b: Block; msg: MaxMessage; last: boolean 
       <div className="flex gap-3 rounded-card border border-border p-3">
         <span className="flex size-10 shrink-0 items-center justify-center rounded-control bg-subtle text-muted">{b.kind === 'presentation' ? <Presentation className="size-5" /> : <FileText className="size-5" />}</span>
         <div className="min-w-0 flex-1"><div className="font-medium">{b.title}</div><div className="text-sm text-muted">{b.kind === 'presentation' ? `${b.pages.length} slides` : `${b.pages.length} pages`} · {b.pages.slice(0, 3).join(' · ')}</div>
-          <div className="mt-2 flex gap-1.5"><Button size="sm" onClick={() => toast('Opening the presentation (demo)')}>Open</Button><Button size="sm" variant="ghost" onClick={() => toast.success('Saved to Reports › Max reports')}>Save to Reports</Button><Button size="sm" variant="ghost" onClick={() => toast('PDF downloaded (demo)')}>Download PDF</Button></div></div>
+          <div className="mt-2 flex gap-1.5"><Button size="sm" onClick={() => toast('Opening the presentation (demo)')}>Open</Button><Button size="sm" variant="ghost" onClick={() => { useStore.getState().addReport({ name: b.title, folder: 'r6', date: '2026-09-27', by: 'Max', kind: b.kind === 'presentation' ? 'Presentation' : 'Research' }); toast.success('Saved to Reports › Max reports') }}>Save to Reports</Button><Button size="sm" variant="ghost" onClick={() => toast('PDF downloaded (demo)')}>Download PDF</Button></div></div>
       </div>
     )
     case 'steps': return (

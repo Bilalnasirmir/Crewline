@@ -43,14 +43,16 @@ export function CampaignChip({ id, className }: { id: string | null | undefined;
 
 /** Metric card (Polaris analytics style): heading-sm title with a dotted underline when it has a
  *  definition, heading-lg value, 12px change line. Clicks through. */
-export function Kpi({ label, value, delta, up, to, tip, onClick, className, sub }: { label: React.ReactNode; value: React.ReactNode; delta?: React.ReactNode; up?: boolean; to?: string; tip?: React.ReactNode; onClick?: () => void; className?: string; sub?: React.ReactNode }) {
+export function Kpi({ label, value, delta, up, good, to, tip, onClick, className, sub }: { label: React.ReactNode; value: React.ReactNode; delta?: React.ReactNode; up?: boolean; good?: boolean; to?: string; tip?: React.ReactNode; onClick?: () => void; className?: string; sub?: React.ReactNode }) {
+  // The arrow shows which way the number moved; the colour shows whether that's good (for costs, down is good).
+  const ok = good ?? up
   const body = (
     <Card className={cn('flex flex-col gap-1 p-4 transition-colors', (to || onClick) && 'cursor-pointer hover:bg-subtle-2', className)} onClick={onClick}>
       <h3 className={cn('truncate', tip && 'self-start underline decoration-border-strong decoration-dotted decoration-1 underline-offset-4')}>{label}</h3>
       <div className="flex items-baseline justify-between gap-2">
         <span className="text-2xl font-semibold tabular text-text">{value}</span>
         {delta !== undefined && (
-          <span className={cn('flex items-center gap-0.5 text-xs font-medium', up === undefined ? 'text-muted' : up ? 'text-success' : 'text-danger')}>
+          <span className={cn('flex items-center gap-0.5 text-xs font-medium', ok === undefined ? 'text-muted' : ok ? 'text-success' : 'text-danger')}>
             {up === true && <ArrowUpRight className="size-3" />}{up === false && <ArrowDownRight className="size-3" />}{delta}
           </span>
         )}
@@ -63,6 +65,16 @@ export function Kpi({ label, value, delta, up, to, tip, onClick, className, sub 
 }
 
 export const Num = ({ n }: { n: number }) => <span className="tabular">{nf(n)}</span>
+
+/** Toggle chip for picking one or several options. Selected = brand fill, like a checked checkbox. */
+export function ToggleChip({ on, onClick, children, className, disabled }: { on: boolean; onClick: () => void; children: React.ReactNode; className?: string; disabled?: boolean }) {
+  return (
+    <button type="button" disabled={disabled} aria-pressed={on} onClick={onClick}
+      className={cn('inline-flex h-7 shrink-0 items-center gap-1.5 rounded-control border px-2.5 text-xs font-medium transition-colors disabled:opacity-50 [&_svg]:size-3.5 [&_svg]:shrink-0', on ? 'border-btn bg-btn text-btn-fg hover:bg-btn-hover' : 'border-border-strong bg-surface text-text hover:bg-subtle-2', className)}>
+      {children}
+    </button>
+  )
+}
 
 /** Horizontal bar for stage breakdowns and similar. */
 export function BarRow({ label, value, max, color, right, onClick }: { label: React.ReactNode; value: number; max: number; color?: string; right?: React.ReactNode; onClick?: () => void }) {

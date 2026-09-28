@@ -1,36 +1,36 @@
-import { StrictMode } from 'react'
+import { StrictMode, type ComponentType } from 'react'
 import { createRoot } from 'react-dom/client'
 import { createHashRouter, RouterProvider, Navigate } from 'react-router-dom'
 import './index.css'
 import { AppShell } from '@/components/app/shell'
 import { HomePage } from '@/features/home/page'
 import { MaxPage } from '@/features/max/page'
-import { ContactsPage } from '@/features/contacts/page'
-import { ContactProfile } from '@/features/contacts/profile'
-import { Stub } from '@/features/stub'
-import { CampaignsPage } from '@/features/campaigns/page'
+
+/** Each module is its own chunk, loaded the first time you open it. */
+const page = <M,>(load: () => Promise<M>, name: keyof M) => async () => ({ Component: (await load())[name] as ComponentType })
 
 const router = createHashRouter([
-  { path: '/', element: <AppShell />, children: [
+  { path: '/', element: <AppShell />, HydrateFallback: () => <div className="h-dvh bg-bg" />, children: [
     { index: true, element: <Navigate to="/home" replace /> },
-    { path: 'get-started', element: <Stub title="Get Started" /> },
     { path: 'home', element: <HomePage /> },
     { path: 'max', element: <MaxPage /> },
-    { path: 'inbox', element: <Stub title="Inbox" /> },
-    { path: 'contacts', element: <ContactsPage /> },
-    { path: 'contacts/:id', element: <ContactProfile /> },
-    { path: 'campaigns', element: <CampaignsPage /> },
-    { path: 'campaigns/new', element: <Stub title="New campaign" /> },
-    { path: 'campaigns/:id', element: <Stub title="Campaign" /> },
-    { path: 'stages', element: <Stub title="Stages" /> },
-    { path: 'bookings', element: <Stub title="Bookings" /> },
-    { path: 'agents', element: <Stub title="AI Agents" /> },
-    { path: 'agents/:id', element: <Stub title="Agent" /> },
-    { path: 'expenses', element: <Stub title="Expenses" /> },
-    { path: 'reports', element: <Stub title="Reports" /> },
-    { path: 'settings/*', element: <Stub title="Settings" /> },
-    { path: 'pricing', element: <Stub title="Plans & pricing" /> },
-    { path: 'assigned', element: <Stub title="Assigned to me" /> },
+    { path: 'get-started', lazy: page(() => import('@/features/getstarted/page'), 'GetStartedPage') },
+    { path: 'inbox', lazy: page(() => import('@/features/inbox/page'), 'InboxPage') },
+    { path: 'contacts', lazy: page(() => import('@/features/contacts/page'), 'ContactsPage') },
+    { path: 'contacts/:id', lazy: page(() => import('@/features/contacts/profile'), 'ContactProfile') },
+    { path: 'campaigns', lazy: page(() => import('@/features/campaigns/page'), 'CampaignsPage') },
+    { path: 'campaigns/new', lazy: page(() => import('@/features/campaigns/wizard'), 'NewCampaignPage') },
+    { path: 'campaigns/:id', lazy: page(() => import('@/features/campaigns/detail'), 'CampaignDetailPage') },
+    { path: 'stages', lazy: page(() => import('@/features/stages/page'), 'StagesPage') },
+    { path: 'bookings', lazy: page(() => import('@/features/bookings/page'), 'BookingsPage') },
+    { path: 'agents', lazy: page(() => import('@/features/agents/page'), 'AgentsPage') },
+    { path: 'agents/:id', lazy: page(() => import('@/features/agents/editor'), 'AgentEditorPage') },
+    { path: 'expenses', lazy: page(() => import('@/features/expenses/page'), 'ExpensesPage') },
+    { path: 'reports', lazy: page(() => import('@/features/reports/page'), 'ReportsPage') },
+    { path: 'settings', element: <Navigate to="/settings/business" replace /> },
+    { path: 'settings/:section', lazy: page(() => import('@/features/settings/page'), 'SettingsPage') },
+    { path: 'pricing', lazy: page(() => import('@/features/pricing/page'), 'PricingPage') },
+    { path: 'assigned', lazy: page(() => import('@/features/assigned/page'), 'AssignedPage') },
     { path: '*', element: <Navigate to="/home" replace /> },
   ] },
 ])

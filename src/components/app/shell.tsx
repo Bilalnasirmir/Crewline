@@ -11,8 +11,9 @@ import { Kbd } from '@/components/ui/controls'
 import { Count } from '@/components/ui/badge'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
-import { Toaster } from 'sonner'
+import { Toaster, toast } from 'sonner'
 import { CommandPalette } from './command-palette'
+import { AskHost } from './ask'
 import { MaxPanel } from '@/features/max/panel'
 
 type NavChild = { to: string; label: string }
@@ -22,18 +23,27 @@ const NAV: NavDef[] = [
   { to: '/get-started', label: 'Get Started', Icon: Rocket, group: '' },
   { to: '/home', label: 'Home', Icon: Home, group: '' },
   { to: '/max', label: 'Max', Icon: Sparkles, group: '' },
-  { to: '/inbox', label: 'Inbox', Icon: Inbox, group: 'Work' },
+  { to: '/inbox', label: 'Inbox', Icon: Inbox, group: 'Work', children: [
+    { to: '/inbox?kind=email', label: 'Email' },
+    { to: '/inbox?kind=calls', label: 'Calls' },
+  ] },
   { to: '/contacts', label: 'Contacts', Icon: Users, group: 'Work', children: [
     { to: '/contacts?view=folders', label: 'Folders' },
     { to: '/contacts?view=dnc', label: 'Do-Not-Contact' },
     { to: '/contacts?view=health', label: 'Database health' },
   ] },
   { to: '/campaigns', label: 'Campaigns', Icon: Megaphone, group: 'Work', children: [{ to: '/campaigns/new', label: 'New campaign' }] },
-  { to: '/stages', label: 'Stages', Icon: Kanban, group: 'Work' },
-  { to: '/bookings', label: 'Bookings', Icon: CalendarDays, group: 'Work' },
-  { to: '/agents', label: 'AI Agents', Icon: Bot, group: 'Work' },
+  { to: '/stages', label: 'Stages', Icon: Kanban, group: 'Work', children: [
+    { to: '/stages?view=list', label: 'List' },
+    { to: '/stages?view=review', label: 'Review for me' },
+  ] },
+  { to: '/bookings', label: 'Bookings', Icon: CalendarDays, group: 'Work', children: [
+    { to: '/bookings?view=calendar', label: 'Calendar' },
+    { to: '/bookings?view=queries', label: 'Queries' },
+  ] },
+  { to: '/agents', label: 'AI Agents', Icon: Bot, group: 'Work', children: [{ to: '/agents?tab=leaderboard', label: 'Leaderboard' }] },
   { to: '/expenses', label: 'Expenses', Icon: Receipt, group: 'Business' },
-  { to: '/reports', label: 'Reports', Icon: BarChart3, group: 'Business' },
+  { to: '/reports', label: 'Reports', Icon: BarChart3, group: 'Business', children: [{ to: '/reports?tab=library', label: 'Report library' }] },
   { to: '/settings', label: 'Settings', Icon: Settings, group: 'Business' },
 ]
 
@@ -106,6 +116,7 @@ export function AppShell() {
         </div>
         <MaxPanel />
         <CommandPalette open={cmdOpen} onOpenChange={setCmdOpen} />
+        <AskHost />
         <Toaster position="bottom-right" toastOptions={{ className: '!rounded-card !border-0 !bg-[var(--btn-hover)] !text-white !text-sm !font-medium !shadow-tooltip', duration: 3500 }} />
       </div>
     </TooltipProvider>
@@ -249,7 +260,7 @@ function TopBar({ onMenu, onSearch }: { onMenu: () => void; onSearch: () => void
             <DropdownMenuItem onSelect={() => nav('/settings/team')}>Team</DropdownMenuItem>
             <DropdownMenuItem onSelect={() => nav('/pricing')}>Plans & pricing</DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem><LogOut />Sign out</DropdownMenuItem>
+            <DropdownMenuItem onSelect={() => toast('Sign-out comes with the real accounts (backend phase)')}><LogOut />Sign out</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
