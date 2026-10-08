@@ -263,7 +263,7 @@ Every module is built and runs on sample data. Every button does something (toas
 
 - **No code is half-finished.** The working tree was clean at commit `58730ef` before this file was added.
 - The project is waiting for the owner to start the **module-by-module layout redesign**: the owner will name a module and provide designs/notes; Claude changes only layouts (never fonts, sizes or colours), refreshes the preview, waits for approval, then commits and pushes that module.
-- **Open questions for the owner:** (1) which module to start with; (2) whether to merge `full-frontend` into `main` now or after all module changes.
+- **Open question for the owner:** which module to start with. (The owner already merged `full-frontend` into `main` via pull request #1.)
 - **Promised but not done yet:** add the owner's new rule ("fonts, sizes, colours and the design system never change; only layouts change, module by module, with approval before saving") to `CLAUDE.md`, saved together with the first approved module.
 
 ---
@@ -350,7 +350,7 @@ Every module is built and runs on sample data. Every button does something (toas
 
 ## 12. Important Context and Gotchas
 
-- **Branches**: all the work is on `full-frontend` (commit `58730ef`); `main` is still at `977dc2e`. Merge only with the owner's approval.
+- **Branches**: the owner merged the full front end into `main` on GitHub through pull request #1 (merge commit `3ed6735`). `full-frontend` additionally holds the `PROGRESS.md` commit. This clone was made as a single-branch clone, so `git config remote.origin.fetch '+refs/heads/*:refs/remotes/origin/*'` was set to see all branches.
 - **Sample date**: `seed.TODAY` is 27 Sep 2026, 12:00. Many screens ("today", calendar now-line at 12 PM, bookings) depend on it.
 - **Lazy routes**: `main.tsx` uses `page(() => import(...), 'ExportName')`; the named export must exist or the route crashes.
 - **Agent score**: never set `score` by hand; the store recomputes it with `reviewOf` on `addAgent`/`updateAgent`. Changing `checks()` or `FINDINGS` in `data/review.ts` changes every agent's score.
